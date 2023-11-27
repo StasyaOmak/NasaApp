@@ -9,6 +9,10 @@ import UIKit
 import Lottie
 
 class PhotoViewController: UIViewController {
+    
+    
+   
+    
 
     var animationView = LottieAnimationView()
     
@@ -43,7 +47,17 @@ class PhotoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       
+        
+    
+//        NetworkManager.fetchData(url: countryAllUrl) {
+//            countries in
+//            self.countries = countries
+//            DispatchQueue.main.async {
+//                self.tableView.reloadData()
+//            }
+//        }
+        
+        
         setupAnimation()
         setupUI()
         setupConstraints()

@@ -39,18 +39,13 @@ class HomeViewController: UIViewController {
         
         animationView.frame = CGRect(x: 0, y: 200, width: 400, height: 200)
 //        animationView.center = view.
-        animationView.backgroundColor = .black
+//        animationView.backgroundColor = .black
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
         animationView.animationSpeed = 1
         view.addSubview(animationView)
         animationView.play()
         
-        animationView.play { (finished) in
-            if !finished {
-                print("Анимация не завершилась.")
-            }
-        }
     }
     
     
