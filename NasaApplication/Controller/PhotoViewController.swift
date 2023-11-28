@@ -47,15 +47,7 @@ class PhotoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-    
-//        NetworkManager.fetchData(url: countryAllUrl) {
-//            countries in
-//            self.countries = countries
-//            DispatchQueue.main.async {
-//                self.tableView.reloadData()
-//            }
-//        }
+
         
         
         setupAnimation()
@@ -98,7 +90,7 @@ class PhotoViewController: UIViewController {
                 firstButton.addTarget(self, action: #selector(todaysPictureButtonTapped), for: .touchUpInside)
         
         secondButton.setTitle("Random Set", for: .normal)
-        //        secondButton.addTarget(self, action: #selector(answerButtonPressed), for: .touchUpInside)
+                secondButton.addTarget(self, action: #selector(randomSetButtonTapped), for: .touchUpInside)
         
         firstButton.layer.cornerRadius = 20
         secondButton.layer.cornerRadius = 20
@@ -108,6 +100,11 @@ class PhotoViewController: UIViewController {
     @objc private func todaysPictureButtonTapped() {
         let todaysPictureViewController = TodaysPictureViewController()
         navigationController?.pushViewController(todaysPictureViewController, animated: true)
+    }
+    
+    @objc private func randomSetButtonTapped() {
+        let randomSetViewController = RandomSetViewController()
+        navigationController?.pushViewController(randomSetViewController, animated: true)
     }
 
 }

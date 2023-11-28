@@ -30,13 +30,7 @@ class MainTabBarController: UITabBarController {
     }
 
     private func generateVC(viewController: UIViewController, title: String, image: UIImage?) -> UIViewController {
-//        viewController.tabBarItem.title = title
-//        viewController.tabBarItem.image = image
-//        viewController.tabBarItem.titlePositionAdjustment = .init(horizontal: -3, vertical: 0)
-//        
-//        
-//        return viewController
-        
+
         let navigationController = UINavigationController(rootViewController: viewController)
             
             navigationController.tabBarItem.title = title
@@ -48,6 +42,10 @@ class MainTabBarController: UITabBarController {
     
     
     private func setTabBarAppearance() {
+        
+     
+       
+        
         
         let positionOnX: CGFloat = 10
         let positionOnY: CGFloat = 14
@@ -77,18 +75,7 @@ class MainTabBarController: UITabBarController {
     }
     
 
-//    func createNavController(vc: UIViewController, itemName: String, itemImage: String) -> UINavigationController {
-//        
-//        let navController = UINavigationController(rootViewController: vc)
-//        
-//        return navController
-//    }
-    
-    
-//    private func setupView() {
-//        title = "NASA"
-//    }
-    
+
     /*
     // MARK: - Navigation
 

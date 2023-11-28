@@ -11,13 +11,16 @@ import SDWebImage
 
 class TodaysPictureViewController: UIViewController {
     
+    
+//    var myScrollView = UIScrollView()
+    
     private var photoOfTheDay: AstronomyPicture?
     private let photoNetworkManager = PhotoNetworkManager()
     
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
-        element.spacing = 10
+        element.spacing = 1
         element.distribution = .fillProportionally
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -28,7 +31,7 @@ class TodaysPictureViewController: UIViewController {
         let element = UILabel()
         element.text = "12-13-12"
         element.textAlignment = .center
-        element.font = .systemFont(ofSize: 30, weight: .bold)
+        element.font = .systemFont(ofSize: 5, weight: .bold)
         element.minimumScaleFactor = 0.5
         element.numberOfLines = 0
         
@@ -47,9 +50,9 @@ class TodaysPictureViewController: UIViewController {
     
     let titleLabel: UILabel = {
         let element = UILabel()
-        element.text = "Звезда такая-то"
+        element.text = "text"
         element.textAlignment = .center
-        element.font = .systemFont(ofSize: 20, weight: .bold)
+        element.font = .systemFont(ofSize: 5, weight: .bold)
         element.minimumScaleFactor = 0.5
         element.numberOfLines = 0
         
@@ -57,13 +60,13 @@ class TodaysPictureViewController: UIViewController {
         return element
     }()
     
-    let textLabel: UILabel = {
-        let element = UILabel()
+    let textLabel: UITextView = {
+        let element = UITextView()
         element.textAlignment = .center
         element.text = "jnkdjbkfjabdkvjbndfjklbnkjvkfjdbjkvbdfkjbkvjdkfjbvkjbdfkjbvkjdfkjbkjfdbkjkdfjbkjfdkjbkjdfb"
-        element.font = .systemFont(ofSize: 20, weight: .black)
-        element.minimumScaleFactor = 0.5
-        element.numberOfLines = 0
+        element.font = .systemFont(ofSize: 5, weight: .black)
+        element.isEditable = false
+       /* element.isScrollEnabled = true*/ 
         
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -81,11 +84,12 @@ class TodaysPictureViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+//        scrollView.contentInsetAdjustmentBehavior = .never
         
         view.backgroundColor = .systemBackground
         
-        view.addSubview(scrollView)
+        view.addSubview(mainStackView)
+        mainStackView.addArrangedSubview(scrollView)
         scrollView.addSubview(dateLabel)
         scrollView.addSubview(dayImageView)
         scrollView.addSubview(titleLabel)
@@ -120,9 +124,11 @@ class TodaysPictureViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             
-            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+
             
             
             //            dateLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -163,9 +169,12 @@ class TodaysPictureViewController: UIViewController {
             
             textLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
             textLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
-            textLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20)
+            textLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
+            textLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20) // Adjust constant as needed
         ])
         
+        let contentHeight = dateLabel.frame.height + dayImageView.frame.height + titleLabel.frame.height + textLabel.frame.height + 200 // Adjust this value based on your content
+            scrollView.contentSize = CGSize(width: view.frame.width, height: contentHeight)
     }
 }
 

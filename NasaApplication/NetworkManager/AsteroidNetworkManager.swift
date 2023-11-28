@@ -1,17 +1,20 @@
 //
-//  PhotoNetworkManager.swift
+//  AsteroidNetworkManager.swift
 //  NasaApplication
 //
-//  Created by Anastasiya Omak on 26/11/2023.
+//  Created by Anastasiya Omak on 27/11/2023.
 //
 
 import Foundation
 
-class PhotoNetworkManager{
+
+class AsteroidNetworkManager {
     
-    private let url = "https://api.nasa.gov/planetary/apod?api_key=1kDltXwD3QbkCzKTa9zQnjk7ep6J57SGegoDoF6Q"
+    static let shared = AsteroidNetworkManager()
     
-    func fetchData(completion: @escaping (AstronomyPicture) -> () ) {
+    private let url = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2023-11-25&end_date=2023-11-28&api_key=1kDltXwD3QbkCzKTa9zQnjk7ep6J57SGegoDoF6Q"
+    
+    func fetchData(completion: @escaping ([AsteroidModel]) -> () ) {
         
         guard let url = URL(string: url) else { return }
         
@@ -34,11 +37,17 @@ class PhotoNetworkManager{
             
             
             do {
-                let jsonData = try JSONDecoder().decode(AstronomyPicture.self, from: data)
-                completion(jsonData)
+                let jsonData = try JSONDecoder().decode(AsteroidData.self, from: data)
+                let model: [AsteroidModel] = jsonData.nearEarthObjects.values.flatMap{dict in
+                    var result: [AsteroidModel] = []
+                    dict.forEach{result.append(AsteroidModel(object: $0))}
+                    return result
+                }
+                completion(model)
             }catch{
                 print("err:::::", error)
             }
+            
             
         }.resume()
         

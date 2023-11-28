@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6F25E0502B15B38200620097 /* AsteroidModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F25E04F2B15B38200620097 /* AsteroidModel.swift */; };
+		6F25E0562B16341500620097 /* AsteroidTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F25E0552B16341500620097 /* AsteroidTableViewCell.swift */; };
 		6F47DBCC2B11E6FB00992389 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F47DBCB2B11E6FB00992389 /* AppDelegate.swift */; };
 		6F47DBCE2B11E6FB00992389 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F47DBCD2B11E6FB00992389 /* SceneDelegate.swift */; };
 		6F47DBD52B11E6FC00992389 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F47DBD42B11E6FC00992389 /* Assets.xcassets */; };
@@ -26,9 +28,14 @@
 		6F47DC072B13717600992389 /* TodaysPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F47DC062B13717600992389 /* TodaysPictureViewController.swift */; };
 		6F47DC0A2B1373CB00992389 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 6F47DC092B1373CB00992389 /* SDWebImage */; };
 		6F47DC0C2B1373CB00992389 /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6F47DC0B2B1373CB00992389 /* SDWebImageMapKit */; };
+		6F47DC142B149F1C00992389 /* Asteroid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F47DC132B149F1C00992389 /* Asteroid.swift */; };
+		6F47DC162B149F4E00992389 /* AsteroidNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F47DC152B149F4E00992389 /* AsteroidNetworkManager.swift */; };
+		6F47DC1C2B14AE8400992389 /* RandomSetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F47DC1B2B14AE8400992389 /* RandomSetViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6F25E04F2B15B38200620097 /* AsteroidModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsteroidModel.swift; sourceTree = "<group>"; };
+		6F25E0552B16341500620097 /* AsteroidTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsteroidTableViewCell.swift; sourceTree = "<group>"; };
 		6F47DBC82B11E6FB00992389 /* NasaApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NasaApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F47DBCB2B11E6FB00992389 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6F47DBCD2B11E6FB00992389 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -47,6 +54,9 @@
 		6F47DC022B136AFB00992389 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		6F47DC042B136B8C00992389 /* PhotoNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoNetworkManager.swift; sourceTree = "<group>"; };
 		6F47DC062B13717600992389 /* TodaysPictureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaysPictureViewController.swift; sourceTree = "<group>"; };
+		6F47DC132B149F1C00992389 /* Asteroid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asteroid.swift; sourceTree = "<group>"; };
+		6F47DC152B149F4E00992389 /* AsteroidNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsteroidNetworkManager.swift; sourceTree = "<group>"; };
+		6F47DC1B2B14AE8400992389 /* RandomSetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomSetViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,25 +92,86 @@
 		6F47DBCA2B11E6FB00992389 /* NasaApplication */ = {
 			isa = PBXGroup;
 			children = (
-				6F47DC022B136AFB00992389 /* Photo.swift */,
-				6F47DC042B136B8C00992389 /* PhotoNetworkManager.swift */,
-				6F47DC062B13717600992389 /* TodaysPictureViewController.swift */,
-				6F47DBCB2B11E6FB00992389 /* AppDelegate.swift */,
-				6F47DBCD2B11E6FB00992389 /* SceneDelegate.swift */,
-				6F47DBE72B12157A00992389 /* MainTabBarController.swift */,
-				6F47DBE12B11F75D00992389 /* HomeViewController.swift */,
-				6F47DBDF2B11F74200992389 /* PhotoViewController.swift */,
-				6F47DBED2B12939900992389 /* Extension.swift */,
-				6F47DBE32B12012000992389 /* AsteroidViewController.swift */,
-				6F47DBE52B1202D300992389 /* BookmarksViewController.swift */,
-				6F47DBEB2B127F6B00992389 /* UIColorExtension.swift */,
+				6F47DC102B149DBD00992389 /* AppDelegate */,
+				6F47DC122B149EE800992389 /* NetworkManager */,
+				6F47DC0D2B149DA600992389 /* Model */,
+				6F47DC0E2B149DAC00992389 /* View */,
+				6F47DC1A2B14A2DB00992389 /* Cells */,
+				6F47DC0F2B149DB300992389 /* Controller */,
+				6F47DC112B149E3300992389 /* Extension */,
 				6F47DBFE2B13531200992389 /* nasaAnimationMain.json */,
 				6F47DC002B13579000992389 /* planetsLottie.json */,
 				6F47DBD42B11E6FC00992389 /* Assets.xcassets */,
-				6F47DBD62B11E6FC00992389 /* LaunchScreen.storyboard */,
 				6F47DBD92B11E6FC00992389 /* Info.plist */,
 			);
 			path = NasaApplication;
+			sourceTree = "<group>";
+		};
+		6F47DC0D2B149DA600992389 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6F47DC022B136AFB00992389 /* Photo.swift */,
+				6F47DC132B149F1C00992389 /* Asteroid.swift */,
+				6F25E04F2B15B38200620097 /* AsteroidModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		6F47DC0E2B149DAC00992389 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6F47DBD62B11E6FC00992389 /* LaunchScreen.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6F47DC0F2B149DB300992389 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				6F47DBE72B12157A00992389 /* MainTabBarController.swift */,
+				6F47DBE12B11F75D00992389 /* HomeViewController.swift */,
+				6F47DBDF2B11F74200992389 /* PhotoViewController.swift */,
+				6F47DC062B13717600992389 /* TodaysPictureViewController.swift */,
+				6F47DC1B2B14AE8400992389 /* RandomSetViewController.swift */,
+				6F47DBE32B12012000992389 /* AsteroidViewController.swift */,
+				6F47DBE52B1202D300992389 /* BookmarksViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		6F47DC102B149DBD00992389 /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				6F47DBCB2B11E6FB00992389 /* AppDelegate.swift */,
+				6F47DBCD2B11E6FB00992389 /* SceneDelegate.swift */,
+			);
+			path = AppDelegate;
+			sourceTree = "<group>";
+		};
+		6F47DC112B149E3300992389 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				6F47DBED2B12939900992389 /* Extension.swift */,
+				6F47DBEB2B127F6B00992389 /* UIColorExtension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		6F47DC122B149EE800992389 /* NetworkManager */ = {
+			isa = PBXGroup;
+			children = (
+				6F47DC042B136B8C00992389 /* PhotoNetworkManager.swift */,
+				6F47DC152B149F4E00992389 /* AsteroidNetworkManager.swift */,
+			);
+			path = NetworkManager;
+			sourceTree = "<group>";
+		};
+		6F47DC1A2B14A2DB00992389 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				6F25E0552B16341500620097 /* AsteroidTableViewCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -184,16 +255,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F25E0562B16341500620097 /* AsteroidTableViewCell.swift in Sources */,
 				6F47DBEE2B12939900992389 /* Extension.swift in Sources */,
+				6F47DC162B149F4E00992389 /* AsteroidNetworkManager.swift in Sources */,
 				6F47DC072B13717600992389 /* TodaysPictureViewController.swift in Sources */,
 				6F47DBE62B1202D300992389 /* BookmarksViewController.swift in Sources */,
+				6F47DC1C2B14AE8400992389 /* RandomSetViewController.swift in Sources */,
 				6F47DC052B136B8C00992389 /* PhotoNetworkManager.swift in Sources */,
 				6F47DBE02B11F74200992389 /* PhotoViewController.swift in Sources */,
 				6F47DBCC2B11E6FB00992389 /* AppDelegate.swift in Sources */,
 				6F47DC032B136AFB00992389 /* Photo.swift in Sources */,
 				6F47DBEC2B127F6B00992389 /* UIColorExtension.swift in Sources */,
+				6F25E0502B15B38200620097 /* AsteroidModel.swift in Sources */,
 				6F47DBE82B12157A00992389 /* MainTabBarController.swift in Sources */,
 				6F47DBCE2B11E6FB00992389 /* SceneDelegate.swift in Sources */,
+				6F47DC142B149F1C00992389 /* Asteroid.swift in Sources */,
 				6F47DBE22B11F75D00992389 /* HomeViewController.swift in Sources */,
 				6F47DBE42B12012000992389 /* AsteroidViewController.swift in Sources */,
 			);
