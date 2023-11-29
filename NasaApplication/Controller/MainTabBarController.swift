@@ -12,6 +12,10 @@ class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tabBar.backgroundImage = UIImage()
+        tabBar.backgroundColor = .clear
+        tabBar.shadowImage = UIImage()
+        
         generateTabBar()
         setTabBarAppearance()
 //        setupView()

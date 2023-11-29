@@ -19,7 +19,7 @@ class PhotoViewController: UIViewController {
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
-        element.spacing = 20
+        element.spacing = 10
         element.distribution = .fillProportionally
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -28,7 +28,7 @@ class PhotoViewController: UIViewController {
     private lazy var firstButton: UIButton = {
         let element = UIButton(type: .system)
         element.titleLabel?.font = .systemFont(ofSize: 25)
-        element.tintColor = .white
+//        element.tintColor = .systemBackground
         element.setBackgroundImage(UIImage(named: "Rectangle"), for: .normal)
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -37,7 +37,7 @@ class PhotoViewController: UIViewController {
     private lazy var secondButton: UIButton = {
         let element = UIButton(type: .system)
         element.titleLabel?.font = .systemFont(ofSize: 25)
-        element.tintColor = .white
+        element.tintColor = .systemBackground
         element.setBackgroundImage(UIImage(named: "Rectangle"), for: .normal)
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -48,7 +48,7 @@ class PhotoViewController: UIViewController {
         super.viewDidLoad()
         
 
-        
+        view.backgroundColor = .systemBackground
         
         setupAnimation()
         setupUI()
@@ -59,13 +59,13 @@ class PhotoViewController: UIViewController {
     }
     
     private func setupAnimation() {
-                animationView.animation = LottieAnimation.named("planetsLottie")
+                animationView.animation = LottieAnimation.named("planet")
         
 
         
         animationView.frame = CGRect(x: 0, y: 150, width: 200, height: 200)
 
-        animationView.backgroundColor = .black
+//        animationView.backgroundColor = .systemBackground
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
         animationView.animationSpeed = 0.3
@@ -76,7 +76,7 @@ class PhotoViewController: UIViewController {
     
     private func setupUI() {
         
-        view.backgroundColor = .black
+//        view.backgroundColor = .black
         
         view.addSubview(mainStackView)
         
