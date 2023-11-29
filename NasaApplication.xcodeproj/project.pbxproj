@@ -36,6 +36,7 @@
 		6FD50EC52B17656900127308 /* PhotoOfTheDayNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FD50EC42B17656900127308 /* PhotoOfTheDayNetworkManager.swift */; };
 		6FD50EC72B17720D00127308 /* planet.json in Resources */ = {isa = PBXBuildFile; fileRef = 6FD50EC62B17720D00127308 /* planet.json */; };
 		6FD50EC92B177A1600127308 /* waiting.json in Resources */ = {isa = PBXBuildFile; fileRef = 6FD50EC82B177A1600127308 /* waiting.json */; };
+		6FD50ECB2B178C9500127308 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 6FD50ECA2B178C9500127308 /* loading.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +68,7 @@
 		6FD50EC42B17656900127308 /* PhotoOfTheDayNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoOfTheDayNetworkManager.swift; sourceTree = "<group>"; };
 		6FD50EC62B17720D00127308 /* planet.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = planet.json; sourceTree = "<group>"; };
 		6FD50EC82B177A1600127308 /* waiting.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = waiting.json; sourceTree = "<group>"; };
+		6FD50ECA2B178C9500127308 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 				6F47DC0F2B149DB300992389 /* Controller */,
 				6F47DC112B149E3300992389 /* Extension */,
 				6F47DBFE2B13531200992389 /* nasaAnimationMain.json */,
+				6FD50ECA2B178C9500127308 /* loading.json */,
 				6FD50EC62B17720D00127308 /* planet.json */,
 				6FD50EC82B177A1600127308 /* waiting.json */,
 				6F47DC002B13579000992389 /* planetsLottie.json */,
@@ -260,6 +263,7 @@
 				6F47DBD52B11E6FC00992389 /* Assets.xcassets in Resources */,
 				6F47DC012B13579000992389 /* planetsLottie.json in Resources */,
 				6FD50EC72B17720D00127308 /* planet.json in Resources */,
+				6FD50ECB2B178C9500127308 /* loading.json in Resources */,
 				6F47DBFF2B13531200992389 /* nasaAnimationMain.json in Resources */,
 				6FD50EC92B177A1600127308 /* waiting.json in Resources */,
 			);

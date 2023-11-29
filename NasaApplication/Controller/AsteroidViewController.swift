@@ -7,11 +7,17 @@
 
 
 import UIKit
+import Lottie
+
+
 
 class AsteroidViewController: UIViewController {
     
+    
     private var asteroids: [AsteroidModel] = []
     private let asteroidNetworkManager = AsteroidNetworkManager()
+    
+    var animationView = LottieAnimationView()
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -27,25 +33,55 @@ class AsteroidViewController: UIViewController {
         
         view.addSubview(tableView)
         
+        setupAnimation()
         
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+        fetchAstronomyData()
+        setConstraints()
         
         
         tableView.delegate = self
         tableView.dataSource = self
+    }
+    
+    
+    func setConstraints() {
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            animationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            animationView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
+    }
+    
+    
+    private func setupAnimation() {
         
-        asteroidNetworkManager.fetchData { [weak self] asteroid in
+        animationView.animation = LottieAnimation.named("loading")
+        animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
+        animationView.contentMode = .scaleAspectFit
+        animationView.loopMode = .loop
+        animationView.animationSpeed = 1
+        view.addSubview(animationView)
+        animationView.play()
+        
+    }
+    
+    
+    private func fetchAstronomyData() {
+        
+        asteroidNetworkManager.fetchData { [weak self] asteroids in
             DispatchQueue.main.async {
-                self?.asteroids = asteroid
+                self?.asteroids = asteroids
+                self?.animationView.stop()
+                self?.animationView.removeFromSuperview()
                 self?.tableView.reloadData()
             }
         }
     }
+    
 }
 
 extension AsteroidViewController: UITableViewDataSource, UITableViewDelegate {
