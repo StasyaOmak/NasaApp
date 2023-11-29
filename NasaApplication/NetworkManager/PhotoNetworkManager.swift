@@ -9,11 +9,12 @@ import Foundation
 
 class PhotoNetworkManager{
     
-    private let url =
+   private var url =
     "https://api.nasa.gov/planetary/apod?api_key=1kDltXwD3QbkCzKTa9zQnjk7ep6J57SGegoDoF6Q"
     
-    func fetchData(completion: @escaping (AstronomyPicture) -> () ) {
-        
+    func fetchData(count: Int = 1, completion: @escaping ([AstronomyPicture]) -> () ) {
+        url += "&count=\(count)"
+        print(url)
         guard let url = URL(string: url) else { return }
         
         var request = URLRequest(url: url)
@@ -35,7 +36,7 @@ class PhotoNetworkManager{
             
             
             do {
-                let jsonData = try JSONDecoder().decode(AstronomyPicture.self, from: data)
+                let jsonData = try JSONDecoder().decode([AstronomyPicture].self, from: data)
                 completion(jsonData)
             }catch{
                 print("err:::::", error)

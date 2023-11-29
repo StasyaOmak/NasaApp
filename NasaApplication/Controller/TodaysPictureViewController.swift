@@ -74,7 +74,7 @@ class TodaysPictureViewController: UIViewController {
     
     private var scrollView: UIScrollView = {
         let element = UIScrollView()
-        
+        element.contentSize = CGSize(width: 500, height: 1000)
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -88,12 +88,13 @@ class TodaysPictureViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
         
-        view.addSubview(mainStackView)
-        mainStackView.addArrangedSubview(scrollView)
-        scrollView.addSubview(dateLabel)
-        scrollView.addSubview(dayImageView)
-        scrollView.addSubview(titleLabel)
-        scrollView.addSubview(textLabel)
+        view.addSubview(scrollView)
+        scrollView.addSubview(mainStackView)
+//        mainStackView.addArrangedSubview(scrollView)
+        mainStackView.addArrangedSubview(dateLabel)
+        mainStackView.addArrangedSubview(dayImageView)
+        mainStackView.addArrangedSubview(titleLabel)
+        mainStackView.addArrangedSubview(textLabel)
         
         
         setupConstraints()
@@ -101,7 +102,7 @@ class TodaysPictureViewController: UIViewController {
         photoNetworkManager.fetchData { [weak self] picture in
             
             DispatchQueue.main.async {
-                self?.photoOfTheDay = picture
+                self?.photoOfTheDay = picture.first
                 
                 self?.setupViews()
             }
@@ -129,6 +130,10 @@ class TodaysPictureViewController: UIViewController {
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
 
+            mainStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            mainStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            mainStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            mainStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             
             
             //            dateLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -151,26 +156,26 @@ class TodaysPictureViewController: UIViewController {
             //            textLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             //            textLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
             
-            dateLabel.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            
-            dateLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            dateLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            
-            
-            dayImageView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 25),
-            dayImageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            dayImageView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            dayImageView.heightAnchor.constraint(equalToConstant: 200),
-            dayImageView.widthAnchor.constraint(equalToConstant: 150),
-            
-            titleLabel.topAnchor.constraint(equalTo: dayImageView.bottomAnchor, constant: 25),
-            titleLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            
-            textLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
-            textLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
-            textLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
-            textLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20) // Adjust constant as needed
+//            dateLabel.topAnchor.constraint(equalTo: scrollView.topAnchor),
+//            
+//            dateLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+//            dateLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+//            
+//            
+//            dayImageView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 25),
+//            dayImageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+//            dayImageView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+//            dayImageView.heightAnchor.constraint(equalToConstant: 200),
+//            dayImageView.widthAnchor.constraint(equalToConstant: 150),
+//            
+//            titleLabel.topAnchor.constraint(equalTo: dayImageView.bottomAnchor, constant: 25),
+//            titleLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+//            titleLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+//            
+//            textLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
+//            textLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
+//            textLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
+//            textLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20) // Adjust constant as needed
         ])
         
         let contentHeight = dateLabel.frame.height + dayImageView.frame.height + titleLabel.frame.height + textLabel.frame.height + 200 // Adjust this value based on your content

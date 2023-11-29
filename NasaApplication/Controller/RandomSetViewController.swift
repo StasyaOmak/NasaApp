@@ -26,6 +26,8 @@ class RandomSetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = .systemBackground
+        
         setupCollectionView()
         fetchAstronomyData()
         setConstraints()
@@ -51,8 +53,10 @@ class RandomSetViewController: UIViewController {
 
     private func fetchAstronomyData() {
         let networkManager = PhotoNetworkManager()
-        networkManager.fetchData { [weak self] (data) in
-            self?.astronomyPictures.append(data)
+        networkManager.fetchData(count: 70) { [weak self] (data) in
+//            print(data)
+            self?.astronomyPictures = data
+//            self?.astronomyPictures.append(data)
             DispatchQueue.main.async {
                 self?.collectionView.reloadData()
             }
@@ -65,6 +69,8 @@ extension RandomSetViewController: UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return astronomyPictures.count
     }
+    
+   
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)

@@ -72,6 +72,7 @@ class MainTabBarController: UITabBarController {
         roundLayer.fillColor = UIColor.mainBlack.cgColor
         tabBar.tintColor = .tabBarItemAccent
         tabBar.unselectedItemTintColor = .tabBarItemLight
+        tabBar.backgroundColor = .systemBackground
     }
     
 
