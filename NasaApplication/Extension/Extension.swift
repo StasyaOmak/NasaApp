@@ -10,7 +10,7 @@ import UIKit
 extension UIViewController {
     
     func createCustomNavigationBar() {
-        navigationController?.navigationBar.barTintColor = UIColor(red: 0.22, green: 0.67, blue: 0.91, alpha: 1.00)
+        navigationController?.navigationBar.barTintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
     }
     
     func createCustomTitleView(labelName: String, imageNasa: String) -> UIView {
@@ -43,7 +43,7 @@ extension UIViewController {
                 UIImage(systemName: imageName)?.withRenderingMode(.alwaysTemplate),
                 for: .normal
             )
-            button.tintColor = UIColor(red: 0.22, green: 0.67, blue: 0.91, alpha: 1.00)
+            button.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
             button.imageView?.contentMode = .scaleAspectFit
             button.contentVerticalAlignment = .fill
             button.contentHorizontalAlignment = .fill

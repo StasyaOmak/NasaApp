@@ -28,8 +28,9 @@ class PhotoViewController: UIViewController {
     private lazy var firstButton: UIButton = {
         let element = UIButton(type: .system)
         element.titleLabel?.font = .boldSystemFont(ofSize: 25)
-        element.tintColor = UIColor(red: 0.32, green: 0.78, blue: 1.00, alpha: 1.00)
-        element.setBackgroundImage(UIImage(named: "Rectangle"), for: .normal)
+        element.tintColor = .systemBackground
+//        element.setBackgroundImage(UIImage(named: "Rectangle"), for: .normal)
+        element.backgroundColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -37,8 +38,9 @@ class PhotoViewController: UIViewController {
     private lazy var secondButton: UIButton = {
         let element = UIButton(type: .system)
         element.titleLabel?.font = .boldSystemFont(ofSize: 25)
-        element.tintColor = UIColor(red: 0.32, green: 0.78, blue: 1.00, alpha: 1.00)
-        element.setBackgroundImage(UIImage(named: "Rectangle"), for: .normal)
+        element.tintColor = .systemBackground
+//        element.setBackgroundImage(UIImage(named: "Rectangle"), for: .normal)
+        element.backgroundColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()

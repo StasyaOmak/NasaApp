@@ -59,7 +59,7 @@ class AsteroidViewController: UIViewController {
     
     private func setupAnimation() {
         
-        animationView.animation = LottieAnimation.named("loading")
+        animationView.animation = LottieAnimation.named("loadingBlue")
         animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop

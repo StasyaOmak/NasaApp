@@ -47,7 +47,7 @@ class RandomSetViewController: UIViewController {
     }
     
     private func setupAnimation() {
-        animationView.animation = LottieAnimation.named("loading")
+        animationView.animation = LottieAnimation.named("loadingBlue")
         animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
@@ -93,6 +93,23 @@ extension RandomSetViewController: UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return astronomyPictures.count
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item = astronomyPictures[indexPath.row]
+        let detailVC = RandomPhotoDetailViewController()
+        detailVC.selectedPhoto = item
+        
+        self.navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//         let selectedPhoto = astronomyPictures[indexPath.row]
+//
+//         let detailVC = RandomPhotoDetailViewController()
+//         detailVC.selectedPhoto = selectedPhoto
+//
+//         self.navigationController?.pushViewController(detailVC, animated: true)
+//     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
