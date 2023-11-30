@@ -15,7 +15,7 @@ class TodaysPictureViewController: UIViewController {
     private var photoOfTheDay: AstronomyPicture?
     private let photoNetworkManager = PhotoOfTheDayNetworkManager()
     var animationView = LottieAnimationView()
-    
+    private var isMarked = false
     
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
@@ -116,6 +116,17 @@ class TodaysPictureViewController: UIViewController {
     
     @objc private func addBarButtonTapped(){
         print("Hello")
+        isMarked.toggle()
+            
+            if isMarked {
+                addBarButtonItem.image = UIImage(systemName: "bookmark.fill")
+                // Реализуйте логику для обработки маркировки здесь
+            } else {
+                addBarButtonItem.image = UIImage(systemName: "bookmark")
+                // Реализуйте логику для обработки снятия маркировки здесь
+            }
+        
+        
     }
     
     @objc private func actionBarButtonTapped() {
