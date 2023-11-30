@@ -7,13 +7,14 @@
 
 import Foundation
 import SDWebImage
-
+import Lottie
 
 
 class TodaysPictureViewController: UIViewController {
     
     private var photoOfTheDay: AstronomyPicture?
     private let photoNetworkManager = PhotoOfTheDayNetworkManager()
+    var animationView = LottieAnimationView()
     
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
@@ -27,7 +28,6 @@ class TodaysPictureViewController: UIViewController {
     
     let dateLabel: UILabel = {
         let element = UILabel()
-        element.text = "12-13-12"
         element.textAlignment = .left
         element.textAlignment = .center
         element.font = .systemFont(ofSize: 18, weight: .bold)
@@ -39,16 +39,13 @@ class TodaysPictureViewController: UIViewController {
     
     let dayImageView: UIImageView = {
         let element = UIImageView()
-        element.image = UIImage(named: "nasa")
         element.contentMode = .scaleAspectFit
-        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
     let titleLabel: UILabel = {
         let element = UILabel()
-        element.text = "text"
         element.textAlignment = .center
         element.font = .systemFont(ofSize: 22, weight: .bold)
         element.numberOfLines = 0
@@ -60,10 +57,9 @@ class TodaysPictureViewController: UIViewController {
     let textLabel: UITextView = {
         let element = UITextView()
         element.textAlignment = .justified
-        element.text = "jnkdjbkfjabdkvjbndfjklbnkjvkfjdbjkvbdfkjbkvjdkfjbvkjbdfkjbvkjdfkjbkjfdbkjkdfjbkjfdkjbkjdfb"
         element.font = .systemFont(ofSize: 14, weight: .bold)
         element.isEditable = false
-    
+        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -79,12 +75,14 @@ class TodaysPictureViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+        
         view.backgroundColor = .systemBackground
         
         view.addSubview(scrollView)
+        view.addSubview(animationView)
+        
         scrollView.addSubview(mainStackView)
-
+        
         mainStackView.addArrangedSubview(dateLabel)
         mainStackView.addArrangedSubview(dayImageView)
         mainStackView.addArrangedSubview(titleLabel)
@@ -92,14 +90,32 @@ class TodaysPictureViewController: UIViewController {
         
         
         setupConstraints()
+        setupAnimation()
+        
+        animationView.play()
+    
         
         photoNetworkManager.fetchData { [weak self] picture in
             DispatchQueue.main.async {
                 self?.photoOfTheDay = picture
                 self?.setupViews()
+                
+                self?.animationView.stop()
+                self?.animationView.removeFromSuperview()
+                self?.view.setNeedsDisplay()
             }
         }
         
+    }
+
+    private func setupAnimation() {
+        animationView.animation = LottieAnimation.named("loadingBlue")
+        animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
+        animationView.contentMode = .scaleAspectFit
+        animationView.loopMode = .loop
+        animationView.animationSpeed = 1
+        view.addSubview(animationView)
+        animationView.play()
     }
     
     private func setupViews() {
@@ -116,6 +132,9 @@ class TodaysPictureViewController: UIViewController {
     private func setupConstraints() {
         
         NSLayoutConstraint.activate([
+            
+            animationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            animationView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
