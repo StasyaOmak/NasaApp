@@ -12,7 +12,7 @@ import Lottie
 
 class RandomPhotoDetailViewController: UIViewController {
 
-    
+  
     var selectedPhoto: AstronomyPicture?
     private let photoNetworkManager = PhotoNetworkManager()
     var animationView = LottieAnimationView()
@@ -74,18 +74,27 @@ class RandomPhotoDetailViewController: UIViewController {
         return element
     }()
     
+    private lazy var addBarButtonItem: UIBarButtonItem = {
+        return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
+    }()
+    
+    private lazy var actionBarButtonItem: UIBarButtonItem = {
+        return UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(actionBarButtonTapped))
+    }()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+        
+        fetchDataAndUpdateUI()
+        
         view.backgroundColor = .systemBackground
         
         view.addSubview(scrollView)
         view.addSubview(animationView)
         
         scrollView.addSubview(mainStackView)
-
+        
         mainStackView.addArrangedSubview(dateLabel)
         mainStackView.addArrangedSubview(dayImageView)
         mainStackView.addArrangedSubview(titleLabel)
@@ -96,18 +105,40 @@ class RandomPhotoDetailViewController: UIViewController {
         setupAnimation()
         
         animationView.play()
+        setupNavigationBar()
+    }
         
-        photoNetworkManager.fetchData { [weak self] picture in
-            DispatchQueue.main.async {
-                self?.selectedPhoto = picture.last
-                self?.setupViews()
-                
-                self?.animationView.stop()
-                self?.animationView.removeFromSuperview()
-                self?.view.setNeedsDisplay()
+       func fetchDataAndUpdateUI() {
+           
+                photoNetworkManager.fetchData { [weak self] picture in
+                    DispatchQueue.main.async {
+                        self?.dayImageView.image.self
+                        self?.dateLabel.text.self
+                        self?.titleLabel.text.self
+                        self?.textLabel.text.self
+                        
+                        self?.setupViews()
+
+                        self?.animationView.stop()
+                        self?.animationView.removeFromSuperview()
+                        self?.view.setNeedsDisplay()
+                    }
+                }
             }
-        }
         
+    @objc private func addBarButtonTapped(){
+        print(#function)
+    }
+    
+    @objc private func actionBarButtonTapped(){
+        print(#function)
+    }
+    
+    private func setupNavigationBar() {
+        navigationItem.rightBarButtonItems = [actionBarButtonItem, addBarButtonItem]
+        navigationController?.hidesBarsOnSwipe = true
+        actionBarButtonItem.isEnabled = true
+        addBarButtonItem.isEnabled = true
     }
     
     private func setupAnimation() {
@@ -153,12 +184,8 @@ class RandomPhotoDetailViewController: UIViewController {
             dayImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
             dayImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -16),
             dayImageView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor,constant: 5),
-            
-            
-            
-            
+        
             textLabel.heightAnchor.constraint(equalToConstant: 300),
         ])
-        
     }
 }

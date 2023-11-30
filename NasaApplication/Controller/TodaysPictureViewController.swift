@@ -71,7 +71,13 @@ class TodaysPictureViewController: UIViewController {
         return element
     }()
     
+    private lazy var addBarButtonItem: UIBarButtonItem = {
+        return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
+    }()
     
+    private lazy var actionBarButtonItem: UIBarButtonItem = {
+        return UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(actionBarButtonTapped))
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,12 +94,15 @@ class TodaysPictureViewController: UIViewController {
         mainStackView.addArrangedSubview(titleLabel)
         mainStackView.addArrangedSubview(textLabel)
         
-        
+        setupNavigationBar()
         setupConstraints()
         setupAnimation()
         
         animationView.play()
-    
+       
+        
+//        addBarButtonTapped()
+//        actionBarButtonTapped()
         
         photoNetworkManager.fetchData { [weak self] picture in
             DispatchQueue.main.async {
@@ -108,6 +117,21 @@ class TodaysPictureViewController: UIViewController {
         
     }
 
+    @objc private func addBarButtonTapped(){
+        print("Hello")
+    }
+    
+    @objc private func actionBarButtonTapped(){
+        print("Hello")
+    }
+    
+    private func setupNavigationBar() {
+        navigationItem.rightBarButtonItems = [actionBarButtonItem, addBarButtonItem]
+        navigationController?.hidesBarsOnSwipe = true
+        actionBarButtonItem.isEnabled = true
+        addBarButtonItem.isEnabled = true
+    }
+    
     private func setupAnimation() {
         animationView.animation = LottieAnimation.named("loadingBlue")
         animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)

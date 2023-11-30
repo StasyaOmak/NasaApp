@@ -102,14 +102,6 @@ extension RandomSetViewController: UICollectionViewDelegate, UICollectionViewDat
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
     
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//         let selectedPhoto = astronomyPictures[indexPath.row]
-//
-//         let detailVC = RandomPhotoDetailViewController()
-//         detailVC.selectedPhoto = selectedPhoto
-//
-//         self.navigationController?.pushViewController(detailVC, animated: true)
-//     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
@@ -148,11 +140,11 @@ extension RandomSetViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: widthPerItem, height: widthPerItem)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewFlowLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    private func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewFlowLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         sectionInsert.left
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewFlowLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    private func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewFlowLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         sectionInsert
     }
 }

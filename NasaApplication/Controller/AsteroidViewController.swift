@@ -11,8 +11,9 @@ import Lottie
 
 
 
-class AsteroidViewController: UIViewController {
+class AsteroidViewController: UIViewController, UISearchBarDelegate {
     
+    private var searchController = UISearchController(searchResultsController: nil)
     
     private var asteroids: [AsteroidModel] = []
     private let asteroidNetworkManager = AsteroidNetworkManager()
@@ -37,12 +38,20 @@ class AsteroidViewController: UIViewController {
         
         fetchAstronomyData()
         setConstraints()
-        
+        setupSearchBar()
         
         tableView.delegate = self
         tableView.dataSource = self
     }
     
+    private func setupSearchBar() {
+        let seacrhController = UISearchController(searchResultsController: nil)
+        navigationItem.searchController = seacrhController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        seacrhController.hidesNavigationBarDuringPresentation = false
+        seacrhController.obscuresBackgroundDuringPresentation = false
+        seacrhController.searchBar.delegate = self
+    }
     
     func setConstraints() {
         NSLayoutConstraint.activate([
