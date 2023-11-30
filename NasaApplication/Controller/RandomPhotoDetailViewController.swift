@@ -11,13 +11,13 @@ import Lottie
 
 
 class RandomPhotoDetailViewController: UIViewController {
-
-  
+    
+    
     var selectedPhoto: AstronomyPicture?
     private let photoNetworkManager = PhotoNetworkManager()
     var animationView = LottieAnimationView()
     
-
+    
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
@@ -62,7 +62,7 @@ class RandomPhotoDetailViewController: UIViewController {
         element.textAlignment = .justified
         element.font = .systemFont(ofSize: 14, weight: .bold)
         element.isEditable = false
-    
+        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -107,31 +107,55 @@ class RandomPhotoDetailViewController: UIViewController {
         animationView.play()
         setupNavigationBar()
     }
+    
+    func fetchDataAndUpdateUI() {
         
-       func fetchDataAndUpdateUI() {
-           
-                photoNetworkManager.fetchData { [weak self] picture in
-                    DispatchQueue.main.async {
-                        self?.dayImageView.image.self
-                        self?.dateLabel.text.self
-                        self?.titleLabel.text.self
-                        self?.textLabel.text.self
-                        
-                        self?.setupViews()
-
-                        self?.animationView.stop()
-                        self?.animationView.removeFromSuperview()
-                        self?.view.setNeedsDisplay()
-                    }
-                }
+        photoNetworkManager.fetchData { [weak self] picture in
+            DispatchQueue.main.async {
+                self?.dayImageView.image.self
+                self?.dateLabel.text.self
+                self?.titleLabel.text.self
+                self?.textLabel.text.self
+                
+                self?.setupViews()
+                
+                self?.animationView.stop()
+                self?.animationView.removeFromSuperview()
+                self?.view.setNeedsDisplay()
             }
-        
+        }
+    }
+    
     @objc private func addBarButtonTapped(){
         print(#function)
     }
     
-    @objc private func actionBarButtonTapped(){
-        print(#function)
+    @objc private func actionBarButtonTapped() {
+        print("Hello")
+        
+        guard let image = dayImageView.image else {
+            print("No image to share")
+            return
+        }
+        
+        let text = """
+            Date: \(dateLabel.text ?? "")
+            Title: \(titleLabel.text ?? "")
+            Explanation: \(textLabel.text ?? "")
+        """
+        
+        let objectsToShare: [Any] = [image, text]
+        let shareController = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+    
+        shareController.completionWithItemsHandler = { _, completed, _, error in
+            if completed {
+                print("Sharing succeeded")
+            } else {
+                print("Sharing failed: \(String(describing: error))")
+            }
+        }
+        
+        present(shareController, animated: true, completion: nil)
     }
     
     private func setupNavigationBar() {
@@ -161,7 +185,6 @@ class RandomPhotoDetailViewController: UIViewController {
         
     }
     
-    
     private func setupConstraints() {
         
         NSLayoutConstraint.activate([
@@ -184,7 +207,7 @@ class RandomPhotoDetailViewController: UIViewController {
             dayImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
             dayImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -16),
             dayImageView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor,constant: 5),
-        
+            
             textLabel.heightAnchor.constraint(equalToConstant: 300),
         ])
     }

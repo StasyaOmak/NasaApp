@@ -16,6 +16,7 @@ class TodaysPictureViewController: UIViewController {
     private let photoNetworkManager = PhotoOfTheDayNetworkManager()
     var animationView = LottieAnimationView()
     
+    
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
@@ -99,10 +100,7 @@ class TodaysPictureViewController: UIViewController {
         setupAnimation()
         
         animationView.play()
-       
-        
-//        addBarButtonTapped()
-//        actionBarButtonTapped()
+
         
         photoNetworkManager.fetchData { [weak self] picture in
             DispatchQueue.main.async {
@@ -114,19 +112,45 @@ class TodaysPictureViewController: UIViewController {
                 self?.view.setNeedsDisplay()
             }
         }
-        
     }
-
+    
     @objc private func addBarButtonTapped(){
         print("Hello")
     }
     
-    @objc private func actionBarButtonTapped(){
+    @objc private func actionBarButtonTapped() {
         print("Hello")
+        
+        guard let image = dayImageView.image else {
+            print("No image to share")
+            return
+        }
+        
+        let text = """
+            Date: \(dateLabel.text ?? "")
+            Title: \(titleLabel.text ?? "")
+            Explanation: \(textLabel.text ?? "")
+        """
+        
+        let objectsToShare: [Any] = [image, text]
+        let shareController = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+        
+        shareController.completionWithItemsHandler = { _, completed, _, error in
+            if completed {
+                print("Sharing succeeded")
+            } else {
+                print("Sharing failed: \(String(describing: error))")
+            }
+        }
+        
+        present(shareController, animated: true, completion: nil)
     }
     
     private func setupNavigationBar() {
         navigationItem.rightBarButtonItems = [actionBarButtonItem, addBarButtonItem]
+        actionBarButtonItem.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+        addBarButtonItem.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+        //        navigationItem.leftBarButtonItem?.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
         navigationController?.hidesBarsOnSwipe = true
         actionBarButtonItem.isEnabled = true
         addBarButtonItem.isEnabled = true
@@ -152,7 +176,6 @@ class TodaysPictureViewController: UIViewController {
         
     }
     
-    
     private func setupConstraints() {
         
         NSLayoutConstraint.activate([
@@ -176,12 +199,8 @@ class TodaysPictureViewController: UIViewController {
             dayImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -16),
             dayImageView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor,constant: 5),
             
-            
-            
-            
-            textLabel.heightAnchor.constraint(equalToConstant: 200),
+            textLabel.heightAnchor.constraint(equalToConstant: 300),
         ])
-        
     }
 }
 

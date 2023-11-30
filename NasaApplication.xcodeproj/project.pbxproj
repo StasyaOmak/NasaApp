@@ -39,6 +39,7 @@
 		6FD50ECB2B178C9500127308 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 6FD50ECA2B178C9500127308 /* loading.json */; };
 		6FD50ECD2B17BBF400127308 /* loadingBlue.json in Resources */ = {isa = PBXBuildFile; fileRef = 6FD50ECC2B17BBF400127308 /* loadingBlue.json */; };
 		6FD50ECF2B1861DF00127308 /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = 6FD50ECE2B1861DF00127308 /* error.json */; };
+		6FD50EDB2B18B82600127308 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FD50EDA2B18B82600127308 /* NetworkService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +74,7 @@
 		6FD50ECA2B178C9500127308 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		6FD50ECC2B17BBF400127308 /* loadingBlue.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loadingBlue.json; sourceTree = "<group>"; };
 		6FD50ECE2B1861DF00127308 /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
+		6FD50EDA2B18B82600127308 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +181,7 @@
 				6F47DC042B136B8C00992389 /* PhotoNetworkManager.swift */,
 				6F47DC152B149F4E00992389 /* AsteroidNetworkManager.swift */,
 				6FD50EC42B17656900127308 /* PhotoOfTheDayNetworkManager.swift */,
+				6FD50EDA2B18B82600127308 /* NetworkService.swift */,
 			);
 			path = NetworkManager;
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 				6F47DC032B136AFB00992389 /* Photo.swift in Sources */,
 				6F25E0582B17420800620097 /* PhotoCell.swift in Sources */,
 				6F47DBEC2B127F6B00992389 /* UIColorExtension.swift in Sources */,
+				6FD50EDB2B18B82600127308 /* NetworkService.swift in Sources */,
 				6FD50EC52B17656900127308 /* PhotoOfTheDayNetworkManager.swift in Sources */,
 				6F25E0502B15B38200620097 /* AsteroidModel.swift in Sources */,
 				6F47DBE82B12157A00992389 /* MainTabBarController.swift in Sources */,
@@ -455,6 +459,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4CF5B4QS76;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NasaApplication/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -481,6 +486,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4CF5B4QS76;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NasaApplication/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

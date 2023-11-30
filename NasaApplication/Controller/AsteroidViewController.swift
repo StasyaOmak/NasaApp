@@ -11,7 +11,7 @@ import Lottie
 
 
 
-class AsteroidViewController: UIViewController, UISearchBarDelegate {
+class AsteroidViewController: UIViewController {
     
     private var searchController = UISearchController(searchResultsController: nil)
     
@@ -117,3 +117,9 @@ extension AsteroidViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
+extension AsteroidViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print(searchText)
+    }
+    
+}
