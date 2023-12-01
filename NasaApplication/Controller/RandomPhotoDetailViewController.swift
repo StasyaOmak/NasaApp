@@ -42,7 +42,7 @@ class RandomPhotoDetailViewController: UIViewController {
     let dayImageView: UIImageView = {
         let element = UIImageView()
         element.contentMode = .scaleAspectFit
-        
+        element.isUserInteractionEnabled = true
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -146,7 +146,7 @@ class RandomPhotoDetailViewController: UIViewController {
         
         let objectsToShare: [Any] = [image, text]
         let shareController = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-    
+        
         shareController.completionWithItemsHandler = { _, completed, _, error in
             if completed {
                 print("Sharing succeeded")
@@ -183,6 +183,21 @@ class RandomPhotoDetailViewController: UIViewController {
         guard let url = URL(string: selectedPhoto?.url ?? "") else { return }
         dayImageView.sd_setImage(with: url)
         
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        dayImageView.addGestureRecognizer(longPressGesture)
+        
+    }
+    
+    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+        if gesture.state == .began {
+            UIView.animate(withDuration: 0.3) {
+                self.dayImageView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+            }
+        } else if gesture.state == .ended {
+            UIView.animate(withDuration: 0.3) {
+                self.dayImageView.transform = CGAffineTransform.identity
+            }
+        }
     }
     
     private func setupConstraints() {

@@ -105,13 +105,12 @@ extension RandomSetViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.backgroundColor = .black
         
         let imageView = UIImageView()
-        
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        cell.contentView.addSubview(imageView)
         
         cell.contentView.addSubview(imageView)
         
@@ -126,7 +125,61 @@ extension RandomSetViewController: UICollectionViewDelegate, UICollectionViewDat
             imageView.sd_setImage(with: imageURL, completed: nil)
         }
         
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        imageView.addGestureRecognizer(longPressGesture)
+        imageView.isUserInteractionEnabled = true
+        
+        if let imageURL = URL(string: astronomyPictures[indexPath.item].url) {
+            imageView.sd_setImage(with: imageURL, completed: nil)
+        }
+        
         return cell
+    }
+    
+    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+        guard let imageView = gesture.view as? UIImageView else { return }
+        
+        switch gesture.state {
+        case .began:
+            
+            let zoomedImageView = UIImageView(image: imageView.image)
+            zoomedImageView.contentMode = .scaleAspectFit
+            zoomedImageView.backgroundColor = .black
+            zoomedImageView.isUserInteractionEnabled = true
+            
+            if let window = self.view.window {
+                zoomedImageView.frame = window.convert(imageView.frame, from: imageView.superview)
+                window.addSubview(zoomedImageView)
+            }
+            
+            UIView.animate(withDuration: 0.3) {
+                zoomedImageView.frame = UIScreen.main.bounds
+            }
+            
+            zoomedImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomedImageViewTap(_:))))
+            
+        default:
+            break
+        }
+    }
+    
+    @objc private func handleZoomedImageViewTap(_ gesture: UITapGestureRecognizer) {
+        guard let zoomedImageView = gesture.view else { return }
+        UIView.animate(withDuration: 0.3, animations: {
+            zoomedImageView.alpha = 0
+        }) { _ in
+            zoomedImageView.removeFromSuperview()
+        }
+    }
+    
+}
+
+private func handleZoomedImageViewTap(_ gesture: UITapGestureRecognizer) {
+    guard let zoomedImageView = gesture.view else { return }
+    UIView.animate(withDuration: 0.3, animations: {
+        zoomedImageView.alpha = 0
+    }) { _ in
+        zoomedImageView.removeFromSuperview()
     }
 }
 

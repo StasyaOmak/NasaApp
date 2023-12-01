@@ -8,14 +8,29 @@
 import Foundation
 import SDWebImage
 import Lottie
+import CoreData
 
 
 class TodaysPictureViewController: UIViewController {
+    
+    var managedObjectContext: NSManagedObjectContext?
+    
+    var nasaList = [Photo]()
+    
     
     private var photoOfTheDay: AstronomyPicture?
     private let photoNetworkManager = PhotoOfTheDayNetworkManager()
     var animationView = LottieAnimationView()
     private var isMarked = false
+    
+    //Bookmark
+    //    var addBookmarkClosure: ((AstronomyPicture) -> Void)?
+    //
+    //    let bookmarksViewController = BookmarksViewController()
+    //    func bookmarksViewController.addBookmarkClosure = { [weak self] picture in
+    //        self?.handleAddBookmark(picture)
+    //    }
+    
     
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
@@ -41,6 +56,7 @@ class TodaysPictureViewController: UIViewController {
     let dayImageView: UIImageView = {
         let element = UIImageView()
         element.contentMode = .scaleAspectFit
+        element.isUserInteractionEnabled = true
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -73,7 +89,9 @@ class TodaysPictureViewController: UIViewController {
     }()
     
     private lazy var addBarButtonItem: UIBarButtonItem = {
-        return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
+        return UIBarButtonItem(image: UIImage(systemName: "bookmark"), style: .plain, target: self, action: #selector(addBarButtonTapped))
+        
+        
     }()
     
     private lazy var actionBarButtonItem: UIBarButtonItem = {
@@ -82,6 +100,11 @@ class TodaysPictureViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
+        managedObjectContext = appDelegate.persistentContainer.viewContext
+        
+        print(managedObjectContext)
         
         view.backgroundColor = .systemBackground
         
@@ -100,7 +123,7 @@ class TodaysPictureViewController: UIViewController {
         setupAnimation()
         
         animationView.play()
-
+        
         
         photoNetworkManager.fetchData { [weak self] picture in
             DispatchQueue.main.async {
@@ -114,19 +137,50 @@ class TodaysPictureViewController: UIViewController {
         }
     }
     
+    //    func checkModel() -> Bool {
+    //
+    //        if let object = managedObjectContext?.existingObject(with: <#T##NSManagedObjectID#>) {
+    //            // do something with it
+    //        }
+    //        else {
+    //            print("Can't find object")
+    //        }
+    //    }
+    
+    
+    func saveBookmarkArrayFull() {
+        let entity = NSEntityDescription.entity(forEntityName: "Photo", in: self.managedObjectContext!)
+        let list = NSManagedObject(entity: entity!, insertInto: self.managedObjectContext)
+        
+        list.setValue(photoOfTheDay?.date, forKey: "date")
+        list.setValue(photoOfTheDay?.explanation, forKey: "explanation")
+        list.setValue(photoOfTheDay?.title, forKey: "title")
+        list.setValue(photoOfTheDay?.url, forKey: "url")
+        
+        saveCoreData()
+        
+    }
+    
+    func saveCoreData(){
+        do {
+            try managedObjectContext?.save()
+        } catch {
+            fatalError("Error in saving item into core data")
+        }
+    }
+    
+    
+    
+    //bookmark
     @objc private func addBarButtonTapped(){
-        print("Hello")
-        isMarked.toggle()
-            
-            if isMarked {
-                addBarButtonItem.image = UIImage(systemName: "bookmark.fill")
-                // Реализуйте логику для обработки маркировки здесь
-            } else {
-                addBarButtonItem.image = UIImage(systemName: "bookmark")
-                // Реализуйте логику для обработки снятия маркировки здесь
-            }
+        //        do {
+        //            guard let photoOfTheDay = photoOfTheDay else { return }
+        //            addBookmarkClosure?(photoOfTheDay)
+        //
+        //
+        //        }
         
-        
+        saveBookmarkArrayFull()
     }
     
     @objc private func actionBarButtonTapped() {
@@ -185,6 +239,21 @@ class TodaysPictureViewController: UIViewController {
         guard let url = URL(string: photoOfTheDay?.url ?? "") else { return }
         dayImageView.sd_setImage(with: url)
         
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        dayImageView.addGestureRecognizer(longPressGesture)
+        
+    }
+    
+    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+        if gesture.state == .began {
+            UIView.animate(withDuration: 0.3) {
+                self.dayImageView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+            }
+        } else if gesture.state == .ended {
+            UIView.animate(withDuration: 0.3) {
+                self.dayImageView.transform = CGAffineTransform.identity
+            }
+        }
     }
     
     private func setupConstraints() {
