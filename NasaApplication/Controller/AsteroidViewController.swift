@@ -13,10 +13,11 @@ import Lottie
 
 class AsteroidViewController: UIViewController {
     
-    private var searchController = UISearchController(searchResultsController: nil)
     
     private var asteroids: [AsteroidModel] = []
     private let asteroidNetworkManager = AsteroidNetworkManager()
+    
+    private var isSortingDangerousFirst = true
     
     var animationView = LottieAnimationView()
     
@@ -38,19 +39,13 @@ class AsteroidViewController: UIViewController {
         
         fetchAstronomyData()
         setConstraints()
-        setupSearchBar()
+        
+        let sortButtonImage = UIImage(systemName: "chevron.up.chevron.down")
+        let sortButton = UIBarButtonItem(image: sortButtonImage, style: .plain, target: self, action: #selector(sortButtonTapped))
+        navigationItem.rightBarButtonItem = sortButton
         
         tableView.delegate = self
         tableView.dataSource = self
-    }
-    
-    private func setupSearchBar() {
-        let seacrhController = UISearchController(searchResultsController: nil)
-        navigationItem.searchController = seacrhController
-        navigationItem.hidesSearchBarWhenScrolling = false
-        seacrhController.hidesNavigationBarDuringPresentation = false
-        seacrhController.obscuresBackgroundDuringPresentation = false
-        seacrhController.searchBar.delegate = self
     }
     
     func setConstraints() {
@@ -78,17 +73,31 @@ class AsteroidViewController: UIViewController {
         
     }
     
-    
     private func fetchAstronomyData() {
         
         asteroidNetworkManager.fetchData { [weak self] asteroids in
             DispatchQueue.main.async {
                 self?.asteroids = asteroids
+                self?.sortAsteroids()
                 self?.animationView.stop()
                 self?.animationView.removeFromSuperview()
                 self?.tableView.reloadData()
             }
         }
+    }
+    
+    func sortAsteroids() {
+        if isSortingDangerousFirst {
+            asteroids.sort { $0.isDangeros && !$1.isDangeros }
+        } else {
+            asteroids.sort { !$0.isDangeros && $1.isDangeros }
+        }
+        isSortingDangerousFirst.toggle() // Переключение состояния сортировки
+    }
+    
+    @objc func sortButtonTapped() {
+        sortAsteroids()
+        tableView.reloadData()
     }
     
 }
@@ -117,9 +126,5 @@ extension AsteroidViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-extension AsteroidViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print(searchText)
-    }
-    
-}
+
+//}
