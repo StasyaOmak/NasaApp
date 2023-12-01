@@ -31,7 +31,7 @@ class AsteroidViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
+//        view.backgroundColor = .systemBackground
         
         view.addSubview(tableView)
         
@@ -121,10 +121,9 @@ extension AsteroidViewController: UITableViewDataSource, UITableViewDelegate {
         cell.orbitingLabel.text = "Orbiting Body: \(asteroid.orbitingbody)"
         cell.hazardousLabel.text = "Dangerous: \(asteroid.isDangeros ? "Yes" : "No")"
         
-        
+        cell.hazardousLabel.textColor = asteroid.isDangeros ? .red : .label
+
         return cell
     }
 }
 
-
-//}
