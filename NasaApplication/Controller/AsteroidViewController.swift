@@ -31,8 +31,6 @@ class AsteroidViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        view.backgroundColor = .systemBackground
-        
         view.addSubview(tableView)
         
         setupAnimation()
@@ -92,7 +90,7 @@ class AsteroidViewController: UIViewController {
         } else {
             asteroids.sort { !$0.isDangeros && $1.isDangeros }
         }
-        isSortingDangerousFirst.toggle() // Переключение состояния сортировки
+        isSortingDangerousFirst.toggle()
     }
     
     @objc func sortButtonTapped() {

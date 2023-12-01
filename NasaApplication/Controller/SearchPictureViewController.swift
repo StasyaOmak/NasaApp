@@ -1,26 +1,33 @@
 //
-//  RandomSetViewController.swift
+//  SearchPictureViewController.swift
 //  NasaApplication
 //
-//  Created by Anastasiya Omak on 27/11/2023.
+//  Created by Anastasiya Omak on 01/12/2023.
 //
-
 
 
 import UIKit
 import SDWebImage
 import Lottie
 
-class RandomSetViewController: UIViewController {
+class SearchPictureViewController: UIViewController {
     
-    var astronomyPictures: [AstronomyPicture] = []
-    var animationView = LottieAnimationView()
+    var allAstronomyPictures: [AstronomyPicture] = []
+    var filteredAstronomyPictures: [AstronomyPicture] = []
+    
+    var animationView: LottieAnimationView?
     
     let countItem = 2
     let sectionInsert = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
     
+    private let searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.placeholder = "Search pictures by description"
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        return searchBar
+    }()
+    
     private let collectionView: UICollectionView = {
-        
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 1
@@ -32,22 +39,24 @@ class RandomSetViewController: UIViewController {
         return collectionView
     }()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
         
-        view.addSubview(animationView)
-        
+        view.addSubview(searchBar)
         setupCollectionView()
-        setupAnimation()
-        fetchAstronomyData()
         setConstraints()
+        
+        searchBar.delegate = self
+        
+        setupAnimation()
     }
     
     private func setupAnimation() {
-        animationView.animation = LottieAnimation.named("loadingBlue")
+        animationView = LottieAnimationView(name: "loadingBlue")
+        guard let animationView = animationView else { return }
+        
         animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
@@ -57,7 +66,6 @@ class RandomSetViewController: UIViewController {
     }
     
     private func setupCollectionView() {
-        
         self.view.addSubview(collectionView)
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -66,40 +74,58 @@ class RandomSetViewController: UIViewController {
     
     private func setConstraints() {
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
+}
+
+extension SearchPictureViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.count > 2 {
+            fetchAstronomyData(with: searchText)
+        } else {
+            filteredAstronomyPictures = []
+            collectionView.reloadData()
+        }
+    }
     
-    private func fetchAstronomyData() {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    
+    private func fetchAstronomyData(with searchText: String) {
         let networkManager = PhotoNetworkManager()
-        networkManager.fetchData(count: 100 ) { [weak self] (data) in
-            self?.astronomyPictures = data
+        networkManager.fetchData(count: 100) { [weak self] (data) in
+            self?.allAstronomyPictures = data
+            self?.filteredAstronomyPictures = data.filter { $0.explanation.lowercased().contains(searchText.lowercased()) }
             DispatchQueue.main.async {
-                self?.animationView.stop()
-                self?.animationView.removeFromSuperview()
+                self?.animationView?.stop()
+                self?.animationView?.removeFromSuperview()
                 self?.collectionView.reloadData()
             }
         }
     }
 }
 
-extension RandomSetViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    
+extension SearchPictureViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return astronomyPictures.count
+        return filteredAstronomyPictures.count
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let item = astronomyPictures[indexPath.row]
+        let item = filteredAstronomyPictures[indexPath.row]
         let detailVC = RandomPhotoDetailViewController()
         detailVC.selectedPhoto = item
         
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
@@ -110,8 +136,6 @@ extension RandomSetViewController: UICollectionViewDelegate, UICollectionViewDat
         imageView.clipsToBounds = true
         cell.contentView.addSubview(imageView)
         
-        cell.contentView.addSubview(imageView)
-        
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor),
@@ -119,17 +143,13 @@ extension RandomSetViewController: UICollectionViewDelegate, UICollectionViewDat
             imageView.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor),
         ])
         
-        if let imageURL = URL(string: astronomyPictures[indexPath.item].url) {
+        if let imageURL = URL(string: filteredAstronomyPictures[indexPath.item].url) {
             imageView.sd_setImage(with: imageURL, completed: nil)
         }
         
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
         imageView.addGestureRecognizer(longPressGesture)
         imageView.isUserInteractionEnabled = true
-        
-        if let imageURL = URL(string: astronomyPictures[indexPath.item].url) {
-            imageView.sd_setImage(with: imageURL, completed: nil)
-        }
         
         return cell
     }
@@ -169,19 +189,9 @@ extension RandomSetViewController: UICollectionViewDelegate, UICollectionViewDat
             zoomedImageView.removeFromSuperview()
         }
     }
-    
 }
 
-private func handleZoomedImageViewTap(_ gesture: UITapGestureRecognizer) {
-    guard let zoomedImageView = gesture.view else { return }
-    UIView.animate(withDuration: 0.3, animations: {
-        zoomedImageView.alpha = 0
-    }) { _ in
-        zoomedImageView.removeFromSuperview()
-    }
-}
-
-extension RandomSetViewController: UICollectionViewDelegateFlowLayout {
+extension SearchPictureViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
@@ -189,13 +199,5 @@ extension RandomSetViewController: UICollectionViewDelegateFlowLayout {
         let availableWidth = view.frame.width - space
         let widthPerItem = availableWidth / CGFloat(countItem)
         return CGSize(width: widthPerItem, height: widthPerItem)
-    }
-    
-    private func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewFlowLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        sectionInsert.left
-    }
-    
-    private func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewFlowLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        sectionInsert
     }
 }

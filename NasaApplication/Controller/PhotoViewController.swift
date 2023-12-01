@@ -43,6 +43,17 @@ class PhotoViewController: UIViewController {
         return element
     }()
     
+    private lazy var thirdButton: UIButton = {
+        let element = UIButton(type: .system)
+        element.titleLabel?.font = .boldSystemFont(ofSize: 20)
+        element.tintColor = .white
+        element.backgroundColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+        element.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        element.tag = 1
+        element.translatesAutoresizingMaskIntoConstraints = false
+        return element
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -77,6 +88,7 @@ class PhotoViewController: UIViewController {
         mainStackView.addArrangedSubview(animationView)
         mainStackView.addArrangedSubview(firstButton)
         mainStackView.addArrangedSubview(secondButton)
+        mainStackView.addArrangedSubview(thirdButton)
         
         firstButton.setTitle("Today's Picture", for: .normal)
         firstButton.addTarget(self, action: #selector(todaysPictureButtonTapped), for: .touchUpInside)
@@ -84,8 +96,12 @@ class PhotoViewController: UIViewController {
         secondButton.setTitle("Random Set", for: .normal)
         secondButton.addTarget(self, action: #selector(randomSetButtonTapped), for: .touchUpInside)
         
+        thirdButton.setTitle("Search Picture", for: .normal)
+        thirdButton.addTarget(self, action: #selector(searchPictureButtonTapped), for: .touchUpInside)
+        
         firstButton.layer.cornerRadius = 20
         secondButton.layer.cornerRadius = 20
+        thirdButton.layer.cornerRadius = 20
         
     }
     
@@ -103,6 +119,11 @@ class PhotoViewController: UIViewController {
         let randomSetViewController = RandomSetViewController()
         navigationController?.pushViewController(randomSetViewController, animated: true)
     }
+    
+    @objc private func searchPictureButtonTapped() {
+        let searchPictureViewController = SearchPictureViewController()
+        navigationController?.pushViewController(searchPictureViewController, animated: true)
+    }
 }
 
 extension PhotoViewController {
@@ -119,6 +140,8 @@ extension PhotoViewController {
             firstButton.heightAnchor.constraint(equalToConstant: 80),
             
             secondButton.heightAnchor.constraint(equalToConstant: 80),
+            
+            thirdButton.heightAnchor.constraint(equalToConstant: 80),
         ])
     }
 }

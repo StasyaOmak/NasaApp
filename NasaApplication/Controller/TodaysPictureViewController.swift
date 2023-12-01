@@ -184,7 +184,7 @@ class TodaysPictureViewController: UIViewController {
     }
     
     @objc private func actionBarButtonTapped() {
-        print("Hello")
+        print("You can share an image")
         
         guard let image = dayImageView.image else {
             print("No image to share")
