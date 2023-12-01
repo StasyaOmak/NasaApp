@@ -25,7 +25,6 @@ class PhotoViewController: UIViewController {
         let element = UIButton(type: .system)
         element.titleLabel?.font = .boldSystemFont(ofSize: 20)
         element.tintColor = .white
-        element.backgroundColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
         element.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         element.tag = 1
         element.translatesAutoresizingMaskIntoConstraints = false
@@ -36,7 +35,6 @@ class PhotoViewController: UIViewController {
         let element = UIButton(type: .system)
         element.titleLabel?.font = .boldSystemFont(ofSize: 20)
         element.tintColor = .white
-        element.backgroundColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
         element.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         element.tag = 1
         element.translatesAutoresizingMaskIntoConstraints = false
@@ -47,7 +45,6 @@ class PhotoViewController: UIViewController {
         let element = UIButton(type: .system)
         element.titleLabel?.font = .boldSystemFont(ofSize: 20)
         element.tintColor = .white
-        element.backgroundColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
         element.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         element.tag = 1
         element.translatesAutoresizingMaskIntoConstraints = false
@@ -66,8 +63,9 @@ class PhotoViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        firstButton.backgroundColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
-        secondButton.backgroundColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+        firstButton.backgroundColor = UIColor(red: 0.36, green: 0.58, blue: 0.99, alpha: 1.00)
+        secondButton.backgroundColor = UIColor(red: 0.36, green: 0.58, blue: 0.99, alpha: 1.00)
+        thirdButton.backgroundColor = UIColor(red: 0.36, green: 0.58, blue: 0.99, alpha: 1.00)
     }
     
     private func setupAnimation() {
@@ -75,7 +73,7 @@ class PhotoViewController: UIViewController {
         animationView.frame = CGRect(x: 0, y: 150, width: 50, height: 50)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
-        animationView.animationSpeed = 0.6
+        animationView.animationSpeed = 1
         view.addSubview(animationView)
         animationView.play()
         

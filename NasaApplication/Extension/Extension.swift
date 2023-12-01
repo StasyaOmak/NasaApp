@@ -10,7 +10,7 @@ import UIKit
 extension UIViewController {
     
     func createCustomNavigationBar() {
-        navigationController?.navigationBar.barTintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+        navigationController?.navigationBar.barTintColor = UIColor(red: 0.16, green: 0.24, blue: 0.36, alpha: 1.00)
     }
     
     func createCustomTitleView(labelName: String, imageNasa: String) -> UIView {

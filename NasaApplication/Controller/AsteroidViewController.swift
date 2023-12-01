@@ -44,6 +44,8 @@ class AsteroidViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        tableView.separatorColor = .red
     }
     
     func setConstraints() {

@@ -88,7 +88,7 @@ class SearchPictureViewController: UIViewController {
 
 extension SearchPictureViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.count > 2 {
+        if searchText.count > 4 {
             fetchAstronomyData(with: searchText)
         } else {
             filteredAstronomyPictures = []
