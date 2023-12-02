@@ -90,8 +90,6 @@ class TodaysPictureViewController: UIViewController {
     
     private lazy var addBarButtonItem: UIBarButtonItem = {
         return UIBarButtonItem(image: UIImage(systemName: "bookmark"), style: .plain, target: self, action: #selector(addBarButtonTapped))
-        
-        
     }()
     
     private lazy var actionBarButtonItem: UIBarButtonItem = {

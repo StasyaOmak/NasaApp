@@ -123,20 +123,20 @@ class BookmarkPhotoDetailViewController: UIViewController {
     }
     
     @objc private func removeBarButtonItemTapped() {
-        guard let photoOfTheDay = photoOfTheDayTwo else { return }
-        
-        let newPhoto = Photo(context: managedObjectContext!)
-        newPhoto.date = photoOfTheDay.date
-        newPhoto.title = photoOfTheDay.title
-        newPhoto.explanation = photoOfTheDay.explanation
-        newPhoto.url = photoOfTheDay.url
-        
-        do {
-            try managedObjectContext?.save()
-            print("Photo added to bookmarks")
-        } catch {
-            print("Error saving photo to bookmarks: \(error)")
-        }
+//        guard let photoOfTheDay = photoOfTheDayTwo else { return }
+//        
+//        let newPhoto = Photo(context: managedObjectContext!)
+//        newPhoto.date = photoOfTheDay.date
+//        newPhoto.title = photoOfTheDay.title
+//        newPhoto.explanation = photoOfTheDay.explanation
+//        newPhoto.url = photoOfTheDay.url
+//        
+//        do {
+//            try managedObjectContext?.save()
+//            print("Photo added to bookmarks")
+//        } catch {
+//            print("Error saving photo to bookmarks: \(error)")
+//        }
     }
     
     @objc private func actionBarButtonTapped() {

@@ -8,6 +8,7 @@
 import UIKit
 import SDWebImage
 import Lottie
+import CoreData
 
 
 class RandomPhotoDetailViewController: UIViewController {
@@ -16,7 +17,8 @@ class RandomPhotoDetailViewController: UIViewController {
     var selectedPhoto: AstronomyPicture?
     private let photoNetworkManager = PhotoNetworkManager()
     var animationView = LottieAnimationView()
-    
+    var managedObjectContext: NSManagedObjectContext?
+    private var isMarked = false
     
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
@@ -75,7 +77,7 @@ class RandomPhotoDetailViewController: UIViewController {
     }()
     
     private lazy var addBarButtonItem: UIBarButtonItem = {
-        return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
+        return UIBarButtonItem(image: UIImage(systemName: "bookmark"), style: .plain, target: self, action: #selector(addBarButtonTapped))
     }()
     
     private lazy var actionBarButtonItem: UIBarButtonItem = {
@@ -85,6 +87,11 @@ class RandomPhotoDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
+        managedObjectContext = appDelegate.persistentContainer.viewContext
+        
+        print(managedObjectContext)
         
         fetchDataAndUpdateUI()
         
@@ -128,6 +135,7 @@ class RandomPhotoDetailViewController: UIViewController {
     
     @objc private func addBarButtonTapped(){
         print(#function)
+        saveBookmarkArrayFull()
     }
     
     @objc private func actionBarButtonTapped() {
@@ -156,6 +164,27 @@ class RandomPhotoDetailViewController: UIViewController {
         }
         
         present(shareController, animated: true, completion: nil)
+    }
+    
+    func saveBookmarkArrayFull() {
+        let entity = NSEntityDescription.entity(forEntityName: "Photo", in: self.managedObjectContext!)
+        let list = NSManagedObject(entity: entity!, insertInto: self.managedObjectContext)
+        
+        list.setValue(selectedPhoto?.date, forKey: "date")
+        list.setValue(selectedPhoto?.explanation, forKey: "explanation")
+        list.setValue(selectedPhoto?.title, forKey: "title")
+        list.setValue(selectedPhoto?.url, forKey: "url")
+        
+        saveCoreData()
+        
+    }
+    
+    func saveCoreData(){
+        do {
+            try managedObjectContext?.save()
+        } catch {
+            fatalError("Error in saving item into core data")
+        }
     }
     
     private func setupNavigationBar() {

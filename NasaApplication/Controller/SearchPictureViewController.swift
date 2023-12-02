@@ -88,7 +88,7 @@ class SearchPictureViewController: UIViewController {
 
 extension SearchPictureViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.count > 4 {
+        if searchText.count > 3 {
             fetchAstronomyData(with: searchText)
         } else {
             filteredAstronomyPictures = []
@@ -109,7 +109,6 @@ extension SearchPictureViewController: UISearchBarDelegate {
             if let _ = data.first {
                         self?.filteredAstronomyPictures = data.filter { $0.explanation.lowercased().contains(searchText.lowercased()) }
                     } else {
-                        // Если произошла ошибка, отключаем анимацию
                         self?.animationView?.stop()
                         self?.animationView?.removeFromSuperview()
                     }
