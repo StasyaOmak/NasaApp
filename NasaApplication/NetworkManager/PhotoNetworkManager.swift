@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Lottie
+import UIKit
 
 class PhotoNetworkManager{
     
@@ -47,4 +49,6 @@ class PhotoNetworkManager{
     }
     
 }
+
+
 

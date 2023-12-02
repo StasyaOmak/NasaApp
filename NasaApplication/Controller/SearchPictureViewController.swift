@@ -104,13 +104,22 @@ extension SearchPictureViewController: UISearchBarDelegate {
         let networkManager = PhotoNetworkManager()
         networkManager.fetchData(count: 100) { [weak self] (data) in
             self?.allAstronomyPictures = data
-            self?.filteredAstronomyPictures = data.filter { $0.explanation.lowercased().contains(searchText.lowercased()) }
+            
+            
+            if let _ = data.first {
+                        self?.filteredAstronomyPictures = data.filter { $0.explanation.lowercased().contains(searchText.lowercased()) }
+                    } else {
+                        // Если произошла ошибка, отключаем анимацию
+                        self?.animationView?.stop()
+                        self?.animationView?.removeFromSuperview()
+                    }
+            
             DispatchQueue.main.async {
                 self?.animationView?.stop()
                 self?.animationView?.removeFromSuperview()
                 self?.collectionView.reloadData()
             }
-        }
+        } 
     }
 }
 

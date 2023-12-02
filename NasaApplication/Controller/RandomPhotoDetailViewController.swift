@@ -110,7 +110,7 @@ class RandomPhotoDetailViewController: UIViewController {
     
     func fetchDataAndUpdateUI() {
         
-        photoNetworkManager.fetchData { [weak self] picture in
+       photoNetworkManager.fetchData  { [weak self] picture in
             DispatchQueue.main.async {
                 self?.dayImageView.image.self
                 self?.dateLabel.text.self

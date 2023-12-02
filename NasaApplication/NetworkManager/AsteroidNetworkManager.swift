@@ -12,7 +12,7 @@ class AsteroidNetworkManager {
     
     static let shared = AsteroidNetworkManager()
     
-    private let url = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2023-11-25&end_date=2023-11-28&api_key=1kDltXwD3QbkCzKTa9zQnjk7ep6J57SGegoDoF6Q"
+    private let url = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2023-11-25&end_date=2023-12-02&api_key=1kDltXwD3QbkCzKTa9zQnjk7ep6J57SGegoDoF6Q"
     
     func fetchData(completion: @escaping ([AsteroidModel]) -> () ) {
         

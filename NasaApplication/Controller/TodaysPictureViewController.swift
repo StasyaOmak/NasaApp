@@ -260,8 +260,8 @@ class TodaysPictureViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             
-            animationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            animationView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+//            animationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//            animationView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -275,9 +275,9 @@ class TodaysPictureViewController: UIViewController {
             
             dayImageView.heightAnchor.constraint(equalToConstant: 280),
             dayImageView.widthAnchor.constraint(equalToConstant: 250),
-            dayImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
-            dayImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -16),
-            dayImageView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor,constant: 5),
+            dayImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            dayImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            dayImageView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 5),
             
             textLabel.heightAnchor.constraint(equalToConstant: 300),
         ])

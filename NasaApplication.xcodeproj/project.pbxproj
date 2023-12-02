@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6F1A27162B1B79BE001B8FED /* BookmarksTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F1A27152B1B79BE001B8FED /* BookmarksTableViewCell.swift */; };
 		6F25E0502B15B38200620097 /* AsteroidModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F25E04F2B15B38200620097 /* AsteroidModel.swift */; };
 		6F25E0562B16341500620097 /* AsteroidTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F25E0552B16341500620097 /* AsteroidTableViewCell.swift */; };
 		6F25E05C2B17501700620097 /* RandomPhotoDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F25E05B2B17501700620097 /* RandomPhotoDetailViewController.swift */; };
@@ -46,6 +47,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6F1A27152B1B79BE001B8FED /* BookmarksTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTableViewCell.swift; sourceTree = "<group>"; };
 		6F25E04F2B15B38200620097 /* AsteroidModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsteroidModel.swift; sourceTree = "<group>"; };
 		6F25E0552B16341500620097 /* AsteroidTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsteroidTableViewCell.swift; sourceTree = "<group>"; };
 		6F25E05B2B17501700620097 /* RandomPhotoDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomPhotoDetailViewController.swift; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 			isa = PBXGroup;
 			children = (
 				6F25E0552B16341500620097 /* AsteroidTableViewCell.swift */,
+				6F1A27152B1B79BE001B8FED /* BookmarksTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 				6F47DC052B136B8C00992389 /* PhotoNetworkManager.swift in Sources */,
 				6F47DBE02B11F74200992389 /* PhotoViewController.swift in Sources */,
 				6F47DBCC2B11E6FB00992389 /* AppDelegate.swift in Sources */,
+				6F1A27162B1B79BE001B8FED /* BookmarksTableViewCell.swift in Sources */,
 				6FD50EE62B18F3A200127308 /* NasaModel.xcdatamodeld in Sources */,
 				6FB64D802B1A09DC003952F0 /* SearchPictureViewController.swift in Sources */,
 				6F47DC032B136AFB00992389 /* Photo.swift in Sources */,

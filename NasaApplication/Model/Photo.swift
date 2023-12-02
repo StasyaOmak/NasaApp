@@ -12,4 +12,6 @@ struct AstronomyPicture: Codable {
     let explanation: String
     let title: String
     let url: String
+//    let copyright: String
+//    var imageData: Data?
 }
