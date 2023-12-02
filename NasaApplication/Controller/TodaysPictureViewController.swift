@@ -260,9 +260,6 @@ class TodaysPictureViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             
-//            animationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            animationView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),

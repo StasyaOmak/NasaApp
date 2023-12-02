@@ -8,17 +8,18 @@
 import Foundation
 import SDWebImage
 import Lottie
+import CoreData
 
 
 
 
 class BookmarkPhotoDetailViewController: UIViewController {
     
-    private var photoOfTheDay: AstronomyPicture?
-    private let photoNetworkManager = PhotoOfTheDayNetworkManager()
+    var photoOfTheDayTwo: AstronomyPicture?
+    private let photoNetworkManager = PhotoNetworkManager()
     var animationView = LottieAnimationView()
     private var isMarked = false
-    
+    var managedObjectContext: NSManagedObjectContext?
     
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
@@ -107,7 +108,11 @@ class BookmarkPhotoDetailViewController: UIViewController {
         
         photoNetworkManager.fetchData { [weak self] picture in
             DispatchQueue.main.async {
-                self?.photoOfTheDay = picture
+                self?.dayImageView.image.self
+                self?.dateLabel.text.self
+                self?.titleLabel.text.self
+                self?.textLabel.text.self
+                
                 self?.setupViews()
                 
                 self?.animationView.stop()
@@ -117,10 +122,21 @@ class BookmarkPhotoDetailViewController: UIViewController {
         }
     }
     
-    
-    //bookmark
-    @objc private func removeBarButtonItemTapped(){
-       
+    @objc private func removeBarButtonItemTapped() {
+        guard let photoOfTheDay = photoOfTheDayTwo else { return }
+        
+        let newPhoto = Photo(context: managedObjectContext!)
+        newPhoto.date = photoOfTheDay.date
+        newPhoto.title = photoOfTheDay.title
+        newPhoto.explanation = photoOfTheDay.explanation
+        newPhoto.url = photoOfTheDay.url
+        
+        do {
+            try managedObjectContext?.save()
+            print("Photo added to bookmarks")
+        } catch {
+            print("Error saving photo to bookmarks: \(error)")
+        }
     }
     
     @objc private func actionBarButtonTapped() {
@@ -172,11 +188,11 @@ class BookmarkPhotoDetailViewController: UIViewController {
     }
     
     private func setupViews() {
-        dateLabel.text = photoOfTheDay?.date
-        titleLabel.text = photoOfTheDay?.title
-        textLabel.text = photoOfTheDay?.explanation
+        dateLabel.text = photoOfTheDayTwo?.date
+        titleLabel.text = photoOfTheDayTwo?.title
+        textLabel.text = photoOfTheDayTwo?.explanation
         
-        guard let url = URL(string: photoOfTheDay?.url ?? "") else { return }
+        guard let url = URL(string: photoOfTheDayTwo?.url ?? "") else { return }
         dayImageView.sd_setImage(with: url)
         
     }

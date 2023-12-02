@@ -11,6 +11,7 @@ import UIKit
 import SDWebImage
 import Lottie
 
+
 class RandomSetViewController: UIViewController {
     
     var astronomyPictures: [AstronomyPicture] = []

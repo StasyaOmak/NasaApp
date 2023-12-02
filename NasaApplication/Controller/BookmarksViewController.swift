@@ -18,6 +18,8 @@ class BookmarksViewController: UIViewController {
     private let tableView = UITableView()
     var managedObjectContext: NSManagedObjectContext?
     var nasaList = [Photo]()
+    var bookmarkAstronomyPictures: [AstronomyPicture] = []
+    private var photoOfTheDayTwo: AstronomyPicture?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +49,7 @@ class BookmarksViewController: UIViewController {
             nasaList = result ?? []
             print(nasaList.count)
         } catch {
-            fatalError("Error in loading item into core data")
+            fatalError("Error loading items into Core Data")
         }
     }
     
@@ -108,6 +110,7 @@ class BookmarksViewController: UIViewController {
     
 }
 
+
 extension BookmarksViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -122,6 +125,18 @@ extension BookmarksViewController: UITableViewDataSource, UITableViewDelegate {
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            let photo = nasaList[indexPath.row]
+            let detailVC = BookmarkPhotoDetailViewController()
+        detailVC.photoOfTheDayTwo = convertPhotoToAstronomyPicture(photo)
+            self.navigationController?.pushViewController(detailVC, animated: true)
+        }
+
+        private func convertPhotoToAstronomyPicture(_ photo: Photo) -> AstronomyPicture {
+            return AstronomyPicture(date: photo.date ?? "", explanation: photo.explanation ?? "", title: photo.title ?? "", url: photo.url ?? "")
+        }
+    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120

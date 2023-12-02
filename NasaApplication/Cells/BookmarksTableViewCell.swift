@@ -59,11 +59,13 @@ class BookmarksTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupSubviews()
+        setupConstraints()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setupSubviews()
+//        setupSubviews()
+//        setupConstraints()
     }
     
     func setupUI(withDataFrom: Photo){
@@ -82,20 +84,21 @@ class BookmarksTableViewCell: UITableViewCell {
         labelStackView.addArrangedSubview(bookmarkDateLabel)
         labelStackView.addArrangedSubview(bookmarkTitleLabel)
         
-        
-        NSLayoutConstraint.activate([
-            
-            mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            
-            bookmarkImageView.widthAnchor.constraint(equalToConstant: 150),
-            bookmarkImageView.heightAnchor.constraint(equalTo: bookmarkImageView.widthAnchor),
-            bookmarkImageView.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 20),
-            bookmarkImageView.topAnchor.constraint(equalTo: mainStackView.topAnchor, constant: 20),
-            bookmarkImageView.bottomAnchor.constraint(equalTo: mainStackView.bottomAnchor, constant: -20),
-        ])
     }
-}
-
+    private func setupConstraints() {
+            
+            NSLayoutConstraint.activate([
+                
+                mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
+                mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                
+                bookmarkImageView.widthAnchor.constraint(equalToConstant: 150),
+                bookmarkImageView.heightAnchor.constraint(equalTo: bookmarkImageView.widthAnchor),
+                bookmarkImageView.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 20),
+                bookmarkImageView.topAnchor.constraint(equalTo: mainStackView.topAnchor, constant: 20),
+                bookmarkImageView.bottomAnchor.constraint(equalTo: mainStackView.bottomAnchor, constant: -20),
+            ])
+        }
+    }
