@@ -3,9 +3,9 @@
 //  NasaApplication
 //
 //  Created by Anastasiya Omak on 25/11/2023.
-//
-//
-//
+
+
+
 import UIKit
 import SDWebImage
 import Lottie
@@ -31,14 +31,15 @@ class BookmarksViewController: UIViewController {
         
         setConstraints()
         
+        
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
         managedObjectContext = appDelegate.persistentContainer.viewContext
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadCoreData()
+        bookmarkTableView.reloadData()
     }
     
     func loadCoreData() {
@@ -60,6 +61,34 @@ class BookmarksViewController: UIViewController {
         return tableView
     }()
     
+    func deleteAllCoreData() {
+        
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult>
+        fetchRequest = NSFetchRequest(entityName: "Photo")
+        
+        let deleteRequest = NSBatchDeleteRequest(
+            fetchRequest: fetchRequest
+        )
+        
+        deleteRequest.resultType = .resultTypeObjectIDs
+        
+        let batchDelete = try? managedObjectContext!.execute(deleteRequest)
+        as? NSBatchDeleteResult
+        
+        guard let deleteResult = batchDelete?.result
+                as? [NSManagedObjectID]
+        else { return }
+        
+        let deletedObjects: [AnyHashable: Any] = [
+            NSDeletedObjectsKey: deleteResult
+        ]
+        
+        NSManagedObjectContext.mergeChanges(
+            fromRemoteContextSave: deletedObjects,
+            into: [managedObjectContext!]
+        )
+    }
+    
     func setConstraints() {
         NSLayoutConstraint.activate([
             bookmarkTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -68,48 +97,7 @@ class BookmarksViewController: UIViewController {
             bookmarkTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
-    
-    
-    //            extension BookmarksViewController {
-    //
-    //                func loadCoreData() {
-    //
-    //                }
-    //
-    //                func saveCoreData(){
-    //
-    //                }
-    //
-    //    func saveToDoListArrayFull() {
-    //
-    //    do {
-    //        try managedObjectContext?.save()
-    //    } catch {
-    //        fatalError("Error in saving item into core data")
-    //    }
-    //    loadCoreData()
-    //                }
-    //
-    //
-    //                func deleteAllCoreData() {
-    //
-    //                }
-    //    }
-    //    /*
-    //      MARK: - Navigation
-    //
-    //      In a storyboard-based application, you will often want to do a little preparation before navigation
-    //     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    //      Get the new view controller using segue.destination.
-    //      Pass the selected object to the new view controller.
-    //     }
-    //     */
-    //
-    //
-    
-    
 }
-
 
 extension BookmarksViewController: UITableViewDataSource, UITableViewDelegate {
     
@@ -127,15 +115,15 @@ extension BookmarksViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            let photo = nasaList[indexPath.row]
-            let detailVC = BookmarkPhotoDetailViewController()
+        let photo = nasaList[indexPath.row]
+        let detailVC = BookmarkPhotoDetailViewController()
         detailVC.photoOfTheDayTwo = convertPhotoToAstronomyPicture(photo)
-            self.navigationController?.pushViewController(detailVC, animated: true)
-        }
-
-        private func convertPhotoToAstronomyPicture(_ photo: Photo) -> AstronomyPicture {
-            return AstronomyPicture(date: photo.date ?? "", explanation: photo.explanation ?? "", title: photo.title ?? "", url: photo.url ?? "")
-        }
+        self.navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
+    private func convertPhotoToAstronomyPicture(_ photo: Photo) -> AstronomyPicture {
+        return AstronomyPicture(date: photo.date ?? "", explanation: photo.explanation ?? "", title: photo.title ?? "", url: photo.url ?? "")
+    }
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

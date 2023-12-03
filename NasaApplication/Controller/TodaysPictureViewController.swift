@@ -17,19 +17,10 @@ class TodaysPictureViewController: UIViewController {
     
     var nasaList = [Photo]()
     
-    
     private var photoOfTheDay: AstronomyPicture?
     private let photoNetworkManager = PhotoOfTheDayNetworkManager()
     var animationView = LottieAnimationView()
     private var isMarked = false
-    
-    //Bookmark
-    //    var addBookmarkClosure: ((AstronomyPicture) -> Void)?
-    //
-    //    let bookmarksViewController = BookmarksViewController()
-    //    func bookmarksViewController.addBookmarkClosure = { [weak self] picture in
-    //        self?.handleAddBookmark(picture)
-    //    }
     
     
     private lazy var mainStackView: UIStackView = {
@@ -96,6 +87,25 @@ class TodaysPictureViewController: UIViewController {
         return UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(actionBarButtonTapped))
     }()
     
+    func checkCoreData() {
+        let fetchRequest: NSFetchRequest<Photo>
+        fetchRequest = Photo.fetchRequest()
+        
+        guard let title = photoOfTheDay?.title else {
+            print("Don't have photoOfTheDay")
+            return
+        }
+        fetchRequest.predicate = NSPredicate(
+            format: "title LIKE %@", title
+        )
+        
+        if let object = try? managedObjectContext?.fetch(fetchRequest).first {
+            addBarButtonItem.image = UIImage(systemName: "bookmark.fill")
+        } else {
+            addBarButtonItem.image = UIImage(systemName: "bookmark")
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -122,10 +132,10 @@ class TodaysPictureViewController: UIViewController {
         
         animationView.play()
         
-        
         photoNetworkManager.fetchData { [weak self] picture in
             DispatchQueue.main.async {
                 self?.photoOfTheDay = picture
+                self?.checkCoreData()
                 self?.setupViews()
                 
                 self?.animationView.stop()
@@ -134,17 +144,6 @@ class TodaysPictureViewController: UIViewController {
             }
         }
     }
-    
-    //    func checkModel() -> Bool {
-    //
-    //        if let object = managedObjectContext?.existingObject(with: <#T##NSManagedObjectID#>) {
-    //            // do something with it
-    //        }
-    //        else {
-    //            print("Can't find object")
-    //        }
-    //    }
-    
     
     func saveBookmarkArrayFull() {
         let entity = NSEntityDescription.entity(forEntityName: "Photo", in: self.managedObjectContext!)
@@ -156,7 +155,27 @@ class TodaysPictureViewController: UIViewController {
         list.setValue(photoOfTheDay?.url, forKey: "url")
         
         saveCoreData()
+    }
+    
+    func deleteObject() {
+        let fetchRequest: NSFetchRequest<Photo>
+        fetchRequest = Photo.fetchRequest()
         
+        guard let title = photoOfTheDay?.title else {
+            print("Don't have photoOfTheDay")
+            return
+        }
+        fetchRequest.predicate = NSPredicate(
+            format: "title LIKE %@", title
+        )
+        
+        if let object = try? managedObjectContext?.fetch(fetchRequest).first {
+            managedObjectContext?.delete(object)
+            saveCoreData()
+        } else {
+            saveBookmarkArrayFull()
+        }
+        checkCoreData()
     }
     
     func saveCoreData(){
@@ -167,18 +186,9 @@ class TodaysPictureViewController: UIViewController {
         }
     }
     
-    
-    
-    //bookmark
     @objc private func addBarButtonTapped(){
-        //        do {
-        //            guard let photoOfTheDay = photoOfTheDay else { return }
-        //            addBookmarkClosure?(photoOfTheDay)
-        //
-        //
-        //        }
         
-        saveBookmarkArrayFull()
+        deleteObject()
     }
     
     @objc private func actionBarButtonTapped() {
@@ -213,7 +223,6 @@ class TodaysPictureViewController: UIViewController {
         navigationItem.rightBarButtonItems = [actionBarButtonItem, addBarButtonItem]
         actionBarButtonItem.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
         addBarButtonItem.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
-        //        navigationItem.leftBarButtonItem?.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
         navigationController?.hidesBarsOnSwipe = true
         actionBarButtonItem.isEnabled = true
         addBarButtonItem.isEnabled = true
