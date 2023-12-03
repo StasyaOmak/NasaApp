@@ -5,7 +5,7 @@
 //  Created by Anastasiya Omak on 26/11/2023.
 //
 
-import Foundation
+import UIKit
 import SDWebImage
 import Lottie
 import CoreData

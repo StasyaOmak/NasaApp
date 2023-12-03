@@ -84,6 +84,25 @@ class RandomPhotoDetailViewController: UIViewController {
         return UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(actionBarButtonTapped))
     }()
     
+    func checkCoreData() {
+        let fetchRequest: NSFetchRequest<Photo>
+        fetchRequest = Photo.fetchRequest()
+        
+        guard let title = selectedPhoto?.title else {
+            print("Don't have photoOfTheDay")
+            return
+        }
+        fetchRequest.predicate = NSPredicate(
+            format: "title LIKE %@", title
+        )
+        
+        if let object = try? managedObjectContext?.fetch(fetchRequest).first {
+            addBarButtonItem.image = UIImage(systemName: "bookmark.fill")
+        } else {
+            addBarButtonItem.image = UIImage(systemName: "bookmark")
+        }
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,11 +138,13 @@ class RandomPhotoDetailViewController: UIViewController {
         
        photoNetworkManager.fetchData  { [weak self] picture in
             DispatchQueue.main.async {
+
                 self?.dayImageView.image.self
                 self?.dateLabel.text.self
                 self?.titleLabel.text.self
                 self?.textLabel.text.self
                 
+                self?.checkCoreData()
                 self?.setupViews()
                 
                 self?.animationView.stop()
@@ -135,7 +156,8 @@ class RandomPhotoDetailViewController: UIViewController {
     
     @objc private func addBarButtonTapped(){
         print(#function)
-        saveBookmarkArrayFull()
+        
+        deleteObject()
     }
     
     @objc private func actionBarButtonTapped() {
@@ -177,6 +199,27 @@ class RandomPhotoDetailViewController: UIViewController {
         
         saveCoreData()
         
+    }
+    
+    func deleteObject() {
+        let fetchRequest: NSFetchRequest<Photo>
+        fetchRequest = Photo.fetchRequest()
+        
+        guard let title = selectedPhoto?.title else {
+            print("Don't have photoOfTheDay")
+            return
+        }
+        fetchRequest.predicate = NSPredicate(
+            format: "title LIKE %@", title
+        )
+        
+        if let object = try? managedObjectContext?.fetch(fetchRequest).first {
+            managedObjectContext?.delete(object)
+            saveCoreData()
+        } else {
+            saveBookmarkArrayFull()
+        }
+        checkCoreData()
     }
     
     func saveCoreData(){
