@@ -117,7 +117,7 @@ extension BookmarksViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let photo = nasaList[indexPath.row]
         let detailVC = BookmarkPhotoDetailViewController()
-        detailVC.photoOfTheDayTwo = convertPhotoToAstronomyPicture(photo)
+        detailVC.bookmarkPhoto = convertPhotoToAstronomyPicture(photo)
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
     

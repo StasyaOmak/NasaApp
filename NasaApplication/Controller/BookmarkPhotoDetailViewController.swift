@@ -15,7 +15,7 @@ import CoreData
 
 class BookmarkPhotoDetailViewController: UIViewController {
     
-    var photoOfTheDayTwo: AstronomyPicture?
+    var bookmarkPhoto: AstronomyPicture?
     private let photoNetworkManager = PhotoNetworkManager()
     var animationView = LottieAnimationView()
     private var isMarked = false
@@ -77,15 +77,39 @@ class BookmarkPhotoDetailViewController: UIViewController {
     }()
     
     private lazy var removeBarButtonItem: UIBarButtonItem = {
-        return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(removeBarButtonItemTapped))
+        return UIBarButtonItem(image: UIImage(systemName: "bookmark.fill"), style: .plain, target: self, action: #selector(removeBarButtonItemTapped))
     }()
     
     private lazy var actionBarButtonItem: UIBarButtonItem = {
         return UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(actionBarButtonTapped))
     }()
     
+    func checkCoreData() {
+        let fetchRequest: NSFetchRequest<Photo>
+        fetchRequest = Photo.fetchRequest()
+        
+        guard let title = bookmarkPhoto?.title else {
+            print("Don't have photoOfTheDay")
+            return
+        }
+        fetchRequest.predicate = NSPredicate(
+            format: "title LIKE %@", title
+        )
+        
+        if let object = try? managedObjectContext?.fetch(fetchRequest).first {
+            removeBarButtonItem.image = UIImage(systemName: "bookmark.fill")
+        } else {
+            removeBarButtonItem.image = UIImage(systemName: "bookmark")
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
+        managedObjectContext = appDelegate.persistentContainer.viewContext
+        
+        print(managedObjectContext)
         
         view.backgroundColor = .systemBackground
         
@@ -104,7 +128,7 @@ class BookmarkPhotoDetailViewController: UIViewController {
         setupAnimation()
         
         animationView.play()
-
+        
         
         photoNetworkManager.fetchData { [weak self] picture in
             DispatchQueue.main.async {
@@ -113,6 +137,7 @@ class BookmarkPhotoDetailViewController: UIViewController {
                 self?.titleLabel.text.self
                 self?.textLabel.text.self
                 
+                self?.checkCoreData()
                 self?.setupViews()
                 
                 self?.animationView.stop()
@@ -122,25 +147,54 @@ class BookmarkPhotoDetailViewController: UIViewController {
         }
     }
     
+    func saveBookmarkArrayFull() {
+        let entity = NSEntityDescription.entity(forEntityName: "Photo", in: self.managedObjectContext!)
+        let list = NSManagedObject(entity: entity!, insertInto: self.managedObjectContext)
+        
+        list.setValue(bookmarkPhoto?.date, forKey: "date")
+        list.setValue(bookmarkPhoto?.explanation, forKey: "explanation")
+        list.setValue(bookmarkPhoto?.title, forKey: "title")
+        list.setValue(bookmarkPhoto?.url, forKey: "url")
+        
+        saveCoreData()
+    }
+    
+    func deleteObject() {
+        let fetchRequest: NSFetchRequest<Photo>
+        fetchRequest = Photo.fetchRequest()
+        
+        guard let title = bookmarkPhoto?.title else {
+            print("Don't have photoOfTheDay")
+            return
+        }
+        fetchRequest.predicate = NSPredicate(
+            format: "title LIKE %@", title
+        )
+        
+        if let object = try? managedObjectContext?.fetch(fetchRequest).first {
+            managedObjectContext?.delete(object)
+            saveCoreData()
+        } else {
+            saveBookmarkArrayFull()
+        }
+        checkCoreData()
+    }
+    
+    func saveCoreData(){
+        do {
+            try managedObjectContext?.save()
+        } catch {
+            fatalError("Error in saving item into core data")
+        }
+    }
+    
     @objc private func removeBarButtonItemTapped() {
-//        guard let photoOfTheDay = photoOfTheDayTwo else { return }
-//        
-//        let newPhoto = Photo(context: managedObjectContext!)
-//        newPhoto.date = photoOfTheDay.date
-//        newPhoto.title = photoOfTheDay.title
-//        newPhoto.explanation = photoOfTheDay.explanation
-//        newPhoto.url = photoOfTheDay.url
-//        
-//        do {
-//            try managedObjectContext?.save()
-//            print("Photo added to bookmarks")
-//        } catch {
-//            print("Error saving photo to bookmarks: \(error)")
-//        }
+        
+        deleteObject()
     }
     
     @objc private func actionBarButtonTapped() {
-        print("Hello")
+        print("Action Bar Button Tapped")
         
         guard let image = dayImageView.image else {
             print("No image to share")
@@ -171,7 +225,6 @@ class BookmarkPhotoDetailViewController: UIViewController {
         navigationItem.rightBarButtonItems = [actionBarButtonItem, removeBarButtonItem]
         actionBarButtonItem.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
         removeBarButtonItem.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
-        //        navigationItem.leftBarButtonItem?.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
         navigationController?.hidesBarsOnSwipe = true
         actionBarButtonItem.isEnabled = true
         removeBarButtonItem.isEnabled = true
@@ -188,11 +241,11 @@ class BookmarkPhotoDetailViewController: UIViewController {
     }
     
     private func setupViews() {
-        dateLabel.text = photoOfTheDayTwo?.date
-        titleLabel.text = photoOfTheDayTwo?.title
-        textLabel.text = photoOfTheDayTwo?.explanation
+        dateLabel.text = bookmarkPhoto?.date
+        titleLabel.text = bookmarkPhoto?.title
+        textLabel.text = bookmarkPhoto?.explanation
         
-        guard let url = URL(string: photoOfTheDayTwo?.url ?? "") else { return }
+        guard let url = URL(string: bookmarkPhoto?.url ?? "") else { return }
         dayImageView.sd_setImage(with: url)
         
     }
