@@ -33,7 +33,7 @@ class BookmarksTableViewCell: UITableViewCell {
     
     let bookmarkImageView: UIImageView = {
         let element = UIImageView()
-        element.contentMode = .scaleAspectFit
+        element.contentMode = .scaleToFill
         
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -91,14 +91,14 @@ class BookmarksTableViewCell: UITableViewCell {
                 
                 mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
                 mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-                mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-                mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+                mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
                 
+                bookmarkImageView.heightAnchor.constraint(equalToConstant: 180),
                 bookmarkImageView.widthAnchor.constraint(equalToConstant: 150),
-                bookmarkImageView.heightAnchor.constraint(equalTo: bookmarkImageView.widthAnchor),
-                bookmarkImageView.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 20),
-                bookmarkImageView.topAnchor.constraint(equalTo: mainStackView.topAnchor, constant: 20),
-                bookmarkImageView.bottomAnchor.constraint(equalTo: mainStackView.bottomAnchor, constant: -20),
+                bookmarkImageView.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor),
+                bookmarkImageView.topAnchor.constraint(equalTo: mainStackView.topAnchor, constant: 5),
+                bookmarkImageView.bottomAnchor.constraint(equalTo: mainStackView.bottomAnchor, constant: -5),
             ])
         }
     }
