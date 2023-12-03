@@ -29,8 +29,14 @@ class BookmarksViewController: UIViewController {
         bookmarkTableView.delegate = self
         bookmarkTableView.dataSource = self
         
-        setConstraints()
+        if let navigationController = self.navigationController {
+                    let appearance = UINavigationBarAppearance()
+                    appearance.backgroundColor = UIColor.systemBackground
+                    navigationController.navigationBar.standardAppearance = appearance
+                    navigationController.navigationBar.scrollEdgeAppearance = appearance
+                }
         
+        setConstraints()
        
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
         managedObjectContext = appDelegate.persistentContainer.viewContext
