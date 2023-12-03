@@ -45,11 +45,11 @@ class BookmarksTableViewCell: UITableViewCell {
         let element = UIImageView()
         element.contentMode = .scaleToFill
         element.layer.masksToBounds = true
-            element.layer.cornerRadius = 5
-            element.layer.shadowColor = UIColor.black.cgColor
-            element.layer.shadowOpacity = 0.5
-            element.layer.shadowOffset = CGSize(width: 0, height: 2)
-            element.layer.shadowRadius = 7
+        element.layer.cornerRadius = 5
+        element.layer.shadowColor = UIColor.black.cgColor
+        element.layer.shadowOpacity = 0.5
+        element.layer.shadowOffset = CGSize(width: 0, height: 2)
+        element.layer.shadowRadius = 7
         
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -95,8 +95,18 @@ class BookmarksTableViewCell: UITableViewCell {
     
     func setupUI(withDataFrom: Photo){
         
+        let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                
+                if let dateString = withDataFrom.date, let date = dateFormatter.date(from: dateString) {
+                    dateFormatter.dateFormat = "dd MMMM yyyy"
+                    let formattedDate = dateFormatter.string(from: date)
+                    bookmarkDateLabel.text = formattedDate
+                } else {
+                    bookmarkDateLabel.text = "Invalid date format"
+                }
+        
         bookmarkTitleLabel.text = withDataFrom.title
-        bookmarkDateLabel.text = withDataFrom.date
         bookmarkImageView.sd_setImage(with: URL(string: withDataFrom.url ?? ""))
         
     }

@@ -26,7 +26,7 @@ class TodaysPictureViewController: UIViewController {
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
-        element.spacing = 1
+        element.spacing = 20
         element.distribution = .fill
         
         element.translatesAutoresizingMaskIntoConstraints = false
@@ -244,7 +244,15 @@ class TodaysPictureViewController: UIViewController {
     }
     
     private func setupViews() {
-        dateLabel.text = photoOfTheDay?.date
+                
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        if let date = dateFormatter.date(from: photoOfTheDay?.date ?? "") {
+            dateFormatter.dateFormat = "dd MMMM yyyy"
+            let formattedDate = dateFormatter.string(from: date)
+            dateLabel.text =  formattedDate
+        }
+        
         titleLabel.text = photoOfTheDay?.title
         textLabel.text = photoOfTheDay?.explanation
         

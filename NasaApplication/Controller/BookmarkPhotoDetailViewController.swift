@@ -24,7 +24,7 @@ class BookmarkPhotoDetailViewController: UIViewController {
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
-        element.spacing = 1
+        element.spacing = 20
         element.distribution = .fill
         
         element.translatesAutoresizingMaskIntoConstraints = false
@@ -241,7 +241,15 @@ class BookmarkPhotoDetailViewController: UIViewController {
     }
     
     private func setupViews() {
-        dateLabel.text = bookmarkPhoto?.date
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        if let date = dateFormatter.date(from: bookmarkPhoto?.date ?? "") {
+            dateFormatter.dateFormat = "dd MMMM yyyy"
+            let formattedDate = dateFormatter.string(from: date)
+            dateLabel.text =  formattedDate
+        }
+        
         titleLabel.text = bookmarkPhoto?.title
         textLabel.text = bookmarkPhoto?.explanation
         

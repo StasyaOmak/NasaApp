@@ -23,7 +23,7 @@ class RandomPhotoDetailViewController: UIViewController {
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
-        element.spacing = 1
+        element.spacing = 20
         element.distribution = .fill
         
         element.translatesAutoresizingMaskIntoConstraints = false
@@ -250,7 +250,15 @@ class RandomPhotoDetailViewController: UIViewController {
     }
     
     private func setupViews() {
-        dateLabel.text = selectedPhoto?.date
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        if let date = dateFormatter.date(from: selectedPhoto?.date ?? "") {
+            dateFormatter.dateFormat = "dd MMMM yyyy"
+            let formattedDate = dateFormatter.string(from: date)
+            dateLabel.text =  formattedDate
+        }
+        
         titleLabel.text = selectedPhoto?.title
         textLabel.text = selectedPhoto?.explanation
         
