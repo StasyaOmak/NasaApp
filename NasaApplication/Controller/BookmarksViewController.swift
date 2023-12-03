@@ -31,7 +31,7 @@ class BookmarksViewController: UIViewController {
         
         setConstraints()
         
-        
+       
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
         managedObjectContext = appDelegate.persistentContainer.viewContext
     }

@@ -224,6 +224,7 @@ class TodaysPictureViewController: UIViewController {
         actionBarButtonItem.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
         addBarButtonItem.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
         navigationController?.hidesBarsOnSwipe = true
+        
         actionBarButtonItem.isEnabled = true
         addBarButtonItem.isEnabled = true
     }
