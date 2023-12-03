@@ -45,6 +45,7 @@ class RandomPhotoDetailViewController: UIViewController {
         let element = UIImageView()
         element.contentMode = .scaleAspectFit
         element.isUserInteractionEnabled = true
+        element.layer.cornerRadius = 5
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -115,6 +116,7 @@ class RandomPhotoDetailViewController: UIViewController {
         fetchDataAndUpdateUI()
         
         view.backgroundColor = .systemBackground
+        navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
         
         view.addSubview(scrollView)
         view.addSubview(animationView)

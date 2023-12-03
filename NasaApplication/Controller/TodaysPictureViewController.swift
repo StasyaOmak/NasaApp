@@ -47,6 +47,8 @@ class TodaysPictureViewController: UIViewController {
     let dayImageView: UIImageView = {
         let element = UIImageView()
         element.contentMode = .scaleAspectFit
+        element.clipsToBounds = true
+        element.layer.cornerRadius = 5
         element.isUserInteractionEnabled = true
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -115,6 +117,8 @@ class TodaysPictureViewController: UIViewController {
         print(managedObjectContext)
         
         view.backgroundColor = .systemBackground
+        navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+ 
         
         view.addSubview(scrollView)
         view.addSubview(animationView)

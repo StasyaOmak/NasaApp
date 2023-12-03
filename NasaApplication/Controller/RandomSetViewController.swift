@@ -108,6 +108,7 @@ extension RandomSetViewController: UICollectionViewDelegate, UICollectionViewDat
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 5
         imageView.clipsToBounds = true
         cell.contentView.addSubview(imageView)
         
