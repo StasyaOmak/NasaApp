@@ -33,21 +33,14 @@ class AsteroidViewController: UIViewController {
         
         view.addSubview(tableView)
         
+        setupNavigationBar()
         setupAnimation()
         
         fetchAstronomyData()
         setConstraints()
         
-        let sortButtonImage = UIImage(systemName: "chevron.up.chevron.down")
-        let sortButton = UIBarButtonItem(image: sortButtonImage, style: .plain, target: self, action: #selector(sortButtonTapped))
-        
-        navigationItem.rightBarButtonItem = sortButton
         navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
-        let titleLabel = UILabel()
-            titleLabel.text = "Asteroid"
-            titleLabel.textColor = UIColor.label
-            titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-            navigationItem.titleView = titleLabel
+        
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         
         tableView.delegate = self
@@ -117,6 +110,50 @@ class AsteroidViewController: UIViewController {
             }
         }
     }
+    
+    private func setupNavigationBar() {
+ 
+        navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+        
+        let titleLabel = UILabel()
+                    titleLabel.text = "Asteroids"
+                    titleLabel.textColor = UIColor.label
+                    titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+                    navigationItem.titleView = titleLabel
+        
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor:UIColor.label]
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor:UIColor.label]
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationBar.tintColor = .label
+        
+        
+        let sortButtonImage = UIImage(systemName: "chevron.up.chevron.down")
+        let sortButton = UIBarButtonItem(image: sortButtonImage, style: .plain, target: self, action: #selector(sortButtonTapped))
+        
+        navigationItem.rightBarButtonItem = sortButton
+        
+        
+        let infoImage = UIImage(systemName: "info.circle.fill")
+        let infoButton = UIBarButtonItem(image: infoImage, style: .plain, target: self, action: #selector(infoPressed))
+        
+        navigationItem.leftBarButtonItem = infoButton
+        
+    }
+    
+    @objc private func infoPressed(){
+        let alert = UIAlertController(
+            title: "Info",
+            message: "Within this table, detailed information is provided regarding asteroids approaching Earth. The dataset encompasses the following particulars:\n - Asteroid Name\n - Close Approach Date\n - Orbiting Body\n - Potential Hazardous Classification\n - Estimated Minimum Diameter\n - Estimated Maximum Diameter\n",
+            preferredStyle: .actionSheet
+        )
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
     
     func sortAsteroids() {
         if isSortingDangerousFirst {
