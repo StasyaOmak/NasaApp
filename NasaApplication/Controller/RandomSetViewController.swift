@@ -47,6 +47,11 @@ class RandomSetViewController: UIViewController {
         setConstraints()
         
         navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+        let titleLabel = UILabel()
+            titleLabel.text = "Random"
+            titleLabel.textColor = UIColor.label
+            titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+            navigationItem.titleView = titleLabel
     }
     
     private func setupAnimation() {

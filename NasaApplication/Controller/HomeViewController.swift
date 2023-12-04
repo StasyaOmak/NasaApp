@@ -15,7 +15,7 @@ class HomeViewController: UIViewController {
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
-        element.spacing = 20
+        element.spacing = 10
         element.distribution = .fillProportionally
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -90,9 +90,10 @@ class HomeViewController: UIViewController {
         )
         
         let customTitleView = createCustomTitleView(
-            labelName: "",
+            labelName: "Home",
             imageNasa: "nasa"
         )
+       
         
         navigationItem.rightBarButtonItems = [settings]
         navigationItem.titleView = customTitleView
@@ -119,18 +120,18 @@ class HomeViewController: UIViewController {
             mainStackView.addArrangedSubview(secondButton)
             mainStackView.addArrangedSubview(thirdButton)
             
-            firstButton.setTitle("Today's Picture", for: .normal)
+            firstButton.setTitle("Today's Image", for: .normal)
             firstButton.addTarget(self, action: #selector(todaysPictureButtonTapped), for: .touchUpInside)
             
             secondButton.setTitle("Random Set", for: .normal)
             secondButton.addTarget(self, action: #selector(randomSetButtonTapped), for: .touchUpInside)
             
-            thirdButton.setTitle("Search Picture", for: .normal)
+            thirdButton.setTitle("Search Image", for: .normal)
             thirdButton.addTarget(self, action: #selector(searchPictureButtonTapped), for: .touchUpInside)
             
-            firstButton.layer.cornerRadius = 20
-            secondButton.layer.cornerRadius = 20
-            thirdButton.layer.cornerRadius = 20
+            firstButton.layer.cornerRadius = 15
+            secondButton.layer.cornerRadius = 15
+            thirdButton.layer.cornerRadius = 15
             
         }
     
@@ -167,11 +168,11 @@ extension HomeViewController {
             mainStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             
             
-            firstButton.heightAnchor.constraint(equalToConstant: 80),
+            firstButton.heightAnchor.constraint(equalToConstant: 40),
             
-            secondButton.heightAnchor.constraint(equalToConstant: 80),
+            secondButton.heightAnchor.constraint(equalToConstant: 40),
             
-            thirdButton.heightAnchor.constraint(equalToConstant: 80),
+            thirdButton.heightAnchor.constraint(equalToConstant: 40),
         ])
     }
 }

@@ -136,6 +136,12 @@ class TodaysPictureViewController: UIViewController {
         
         animationView.play()
         fetchAstronomyData()
+        
+        let titleLabel = UILabel()
+            titleLabel.text = "Image Of The Day"
+            titleLabel.textColor = UIColor.label
+            titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+            navigationItem.titleView = titleLabel
     }
     
     private func fetchAstronomyData() {
@@ -150,7 +156,7 @@ class TodaysPictureViewController: UIViewController {
                 self?.animationView.stop()
                 self?.animationView.removeFromSuperview()
                 self?.view.setNeedsDisplay()
-//                self?.collectionView.reloadData()
+                //                self?.collectionView.reloadData()
             }
         case .failure(let failure):
             print(failure)
@@ -160,9 +166,9 @@ class TodaysPictureViewController: UIViewController {
                 self?.setupErrorAnimation()
             }
         }
-           
+            
         }
-}
+    }
     func saveBookmarkArrayFull() {
         let entity = NSEntityDescription.entity(forEntityName: "Photo", in: self.managedObjectContext!)
         let list = NSManagedObject(entity: entity!, insertInto: self.managedObjectContext)
@@ -268,7 +274,7 @@ class TodaysPictureViewController: UIViewController {
     }
     
     private func setupViews() {
-                
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         if let date = dateFormatter.date(from: photoOfTheDay?.date ?? "") {
@@ -277,7 +283,7 @@ class TodaysPictureViewController: UIViewController {
             dateLabel.text =  formattedDate
         }
         
-//        dateLabel.text = photoOfTheDay?.date
+        //        dateLabel.text = photoOfTheDay?.date
         titleLabel.text = photoOfTheDay?.title
         textLabel.text = photoOfTheDay?.explanation
         

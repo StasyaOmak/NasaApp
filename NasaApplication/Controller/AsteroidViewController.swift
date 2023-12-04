@@ -40,8 +40,14 @@ class AsteroidViewController: UIViewController {
         
         let sortButtonImage = UIImage(systemName: "chevron.up.chevron.down")
         let sortButton = UIBarButtonItem(image: sortButtonImage, style: .plain, target: self, action: #selector(sortButtonTapped))
+        
         navigationItem.rightBarButtonItem = sortButton
         navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+        let titleLabel = UILabel()
+            titleLabel.text = "Asteroid"
+            titleLabel.textColor = UIColor.label
+            titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+            navigationItem.titleView = titleLabel
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         
         tableView.delegate = self

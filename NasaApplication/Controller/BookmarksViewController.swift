@@ -38,6 +38,12 @@ class BookmarksViewController: UIViewController {
             navigationController.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
             bookmarkTableView.separatorColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
             bookmarkTableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+            
+            let titleLabel = UILabel()
+                titleLabel.text = "Bookmark"
+                titleLabel.textColor = UIColor.label
+                titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+                navigationItem.titleView = titleLabel
         }
         
         setConstraints()

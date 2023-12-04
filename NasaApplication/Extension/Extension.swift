@@ -25,8 +25,9 @@ extension UIViewController {
         view.addSubview(imageNasa)
         
         let labelName = UILabel()
-//        labelName.text = "NASA"
-//        labelName.tintColor = .white ???
+        labelName.text = "Home"
+        labelName.tintColor = .systemBackground
+
         labelName.frame = CGRect(x: 120, y: 15, width: 220, height: 20)
         labelName.font = UIFont.systemFont(ofSize: 20)
         labelName.font = .systemFont(ofSize: 20, weight: .bold)

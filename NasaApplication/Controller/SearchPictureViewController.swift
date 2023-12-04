@@ -22,7 +22,7 @@ class SearchPictureViewController: UIViewController {
     
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.placeholder = "Search pictures by description"
+        searchBar.placeholder = "Search pictures by words"
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         return searchBar
     }()
@@ -51,6 +51,11 @@ class SearchPictureViewController: UIViewController {
         searchBar.delegate = self
         
         navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+        let titleLabel = UILabel()
+            titleLabel.text = "Search"
+            titleLabel.textColor = UIColor.label
+            titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+            navigationItem.titleView = titleLabel
     }
     
     private func setupAnimation() {
