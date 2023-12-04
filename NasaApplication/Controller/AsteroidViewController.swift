@@ -112,20 +112,14 @@ class AsteroidViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
- 
+        
         navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
         
         let titleLabel = UILabel()
-                    titleLabel.text = "Asteroids"
-                    titleLabel.textColor = UIColor.label
-                    titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-                    navigationItem.titleView = titleLabel
-        
-        self.navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor:UIColor.label]
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor:UIColor.label]
-        self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationController?.navigationBar.tintColor = .label
-        
+        titleLabel.text = "Asteroids"
+        titleLabel.textColor = UIColor.label
+        titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        navigationItem.titleView = titleLabel
         
         let sortButtonImage = UIImage(systemName: "chevron.up.chevron.down")
         let sortButton = UIBarButtonItem(image: sortButtonImage, style: .plain, target: self, action: #selector(sortButtonTapped))
@@ -133,7 +127,7 @@ class AsteroidViewController: UIViewController {
         navigationItem.rightBarButtonItem = sortButton
         
         
-        let infoImage = UIImage(systemName: "info.circle.fill")
+        let infoImage = UIImage(systemName: "info.circle")
         let infoButton = UIBarButtonItem(image: infoImage, style: .plain, target: self, action: #selector(infoPressed))
         
         navigationItem.leftBarButtonItem = infoButton
@@ -215,7 +209,7 @@ extension AsteroidViewController: UITableViewDataSource, UITableViewDelegate {
         cell.hazardousLabel.text = "Dangerous: \(asteroid.isDangeros ? "Yes" : "No")"
         
         cell.hazardousLabel.textColor = asteroid.isDangeros ? .red : .label
-
+        
         return cell
     }
 }

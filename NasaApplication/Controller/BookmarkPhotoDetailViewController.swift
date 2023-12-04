@@ -24,7 +24,7 @@ class BookmarkPhotoDetailViewController: UIViewController {
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
-        element.spacing = 15
+        element.spacing = 20
         element.distribution = .fill
         
         element.translatesAutoresizingMaskIntoConstraints = false

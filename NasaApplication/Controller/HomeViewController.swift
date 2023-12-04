@@ -56,10 +56,14 @@ class HomeViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
         
+        setupNavigationBar()
+        
         setupAnimation()
-        setupViews()
         setupUI()
         setupConstraints()
+        
+        //        navigationController?.navigationItem.rightBarButtonItem?.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+        navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -80,68 +84,98 @@ class HomeViewController: UIViewController {
         
     }
     
-    private func setupViews() {
-        createCustomNavigationBar()
-        
-        let settings = createCustomButton(
-            imageName: "gearshape",
-            selector: #selector(settingsRightButtonTapped)
-            
+    @objc private func infoPressed(){
+        let alert = UIAlertController(
+            title: "Info",
+            message:"""
+        Compatibility:
+        iPhone iOS 15.0 or later.
+
+        Age Rating:
+        4+
+
+        Languages:
+        English
+
+        Category:
+        Reference
+
+        Developer:
+        Anastasiya Omak for Accenture
+
+        Size:
+        5.7 MB
+        """,
+            preferredStyle: .actionSheet
         )
         
-        let customTitleView = createCustomTitleView(
-            labelName: "Home",
-            imageNasa: "nasa"
-        )
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        alert.addAction(cancelAction)
         
-        let customButton = createCustomButton(imageName: "nasa", selector: #selector(customButtonPressed))
+        present(alert, animated: true, completion: nil)
         
-        navigationItem.rightBarButtonItems = [settings]
-        navigationItem.titleView = customTitleView
     }
     
-    @objc func customButtonPressed() {
-            // Создайте новый экран или выполните навигацию к существующему экрану здесь
-            // Например, создайте экземпляр нового контроллера представления и отобразите его
-            let infoViewController = InfoViewController()
-            navigationController?.pushViewController(infoViewController, animated: true)
-        }
+    private func setupNavigationBar() {
+        
+        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 45, height: 40))
+        
+        let imageView = UIImageView(frame: titleView.bounds)
+        imageView.image = UIImage(named: "nasa")
+        imageView.contentMode = .scaleAspectFit
+        titleView.addSubview(imageView)
+        
+        navigationItem.titleView = titleView
+        
+        let darkModeButtonImage = UIImage(systemName: "gearshape")
+        let darkModeButton = UIBarButtonItem(image: darkModeButtonImage, style: .plain, target: self, action: #selector(darkModePressed))
+        
+        navigationItem.rightBarButtonItem = darkModeButton
+        
+        
+        let infoImage = UIImage(systemName: "info.circle")
+        let infoButton = UIBarButtonItem(image: infoImage, style: .plain, target: self, action: #selector(infoPressed))
+        
+        navigationItem.leftBarButtonItem = infoButton
+        
+    }
     
-    @objc private func settingsRightButtonTapped() {
+    @objc private func darkModePressed(){
         openSettingAction()
-        print("settingsRightButtonTapped")
     }
+    
     private func openSettingAction(){
+        
         if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(settingsURL)
         } else {
             print("Error: Invalid value UIApplication.openSettingsURLString")
         }
     }
+    
+    private func setupUI() {
         
-        private func setupUI() {
-            
-            view.addSubview(mainStackView)
-            
-            mainStackView.addArrangedSubview(animationView)
-            mainStackView.addArrangedSubview(firstButton)
-            mainStackView.addArrangedSubview(secondButton)
-            mainStackView.addArrangedSubview(thirdButton)
-            
-            firstButton.setTitle("Today's Image", for: .normal)
-            firstButton.addTarget(self, action: #selector(todaysPictureButtonTapped), for: .touchUpInside)
-            
-            secondButton.setTitle("Random Set", for: .normal)
-            secondButton.addTarget(self, action: #selector(randomSetButtonTapped), for: .touchUpInside)
-            
-            thirdButton.setTitle("Search Image", for: .normal)
-            thirdButton.addTarget(self, action: #selector(searchPictureButtonTapped), for: .touchUpInside)
-            
-            firstButton.layer.cornerRadius = 15
-            secondButton.layer.cornerRadius = 15
-            thirdButton.layer.cornerRadius = 15
-            
-        }
+        view.addSubview(mainStackView)
+        
+        mainStackView.addArrangedSubview(animationView)
+        mainStackView.addArrangedSubview(firstButton)
+        mainStackView.addArrangedSubview(secondButton)
+        mainStackView.addArrangedSubview(thirdButton)
+        
+        firstButton.setTitle("Today's Image", for: .normal)
+        firstButton.addTarget(self, action: #selector(todaysPictureButtonTapped), for: .touchUpInside)
+        
+        secondButton.setTitle("Random Set", for: .normal)
+        secondButton.addTarget(self, action: #selector(randomSetButtonTapped), for: .touchUpInside)
+        
+        thirdButton.setTitle("Search Image", for: .normal)
+        thirdButton.addTarget(self, action: #selector(searchPictureButtonTapped), for: .touchUpInside)
+        
+        firstButton.layer.cornerRadius = 15
+        secondButton.layer.cornerRadius = 15
+        thirdButton.layer.cornerRadius = 15
+        
+    }
     
     
     @objc private func buttonTapped(_ sender: UIButton) {
@@ -181,6 +215,8 @@ extension HomeViewController {
             secondButton.heightAnchor.constraint(equalToConstant: 40),
             
             thirdButton.heightAnchor.constraint(equalToConstant: 40),
+            
+            
         ])
     }
 }
