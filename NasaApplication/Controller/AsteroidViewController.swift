@@ -41,8 +41,8 @@ class AsteroidViewController: UIViewController {
         let sortButtonImage = UIImage(systemName: "chevron.up.chevron.down")
         let sortButton = UIBarButtonItem(image: sortButtonImage, style: .plain, target: self, action: #selector(sortButtonTapped))
         navigationItem.rightBarButtonItem = sortButton
-        navigationController?.navigationBar.tintColor = .red
-       
+        navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         
         tableView.delegate = self
         tableView.dataSource = self

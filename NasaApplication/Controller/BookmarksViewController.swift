@@ -32,15 +32,37 @@ class BookmarksViewController: UIViewController {
         if let navigationController = self.navigationController {
             let appearance = UINavigationBarAppearance()
             appearance.backgroundColor = UIColor.systemBackground
-            appearance.backgroundImage = UIImage()
             navigationController.navigationBar.standardAppearance = appearance
             navigationController.navigationBar.scrollEdgeAppearance = appearance
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "trash.fill"), style: .plain, target: self, action: #selector(deleteAllBookmarks))
+            navigationController.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+            bookmarkTableView.separatorColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+            bookmarkTableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         }
         
         setConstraints()
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
         managedObjectContext = appDelegate.persistentContainer.viewContext
+    }
+    
+    @objc func deleteAllBookmarks() {
+        let alert = UIAlertController(
+            title: "Delete All Bookmarks",
+            message: "Are you sure you want to delete all bookmarks?",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
+            
+            self.deleteAllCoreData()
+            
+            self.loadCoreData()
+            self.bookmarkTableView.reloadData()
+        }))
+        
+        present(alert, animated: true, completion: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
