@@ -19,7 +19,6 @@ class MainTabBarController: UITabBarController {
     private func generateTabBar() {
         viewControllers = [
             generateVC(viewController: HomeViewController(), title: "Home", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill")),
-            generateVC(viewController: PhotoViewController(), title: "Photo", image: UIImage(systemName: "photo"), selectedImage: UIImage(systemName: "photo.fill")),
             generateVC(viewController: AsteroidViewController(), title: "Asteroid", image: UIImage(systemName: "bolt"), selectedImage: UIImage(systemName: "bolt.fill")),
             generateVC(viewController: BookmarksViewController(), title: "Bookmark", image: UIImage(systemName: "bookmark"), selectedImage: UIImage(systemName: "bookmark.fill")),
         ]
