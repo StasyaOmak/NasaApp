@@ -12,7 +12,7 @@ class PhotoOfTheDayNetworkManager{
     private let url =
     "https://api.nasa.gov/planetary/apod?api_key=1kDltXwD3QbkCzKTa9zQnjk7ep6J57SGegoDoF6Q"
     
-    func fetchData(completion: @escaping (AstronomyPicture) -> () ) {
+    func fetchData(completion: @escaping (Result<AstronomyPicture, Error>) -> () ) {
         
         guard let url = URL(string: url) else { return }
         
@@ -25,7 +25,7 @@ class PhotoOfTheDayNetworkManager{
         URLSession(configuration: config).dataTask(with: request) { (data, response, err ) in
             
             guard err == nil else {
-                print("err:::::", err!)
+                completion(.failure(err!))
                 return
             }
             
@@ -36,9 +36,9 @@ class PhotoOfTheDayNetworkManager{
             
             do {
                 let jsonData = try JSONDecoder().decode(AstronomyPicture.self, from: data)
-                completion(jsonData)
+                completion(.success(jsonData))
             }catch{
-                print("err:::::", error)
+                completion(.failure(error))
             }
             
         }.resume()

@@ -75,15 +75,36 @@ class AsteroidViewController: UIViewController {
         
     }
     
+    private func setupErrorAnimation() {
+        animationView = LottieAnimationView(name: "error")
+        animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
+        animationView.contentMode = .scaleAspectFit
+        animationView.loopMode = .loop
+        animationView.animationSpeed = 1.3
+        view.addSubview(animationView)
+        animationView.play()
+    }
+    
     private func fetchAstronomyData() {
-        
-        asteroidNetworkManager.fetchData { [weak self] asteroids in
-            DispatchQueue.main.async {
-                self?.asteroids = asteroids
-                self?.sortAsteroids()
-                self?.animationView.stop()
-                self?.animationView.removeFromSuperview()
-                self?.tableView.reloadData()
+        let networkManager = AsteroidNetworkManager()
+        networkManager.fetchData { [weak self] (result) in
+            switch result {
+            case .success(let success):
+                self?.asteroids = success
+                DispatchQueue.main.async {
+                    
+                    self?.sortAsteroids()
+                    self?.animationView.stop()
+                    self?.animationView.removeFromSuperview()
+                    self?.tableView.reloadData()
+                }
+            case .failure(let failure):
+                print(failure)
+                DispatchQueue.main.async {
+                    self?.animationView.stop()
+                    self?.animationView.removeFromSuperview()
+                    self?.setupErrorAnimation()
+                }
             }
         }
     }

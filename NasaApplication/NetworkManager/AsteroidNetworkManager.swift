@@ -14,7 +14,7 @@ class AsteroidNetworkManager {
     
     private let url = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2023-11-26&end_date=2023-12-03&api_key=1kDltXwD3QbkCzKTa9zQnjk7ep6J57SGegoDoF6Q"
     
-    func fetchData(completion: @escaping ([AsteroidModel]) -> () ) {
+    func fetchData(completion: @escaping (Result<[AsteroidModel], Error>) -> () ) {
         
         guard let url = URL(string: url) else { return }
         
@@ -27,7 +27,7 @@ class AsteroidNetworkManager {
         URLSession(configuration: config).dataTask(with: request) { (data, response, err ) in
             
             guard err == nil else {
-                print("err:::::", err!)
+                completion(.failure(err!))
                 return
             }
             
@@ -41,11 +41,12 @@ class AsteroidNetworkManager {
                 let model: [AsteroidModel] = jsonData.nearEarthObjects.values.flatMap{dict in
                     var result: [AsteroidModel] = []
                     dict.forEach{result.append(AsteroidModel(object: $0))}
+                    
                     return result
                 }
-                completion(model)
+                completion(.success(model))
             }catch{
-                print("err:::::", error)
+                completion(.failure(error))
             }
             
             

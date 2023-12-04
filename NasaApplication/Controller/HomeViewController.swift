@@ -37,10 +37,8 @@ class HomeViewController: UIViewController {
                 animationView.animation = LottieAnimation.named("nasaAnimationMain")
         
 
+        animationView.frame = CGRect(x: (view.bounds.width - 400) / 2, y: (view.bounds.height - 200) / 2, width: 400, height: 200)
         
-        animationView.frame = CGRect(x: 0, y: 200, width: 400, height: 200)
-//        animationView.center = view.
-//        animationView.backgroundColor = .black
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
         animationView.animationSpeed = 1
@@ -60,7 +58,7 @@ class HomeViewController: UIViewController {
         )
         
         let customTitleView = createCustomTitleView(
-            labelName: "Swiftbook",
+            labelName: "",
             imageNasa: "nasa"
         )
         

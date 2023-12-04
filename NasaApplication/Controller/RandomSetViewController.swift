@@ -45,6 +45,8 @@ class RandomSetViewController: UIViewController {
         setupAnimation()
         fetchAstronomyData()
         setConstraints()
+        
+        navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
     }
     
     private func setupAnimation() {
@@ -53,6 +55,16 @@ class RandomSetViewController: UIViewController {
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
         animationView.animationSpeed = 1
+        view.addSubview(animationView)
+        animationView.play()
+    }
+    
+    private func setupErrorAnimation() {
+        animationView = LottieAnimationView(name: "error")
+        animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
+        animationView.contentMode = .scaleAspectFit
+        animationView.loopMode = .loop
+        animationView.animationSpeed = 1.3
         view.addSubview(animationView)
         animationView.play()
     }
@@ -76,12 +88,23 @@ class RandomSetViewController: UIViewController {
     
     private func fetchAstronomyData() {
         let networkManager = PhotoNetworkManager()
-        networkManager.fetchData(count: 100 ) { [weak self] (data) in
-            self?.astronomyPictures = data
-            DispatchQueue.main.async {
-                self?.animationView.stop()
-                self?.animationView.removeFromSuperview()
-                self?.collectionView.reloadData()
+        networkManager.fetchData(count: 100 ) { [weak self] (result) in
+            switch result {
+            case .success(let success):
+                self?.astronomyPictures = success
+                DispatchQueue.main.async {
+                    self?.animationView.stop()
+                    self?.animationView.removeFromSuperview()
+                    self?.collectionView.reloadData()
+                }
+                
+            case .failure(let failure):
+                print(failure)
+                DispatchQueue.main.async {
+                    self?.animationView.stop()
+                    self?.animationView.removeFromSuperview()
+                    self?.setupErrorAnimation()
+                }
             }
         }
     }

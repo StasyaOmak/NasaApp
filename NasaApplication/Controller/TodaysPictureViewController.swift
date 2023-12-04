@@ -26,7 +26,7 @@ class TodaysPictureViewController: UIViewController {
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
-        element.spacing = 20
+        element.spacing = 1
         element.distribution = .fill
         
         element.translatesAutoresizingMaskIntoConstraints = false
@@ -118,7 +118,7 @@ class TodaysPictureViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
- 
+        
         
         view.addSubview(scrollView)
         view.addSubview(animationView)
@@ -135,20 +135,34 @@ class TodaysPictureViewController: UIViewController {
         setupAnimation()
         
         animationView.play()
-        
-        photoNetworkManager.fetchData { [weak self] picture in
+        fetchAstronomyData()
+    }
+    
+    private func fetchAstronomyData() {
+        let networkManager = PhotoOfTheDayNetworkManager()
+        networkManager.fetchData { [weak self] (result) in switch result {
+        case .success(let success):
             DispatchQueue.main.async {
-                self?.photoOfTheDay = picture
+                self?.photoOfTheDay = success
                 self?.checkCoreData()
                 self?.setupViews()
                 
                 self?.animationView.stop()
                 self?.animationView.removeFromSuperview()
                 self?.view.setNeedsDisplay()
+//                self?.collectionView.reloadData()
+            }
+        case .failure(let failure):
+            print(failure)
+            DispatchQueue.main.async {
+                self?.animationView.stop()
+                self?.animationView.removeFromSuperview()
+                self?.setupErrorAnimation()
             }
         }
-    }
-    
+           
+        }
+}
     func saveBookmarkArrayFull() {
         let entity = NSEntityDescription.entity(forEntityName: "Photo", in: self.managedObjectContext!)
         let list = NSManagedObject(entity: entity!, insertInto: self.managedObjectContext)
@@ -243,6 +257,16 @@ class TodaysPictureViewController: UIViewController {
         animationView.play()
     }
     
+    private func setupErrorAnimation() {
+        animationView = LottieAnimationView(name: "error")
+        animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
+        animationView.contentMode = .scaleAspectFit
+        animationView.loopMode = .loop
+        animationView.animationSpeed = 1.3
+        view.addSubview(animationView)
+        animationView.play()
+    }
+    
     private func setupViews() {
                 
         let dateFormatter = DateFormatter()
@@ -253,6 +277,7 @@ class TodaysPictureViewController: UIViewController {
             dateLabel.text =  formattedDate
         }
         
+//        dateLabel.text = photoOfTheDay?.date
         titleLabel.text = photoOfTheDay?.title
         textLabel.text = photoOfTheDay?.explanation
         

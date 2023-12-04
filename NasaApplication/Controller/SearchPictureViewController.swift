@@ -50,7 +50,7 @@ class SearchPictureViewController: UIViewController {
         
         searchBar.delegate = self
         
-        setupAnimation()
+        navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
     }
     
     private func setupAnimation() {
@@ -64,6 +64,19 @@ class SearchPictureViewController: UIViewController {
         view.addSubview(animationView)
         animationView.play()
     }
+    
+    private func setupErrorAnimation() {
+        animationView = LottieAnimationView(name: "error")
+        guard let animationView = animationView else { return }
+        
+        animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
+        animationView.contentMode = .scaleAspectFit
+        animationView.loopMode = .loop
+        animationView.animationSpeed = 1.3
+        view.addSubview(animationView)
+        animationView.play()
+    }
+    
     
     private func setupCollectionView() {
         self.view.addSubview(collectionView)
@@ -87,40 +100,49 @@ class SearchPictureViewController: UIViewController {
 }
 
 extension SearchPictureViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.count > 3 {
-            fetchAstronomyData(with: searchText)
-        } else {
-            filteredAstronomyPictures = []
-            collectionView.reloadData()
-        }
-    }
-    
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        animationView?.stop()
+        animationView?.removeFromSuperview()
+        filteredAstronomyPictures = []
+        collectionView.reloadData()
+        setupAnimation()
+        fetchAstronomyData(with: searchBar.text ?? "")
         searchBar.resignFirstResponder()
     }
     
     private func fetchAstronomyData(with searchText: String) {
         let networkManager = PhotoNetworkManager()
-        networkManager.fetchData(count: 100) { [weak self] (data) in
-            self?.allAstronomyPictures = data
-            
-            
-            if let _ = data.first {
-                        self?.filteredAstronomyPictures = data.filter { $0.explanation.lowercased().contains(searchText.lowercased()) }
-                    } else {
-                        self?.animationView?.stop()
-                        self?.animationView?.removeFromSuperview()
-                    }
-            
-            DispatchQueue.main.async {
-                self?.animationView?.stop()
-                self?.animationView?.removeFromSuperview()
-                self?.collectionView.reloadData()
+        networkManager.fetchData(count: 100) { [weak self] (result) in
+            switch result {
+            case .success(let success):
+                self?.allAstronomyPictures = success
+                if let _ = success.first {
+                    self?.filteredAstronomyPictures = success.filter { $0.explanation.lowercased().contains(searchText.lowercased()) }
+                } else {
+                    self?.animationView?.stop()
+                    self?.animationView?.removeFromSuperview()
+                }
+                
+                DispatchQueue.main.async {
+                    self?.animationView?.stop()
+                    self?.animationView?.removeFromSuperview()
+                    self?.collectionView.reloadData()
+                }
+                
+            case .failure(let failure):
+                print(failure)
+                
+                DispatchQueue.main.async {
+                    self?.animationView?.stop()
+                    self?.animationView?.removeFromSuperview()
+                    self?.setupErrorAnimation()
+                }
             }
-        } 
+        }
     }
 }
+
 
 extension SearchPictureViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
