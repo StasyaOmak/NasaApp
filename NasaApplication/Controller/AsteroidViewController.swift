@@ -54,6 +54,9 @@ class AsteroidViewController: UIViewController {
         tableView.dataSource = self
         
         tableView.separatorColor = .red
+        
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender: )))
+        view.addGestureRecognizer(longPressRecognizer)
     }
     
     func setConstraints() {
@@ -127,6 +130,30 @@ class AsteroidViewController: UIViewController {
     @objc func sortButtonTapped() {
         sortAsteroids()
         tableView.reloadData()
+    }
+    
+    @objc private func longPressed(sender: UILongPressGestureRecognizer){
+        if sender.state == UIGestureRecognizer.State.began {
+            let touchPoint = sender.location(in: tableView)
+            if let indexPath = tableView.indexPathForRow(at: touchPoint){
+                
+                asteroidInfoAlert(for: asteroids[indexPath.row])
+                
+            }
+        }
+    }
+    
+    private func asteroidInfoAlert (for asteroids: AsteroidModel) {
+        let alert = UIAlertController(
+            title: asteroids.name,
+            message: "Absolute magnitude: \(asteroids.absoluteMagnitudeH)\n Sentry: \(asteroids.isSentryObject ? "Yes" : "No")",
+            preferredStyle: .alert
+        )
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true, completion: nil)
     }
     
 }

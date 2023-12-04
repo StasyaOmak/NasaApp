@@ -33,6 +33,7 @@
 		6F47DC1C2B14AE8400992389 /* RandomSetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F47DC1B2B14AE8400992389 /* RandomSetViewController.swift */; };
 		6FB64D762B199934003952F0 /* BookmarkPhotoDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB64D752B199933003952F0 /* BookmarkPhotoDetailViewController.swift */; };
 		6FB64D802B1A09DC003952F0 /* SearchPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB64D7F2B1A09DC003952F0 /* SearchPictureViewController.swift */; };
+		6FB6751D2B1E473500A2149F /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB6751C2B1E473500A2149F /* InfoViewController.swift */; };
 		6FD50EC52B17656900127308 /* PhotoOfTheDayNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FD50EC42B17656900127308 /* PhotoOfTheDayNetworkManager.swift */; };
 		6FD50ECD2B17BBF400127308 /* loadingBlue.json in Resources */ = {isa = PBXBuildFile; fileRef = 6FD50ECC2B17BBF400127308 /* loadingBlue.json */; };
 		6FD50ECF2B1861DF00127308 /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = 6FD50ECE2B1861DF00127308 /* error.json */; };
@@ -66,6 +67,7 @@
 		6F47DC1B2B14AE8400992389 /* RandomSetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomSetViewController.swift; sourceTree = "<group>"; };
 		6FB64D752B199933003952F0 /* BookmarkPhotoDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkPhotoDetailViewController.swift; sourceTree = "<group>"; };
 		6FB64D7F2B1A09DC003952F0 /* SearchPictureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPictureViewController.swift; sourceTree = "<group>"; };
+		6FB6751C2B1E473500A2149F /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		6FD50EC42B17656900127308 /* PhotoOfTheDayNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoOfTheDayNetworkManager.swift; sourceTree = "<group>"; };
 		6FD50ECC2B17BBF400127308 /* loadingBlue.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loadingBlue.json; sourceTree = "<group>"; };
 		6FD50ECE2B1861DF00127308 /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				6F47DBE32B12012000992389 /* AsteroidViewController.swift */,
 				6F47DBE52B1202D300992389 /* BookmarksViewController.swift */,
 				6FB64D752B199933003952F0 /* BookmarkPhotoDetailViewController.swift */,
+				6FB6751C2B1E473500A2149F /* InfoViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -316,6 +319,7 @@
 				6F47DBCE2B11E6FB00992389 /* SceneDelegate.swift in Sources */,
 				6F47DC142B149F1C00992389 /* Asteroid.swift in Sources */,
 				6F47DBE42B12012000992389 /* AsteroidViewController.swift in Sources */,
+				6FB6751D2B1E473500A2149F /* InfoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -462,10 +466,10 @@
 				DEVELOPMENT_TEAM = 4CF5B4QS76;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NasaApplication/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Our application needs permission to save photos to your photos library.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -490,10 +494,10 @@
 				DEVELOPMENT_TEAM = 4CF5B4QS76;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NasaApplication/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Our application needs permission to save photos to your photos library.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

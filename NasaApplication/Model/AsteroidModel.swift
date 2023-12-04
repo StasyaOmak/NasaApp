@@ -16,6 +16,8 @@ struct AsteroidModel {
     let orbitingbody: String
     let diameterMin: Double
     let diameterMax: Double
+    let absoluteMagnitudeH: Double
+    let isSentryObject: Bool
     
     var diametrMinString: String {
         return String(format: "%.0f", diameterMin)
@@ -33,6 +35,8 @@ struct AsteroidModel {
         self.orbitingbody = object.closeApproachData.first?.orbitingBody ?? ""
         self.diameterMin = object.estimatedDiameter.meters.estimatedDiameterMin
         self.diameterMax = object.estimatedDiameter.meters.estimatedDiameterMax
+        self.absoluteMagnitudeH = object.absoluteMagnitudeH
+        self.isSentryObject = object.isSentryObject
     }
 }
 

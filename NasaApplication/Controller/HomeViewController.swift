@@ -93,11 +93,19 @@ class HomeViewController: UIViewController {
             labelName: "Home",
             imageNasa: "nasa"
         )
-       
+        
+        let customButton = createCustomButton(imageName: "nasa", selector: #selector(customButtonPressed))
         
         navigationItem.rightBarButtonItems = [settings]
         navigationItem.titleView = customTitleView
     }
+    
+    @objc func customButtonPressed() {
+            // Создайте новый экран или выполните навигацию к существующему экрану здесь
+            // Например, создайте экземпляр нового контроллера представления и отобразите его
+            let infoViewController = InfoViewController()
+            navigationController?.pushViewController(infoViewController, animated: true)
+        }
     
     @objc private func settingsRightButtonTapped() {
         openSettingAction()
