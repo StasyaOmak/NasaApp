@@ -26,7 +26,7 @@ class TodaysPictureViewController: UIViewController {
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
-        element.spacing = 1
+        element.spacing = 15
         element.distribution = .fill
         
         element.translatesAutoresizingMaskIntoConstraints = false
@@ -319,7 +319,7 @@ class TodaysPictureViewController: UIViewController {
             dayImageView.widthAnchor.constraint(equalToConstant: 250),
             dayImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             dayImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            dayImageView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 5),
+            dayImageView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 10),
             
             textLabel.heightAnchor.constraint(equalToConstant: 300),
         ])
