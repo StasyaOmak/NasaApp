@@ -10,6 +10,7 @@ import Lottie
 
 class HomeViewController: UIViewController {
     private let color = Color()
+    private let cornerRadius = CornerRadius()
     private var animationView = LottieAnimationView()
     
     private lazy var mainStackView: UIStackView = {
@@ -84,12 +85,12 @@ class HomeViewController: UIViewController {
     
     @objc private func infoPressed(){
         let alert = UIAlertController(
-            title: Constants.info.rawValue,
+            title: AppConstants.infoButton,
             message: Constants.infoMessage.rawValue,
             preferredStyle: .actionSheet
         )
         
-        let cancelAction = UIAlertAction(title: Constants.canselTitle.rawValue, style: .default, handler: nil)
+        let cancelAction = UIAlertAction(title: AppConstants.cancelButton, style: .default, handler: nil)
         alert.addAction(cancelAction)
         
         present(alert, animated: true, completion: nil)
@@ -144,9 +145,9 @@ class HomeViewController: UIViewController {
         thirdButton.setTitle(Constants.thirdButtonTitle.rawValue, for: .normal)
         thirdButton.addTarget(self, action: #selector(searchPictureButtonTapped), for: .touchUpInside)
         
-        firstButton.layer.cornerRadius = 15
-        secondButton.layer.cornerRadius = 15
-        thirdButton.layer.cornerRadius = 15
+        firstButton.layer.cornerRadius = CGFloat(cornerRadius.buttonCornerRadius)
+        secondButton.layer.cornerRadius = CGFloat(cornerRadius.buttonCornerRadius)
+        thirdButton.layer.cornerRadius = CGFloat(cornerRadius.buttonCornerRadius)
     }
     
     @objc private func buttonTapped(_ sender: UIButton) {
@@ -196,7 +197,6 @@ extension HomeViewController {
         let buttonCornerRadius = 15
     }
     private enum Constants: String {
-        case info = "Info"
         case infoMessage = """
         Compatibility:
         iPhone iOS 15.0 or later.
@@ -216,7 +216,6 @@ extension HomeViewController {
         Size:
         5.7 MB
         """
-        case canselTitle = "Cancel"
         case openSettingActionError = "Error: Invalid value UIApplication.openSettingsURLString"
         case firstButtonTitle = "Today's Image"
         case secondButtonTitle = "Random Set"

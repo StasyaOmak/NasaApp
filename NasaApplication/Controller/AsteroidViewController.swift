@@ -13,7 +13,6 @@ class AsteroidViewController: UIViewController {
     private var asteroids: [AsteroidModel] = []
     private let asteroidNetworkManager = AsteroidNetworkManager()
     private var isSortingDangerousFirst = true
-    
     var animationView = LottieAnimationView()
     
     private let tableView: UITableView = {
@@ -26,43 +25,25 @@ class AsteroidViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubview(tableView)
-        
+        setupViews()
         setupNavigationBar()
         setupAnimation()
-        
         fetchAstronomyData()
         setConstraints()
-        
-        navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
-        
+        longPressRecognizer()
+    }
+    
+    private func setupViews() {
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        
         tableView.delegate = self
         tableView.dataSource = self
-        
         tableView.separatorColor = .red
         
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender: )))
-        view.addGestureRecognizer(longPressRecognizer)
-        
-        
+        view.addSubview(tableView)
     }
-    
-    func setConstraints() {
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
-            animationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            animationView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-        ])
-    }
-    
+
     private func setupAnimation() {
-        animationView.animation = LottieAnimation.named("loadingBlue")
+        animationView.animation = LottieAnimation.named(AppConstants.loadingAnimation)
         animationView.frame = CGRect(x: (Int(view.bounds.width) - AppConstants.animationFrame) / 2, y: (Int(view.bounds.height) - AppConstants.animationFrame) / 2, width: AppConstants.animationFrame, height: AppConstants.animationFrame)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
@@ -72,7 +53,7 @@ class AsteroidViewController: UIViewController {
     }
     
     private func setupErrorAnimation() {
-        animationView = LottieAnimationView(name: "error")
+        animationView = LottieAnimationView(name: AppConstants.errorAnimation)
         animationView.frame = CGRect(x: (Int(view.bounds.width) - AppConstants.animationFrame) / 2, y: (Int(view.bounds.height) - AppConstants.animationFrame) / 2, width: AppConstants.animationFrame, height: AppConstants.animationFrame)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
@@ -106,16 +87,15 @@ class AsteroidViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        
-        navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+        navigationController?.navigationBar.tintColor = AppConstants.navigationBarTintColor
         
         let titleLabel = UILabel()
-        titleLabel.text = "Asteroids"
+        titleLabel.text = C.titleLabel
         titleLabel.textColor = UIColor.label
         titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         navigationItem.titleView = titleLabel
         
-        let sortButtonImage = UIImage(systemName: "chevron.up.chevron.down")
+        let sortButtonImage = UIImage(systemName: C.sortImage)
         let sortButton = UIBarButtonItem(image: sortButtonImage, style: .plain, target: self, action: #selector(sortButtonTapped))
         
         navigationItem.rightBarButtonItem = sortButton
@@ -129,16 +109,15 @@ class AsteroidViewController: UIViewController {
     
     @objc private func infoPressed(){
         let alert = UIAlertController(
-            title: "Info",
-            message: "Within this table, detailed information is provided regarding asteroids approaching Earth. The dataset encompasses the following particulars:\n - Asteroid Name\n - Close Approach Date\n - Orbiting Body\n - Potential Hazardous Classification\n - Estimated Minimum Diameter\n - Estimated Maximum Diameter\n",
+            title: AppConstants.infoButton,
+            message: C.infoText,
             preferredStyle: .actionSheet
         )
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        let cancelAction = UIAlertAction(title: AppConstants.cancelButton, style: .default, handler: nil)
         alert.addAction(cancelAction)
         
         present(alert, animated: true, completion: nil)
-        
     }
     
     func sortAsteroids() {
@@ -155,13 +134,17 @@ class AsteroidViewController: UIViewController {
         tableView.reloadData()
     }
     
+    private func longPressRecognizer() {
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender: )))
+        view.addGestureRecognizer(longPressRecognizer)
+    }
+    
     @objc private func longPressed(sender: UILongPressGestureRecognizer){
         if sender.state == UIGestureRecognizer.State.began {
             let touchPoint = sender.location(in: tableView)
             if let indexPath = tableView.indexPathForRow(at: touchPoint){
                 
                 asteroidInfoAlert(for: asteroids[indexPath.row])
-                
             }
         }
     }
@@ -173,10 +156,22 @@ class AsteroidViewController: UIViewController {
             preferredStyle: .alert
         )
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        let cancelAction = UIAlertAction(title: AppConstants.cancelButton, style: .default, handler: nil)
         alert.addAction(cancelAction)
         
         present(alert, animated: true, completion: nil)
+    }
+    
+    func setConstraints() {
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            animationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            animationView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
     }
 }
 
@@ -198,3 +193,19 @@ extension AsteroidViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
+extension AsteroidViewController {
+    private struct C {
+        static let infoText = """
+        Within this table, detailed information is provided regarding asteroids approaching Earth.
+        The dataset encompasses the following particulars:
+        - Asteroid Name
+        - Close Approach Date
+        - Orbiting Body
+        - Potential Hazardous Classification
+        - Estimated Minimum Diameter
+        - Estimated Maximum Diameter
+        """
+        static let titleLabel = "Asteroids"
+        static let sortImage = "chevron.up.chevron.down"
+    }
+}

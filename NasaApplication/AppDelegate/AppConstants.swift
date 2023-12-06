@@ -37,4 +37,7 @@ struct AppConstants {
     
     static let loadingAnSpeed = 1.0
     static let errorAnSpeed = 1.2
+    
+    static let cancelButton = "Cancel" 
+    static let infoButton = "Info"
 }
