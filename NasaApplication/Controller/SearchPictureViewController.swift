@@ -11,12 +11,10 @@ import SDWebImage
 import Lottie
 
 class SearchPictureViewController: UIViewController {
-    
+    private let constant = Constants()
     var allAstronomyPictures: [AstronomyPicture] = []
     var filteredAstronomyPictures: [AstronomyPicture] = []
-    
     var animationView: LottieAnimationView?
-    
     let countItem = 2
     let sectionInsert = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
     
@@ -43,25 +41,28 @@ class SearchPictureViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
-        
         view.addSubview(searchBar)
+        
+        setupNavigationBar()
         setupCollectionView()
         setConstraints()
         
         searchBar.delegate = self
         
-        navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+    }
+    
+    private func setupNavigationBar() {
+        navigationController?.navigationBar.tintColor = AppConstants.navigationBarTintColor
         let titleLabel = UILabel()
-            titleLabel.text = "Search"
-            titleLabel.textColor = UIColor.label
-            titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-            navigationItem.titleView = titleLabel
+        titleLabel.text = constant.titleLabelText
+        titleLabel.textColor = UIColor.label
+        titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        navigationItem.titleView = titleLabel
     }
     
     private func setupAnimation() {
-        animationView = LottieAnimationView(name: "loadingBlue")
+        animationView = LottieAnimationView(name: AppConstants.loadingAnimation)
         guard let animationView = animationView else { return }
-        
         animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
@@ -71,9 +72,8 @@ class SearchPictureViewController: UIViewController {
     }
     
     private func setupErrorAnimation() {
-        animationView = LottieAnimationView(name: "error")
+        animationView = LottieAnimationView(name: AppConstants.errorAnimation)
         guard let animationView = animationView else { return }
-        
         animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
@@ -105,7 +105,7 @@ class SearchPictureViewController: UIViewController {
 }
 
 extension SearchPictureViewController: UISearchBarDelegate {
-
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         animationView?.stop()
         animationView?.removeFromSuperview()
@@ -146,8 +146,43 @@ extension SearchPictureViewController: UISearchBarDelegate {
             }
         }
     }
+    
+    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+        guard let imageView = gesture.view as? UIImageView else { return }
+        
+        switch gesture.state {
+        case .began:
+            
+            let zoomedImageView = UIImageView(image: imageView.image)
+            zoomedImageView.contentMode = .scaleAspectFit
+            zoomedImageView.backgroundColor = .black
+            zoomedImageView.isUserInteractionEnabled = true
+            
+            if let window = self.view.window {
+                zoomedImageView.frame = window.convert(imageView.frame, from: imageView.superview)
+                window.addSubview(zoomedImageView)
+            }
+            
+            UIView.animate(withDuration: 0.3) {
+                zoomedImageView.frame = UIScreen.main.bounds
+            }
+            
+            zoomedImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomedImageViewTap(_:))))
+            
+        default:
+            break
+        }
+    }
+    
+    @objc private func handleZoomedImageViewTap(_ gesture: UITapGestureRecognizer) {
+        guard let zoomedImageView = gesture.view else { return }
+        UIView.animate(withDuration: 0.3, animations: {
+            zoomedImageView.alpha = 0
+        }) { _ in
+            zoomedImageView.removeFromSuperview()
+        }
+    }
 }
-
 
 extension SearchPictureViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -189,51 +224,19 @@ extension SearchPictureViewController: UICollectionViewDelegate, UICollectionVie
         
         return cell
     }
-    
-    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
-        guard let imageView = gesture.view as? UIImageView else { return }
-        
-        switch gesture.state {
-        case .began:
-            
-            let zoomedImageView = UIImageView(image: imageView.image)
-            zoomedImageView.contentMode = .scaleAspectFit
-            zoomedImageView.backgroundColor = .black
-            zoomedImageView.isUserInteractionEnabled = true
-            
-            if let window = self.view.window {
-                zoomedImageView.frame = window.convert(imageView.frame, from: imageView.superview)
-                window.addSubview(zoomedImageView)
-            }
-            
-            UIView.animate(withDuration: 0.3) {
-                zoomedImageView.frame = UIScreen.main.bounds
-            }
-            
-            zoomedImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomedImageViewTap(_:))))
-            
-        default:
-            break
-        }
-    }
-    
-    @objc private func handleZoomedImageViewTap(_ gesture: UITapGestureRecognizer) {
-        guard let zoomedImageView = gesture.view else { return }
-        UIView.animate(withDuration: 0.3, animations: {
-            zoomedImageView.alpha = 0
-        }) { _ in
-            zoomedImageView.removeFromSuperview()
-        }
-    }
 }
 
 extension SearchPictureViewController: UICollectionViewDelegateFlowLayout {
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
         let space = sectionInsert.left * CGFloat(countItem + 1)
         let availableWidth = view.frame.width - space
         let widthPerItem = availableWidth / CGFloat(countItem)
         return CGSize(width: widthPerItem, height: widthPerItem)
+    }
+}
+
+extension SearchPictureViewController {
+    private struct Constants {
+        let titleLabelText = "Search"
     }
 }

@@ -9,14 +9,9 @@
 import UIKit
 import Lottie
 
-
-
 class AsteroidViewController: UIViewController {
-    
-    
     private var asteroids: [AsteroidModel] = []
     private let asteroidNetworkManager = AsteroidNetworkManager()
-    
     private var isSortingDangerousFirst = true
     
     var animationView = LottieAnimationView()
@@ -64,9 +59,7 @@ class AsteroidViewController: UIViewController {
         ])
     }
     
-    
     private func setupAnimation() {
-        
         animationView.animation = LottieAnimation.named("loadingBlue")
         animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
         animationView.contentMode = .scaleAspectFit
@@ -74,7 +67,6 @@ class AsteroidViewController: UIViewController {
         animationView.animationSpeed = 1
         view.addSubview(animationView)
         animationView.play()
-        
     }
     
     private func setupErrorAnimation() {
@@ -126,8 +118,7 @@ class AsteroidViewController: UIViewController {
         
         navigationItem.rightBarButtonItem = sortButton
         
-        
-        let infoImage = UIImage(systemName: "info.circle")
+        let infoImage = UIImage(systemName: AppConstants.infoItemIcon)
         let infoButton = UIBarButtonItem(image: infoImage, style: .plain, target: self, action: #selector(infoPressed))
         
         navigationItem.leftBarButtonItem = infoButton
@@ -147,7 +138,6 @@ class AsteroidViewController: UIViewController {
         present(alert, animated: true, completion: nil)
         
     }
-    
     
     func sortAsteroids() {
         if isSortingDangerousFirst {
@@ -186,11 +176,9 @@ class AsteroidViewController: UIViewController {
         
         present(alert, animated: true, completion: nil)
     }
-    
 }
 
 extension AsteroidViewController: UITableViewDataSource, UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return asteroids.count
     }
@@ -202,13 +190,7 @@ extension AsteroidViewController: UITableViewDataSource, UITableViewDelegate {
         
         let asteroid = asteroids[indexPath.row]
         
-        cell.nameLabel.text = asteroid.name
-        cell.diametrLabel.text = "Diameter: \(asteroid.diametrMinString) - \(asteroid.diametrMaxString) meters"
-        cell.aproachLabel.text = "Closest Approach: \(asteroid.closeApproachDate)"
-        cell.orbitingLabel.text = "Orbiting Body: \(asteroid.orbitingbody)"
-        cell.hazardousLabel.text = "Dangerous: \(asteroid.isDangeros ? "Yes" : "No")"
-        
-        cell.hazardousLabel.textColor = asteroid.isDangeros ? .red : .label
+        cell.configure(model: asteroid)
         
         return cell
     }

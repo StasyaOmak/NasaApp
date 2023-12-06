@@ -8,7 +8,7 @@
 import UIKit
 
 class MainTabBarController: UITabBarController {
-    
+    private let titleBar = TitleBar()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,9 +19,9 @@ class MainTabBarController: UITabBarController {
     
     private func generateTabBar() {
         viewControllers = [
-            generateVC(viewController: HomeViewController(), title: "Home", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill")),
-            generateVC(viewController: AsteroidViewController(), title: "Asteroid", image: UIImage(systemName: "bolt"), selectedImage: UIImage(systemName: "bolt.fill")),
-            generateVC(viewController: BookmarksViewController(), title: "Bookmark", image: UIImage(systemName: "bookmark"), selectedImage: UIImage(systemName: "bookmark.fill")),
+            generateVC(viewController: HomeViewController(), title: titleBar.homeTitle, image: UIImage(systemName: AppConstants.houseSysImage), selectedImage: UIImage(systemName: AppConstants.houseFillSysImage)),
+            generateVC(viewController: AsteroidViewController(), title: titleBar.asteroidTitle, image: UIImage(systemName: AppConstants.boltSysImage), selectedImage: UIImage(systemName: AppConstants.boltFillSysImage)),
+            generateVC(viewController: BookmarksViewController(), title: titleBar.bookmarkTitle, image: UIImage(systemName: AppConstants.bookmarkSysImage), selectedImage: UIImage(systemName: AppConstants.bookmarkFillSysImage)),
         ]
     }
     
@@ -37,12 +37,17 @@ class MainTabBarController: UITabBarController {
         return navigationController
     }
     
-    
     private func setTabBarAppearance() {
-        
-        tabBar.tintColor = UIColor(red: 0.98, green: 0.26, blue: 0.23, alpha: 1.00)
-        tabBar.unselectedItemTintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+        tabBar.tintColor = AppConstants.tabBarTintColor
+        tabBar.unselectedItemTintColor = AppConstants.navigationBarTintColor
         tabBar.backgroundColor = .systemBackground
     }
-    
+}
+
+extension MainTabBarController {
+    private struct TitleBar {
+        let homeTitle = "Home"
+        let asteroidTitle = "Asteroid"
+        let bookmarkTitle = "Bookmark"
+    }
 }

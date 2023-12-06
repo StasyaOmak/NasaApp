@@ -10,13 +10,12 @@ import Lottie
 import UIKit
 
 class PhotoNetworkManager{
-    
-   private var url =
-    "https://api.nasa.gov/planetary/apod?api_key=1kDltXwD3QbkCzKTa9zQnjk7ep6J57SGegoDoF6Q"
+    static let apiKey = "1kDltXwD3QbkCzKTa9zQnjk7ep6J57SGegoDoF6Q"
+    private var url =
+    "https://api.nasa.gov/planetary/apod?api_key=\(apiKey)"
     
     func fetchData(count: Int = 1, completion: @escaping (Result<[AstronomyPicture], Error>) -> () ) {
         url += "&count=\(count)"
-        print(url)
         guard let url = URL(string: url) else { return }
         
         var request = URLRequest(url: url)
@@ -31,9 +30,8 @@ class PhotoNetworkManager{
                 completion(.failure(err!))
                 return
             }
-
-            guard let data = data else { return }
             
+            guard let data = data else { return }
             
             do {
                 let jsonData = try JSONDecoder().decode([AstronomyPicture].self, from: data)
@@ -41,11 +39,8 @@ class PhotoNetworkManager{
             } catch {
                 completion(.failure(error))
             }
-            
         }.resume()
-        
     }
-    
 }
 
 

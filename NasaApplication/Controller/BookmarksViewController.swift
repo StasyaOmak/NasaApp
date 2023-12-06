@@ -11,10 +11,7 @@ import SDWebImage
 import Lottie
 import CoreData
 
-
-
 class BookmarksViewController: UIViewController {
-    
     private let tableView = UITableView()
     var managedObjectContext: NSManagedObjectContext?
     var nasaList = [Photo]()
@@ -40,10 +37,10 @@ class BookmarksViewController: UIViewController {
             bookmarkTableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
             
             let titleLabel = UILabel()
-                titleLabel.text = "Bookmark"
-                titleLabel.textColor = UIColor.label
-                titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-                navigationItem.titleView = titleLabel
+            titleLabel.text = "Bookmark"
+            titleLabel.textColor = UIColor.label
+            titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+            navigationItem.titleView = titleLabel
         }
         
         setConstraints()
@@ -63,7 +60,6 @@ class BookmarksViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
             
             self.deleteAllCoreData()
-            
             self.loadCoreData()
             self.bookmarkTableView.reloadData()
         }))
@@ -99,7 +95,7 @@ class BookmarksViewController: UIViewController {
     func deleteAllCoreData() {
         
         let fetchRequest: NSFetchRequest<NSFetchRequestResult>
-        fetchRequest = NSFetchRequest(entityName: "Photo")
+        fetchRequest = NSFetchRequest(entityName: AppConstants.entityName)
         
         let deleteRequest = NSBatchDeleteRequest(
             fetchRequest: fetchRequest
@@ -135,14 +131,12 @@ class BookmarksViewController: UIViewController {
 }
 
 extension BookmarksViewController: UITableViewDataSource, UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return nasaList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookmarkCell", for: indexPath) as! BookmarksTableViewCell
-        
         let photo = nasaList[indexPath.row]
         cell.setupUI(withDataFrom: photo)
         
@@ -159,7 +153,6 @@ extension BookmarksViewController: UITableViewDataSource, UITableViewDelegate {
     private func convertPhotoToAstronomyPicture(_ photo: Photo) -> AstronomyPicture {
         return AstronomyPicture(date: photo.date ?? "", explanation: photo.explanation ?? "", title: photo.title ?? "", url: photo.url ?? "")
     }
-    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120

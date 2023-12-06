@@ -7,15 +7,11 @@
 
 import Foundation
 
-
 class AsteroidNetworkManager {
-    
-    static let shared = AsteroidNetworkManager()
-    
-    private let url = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2023-11-26&end_date=2023-12-03&api_key=1kDltXwD3QbkCzKTa9zQnjk7ep6J57SGegoDoF6Q"
+    static let apiKey = "1kDltXwD3QbkCzKTa9zQnjk7ep6J57SGegoDoF6Q"
+    private let url = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2023-11-30&end_date=2023-12-06&api_key=\(apiKey)"
     
     func fetchData(completion: @escaping (Result<[AsteroidModel], Error>) -> () ) {
-        
         guard let url = URL(string: url) else { return }
         
         var request = URLRequest(url: url)
@@ -30,11 +26,8 @@ class AsteroidNetworkManager {
                 completion(.failure(err!))
                 return
             }
-            
-            //print("response:", response as Any)
-            
+
             guard let data = data else { return }
-            
             
             do {
                 let jsonData = try JSONDecoder().decode(AsteroidData.self, from: data)
@@ -48,11 +41,7 @@ class AsteroidNetworkManager {
             }catch{
                 completion(.failure(error))
             }
-            
-            
         }.resume()
-        
     }
-    
 }
 

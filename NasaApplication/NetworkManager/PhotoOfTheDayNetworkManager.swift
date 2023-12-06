@@ -8,9 +8,9 @@
 import Foundation
 
 class PhotoOfTheDayNetworkManager{
-    
+    static let apiKey = "1kDltXwD3QbkCzKTa9zQnjk7ep6J57SGegoDoF6Q"
     private let url =
-    "https://api.nasa.gov/planetary/apod?api_key=1kDltXwD3QbkCzKTa9zQnjk7ep6J57SGegoDoF6Q"
+    "https://api.nasa.gov/planetary/apod?api_key=\(apiKey)"
     
     func fetchData(completion: @escaping (Result<AstronomyPicture, Error>) -> () ) {
         
@@ -28,11 +28,8 @@ class PhotoOfTheDayNetworkManager{
                 completion(.failure(err!))
                 return
             }
-            
-            //print("response:", response as Any)
-            
+
             guard let data = data else { return }
-            
             
             do {
                 let jsonData = try JSONDecoder().decode(AstronomyPicture.self, from: data)
@@ -40,11 +37,8 @@ class PhotoOfTheDayNetworkManager{
             }catch{
                 completion(.failure(error))
             }
-            
         }.resume()
-        
-    }
-    
+    }    
 }
 
 

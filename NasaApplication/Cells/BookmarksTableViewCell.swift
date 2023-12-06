@@ -7,41 +7,37 @@
 
 import UIKit
 
-
 class BookmarksTableViewCell: UITableViewCell {
-    
-    private lazy var mainStackView: UIStackView = {
+    private let systName = BookmarkConstants()
+    private var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .horizontal
         element.distribution = .fill
         element.alignment = .center
         element.spacing = 10
-        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
-    private lazy var labelStackView: UIStackView = {
+    private var labelStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
         element.distribution = .fill
         element.spacing = 10
-        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
-    private lazy var labelStackViewTwo: UIStackView = {
+    private var labelStackViewTwo: UIStackView = {
         let element = UIStackView()
         element.axis = .horizontal
         element.distribution = .fill
         element.spacing = 10
-        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
-    let bookmarkImageView: UIImageView = {
+    private let bookmarkImageView: UIImageView = {
         let element = UIImageView()
         element.contentMode = .scaleToFill
         element.layer.masksToBounds = true
@@ -50,20 +46,18 @@ class BookmarksTableViewCell: UITableViewCell {
         element.layer.shadowOpacity = 0.5
         element.layer.shadowOffset = CGSize(width: 0, height: 2)
         element.layer.shadowRadius = 7
-        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
-    let bookmarkDateLabel: UILabel = {
+    private let bookmarkDateLabel: UILabel = {
         let element = UILabel()
         element.numberOfLines = 0
-        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
-    let bookmarkTitleLabel: UILabel = {
+    private let bookmarkTitleLabel: UILabel = {
         let element = UILabel()
         element.numberOfLines = 0
         element.font = UIFont.boldSystemFont(ofSize: 18)
@@ -71,12 +65,11 @@ class BookmarksTableViewCell: UITableViewCell {
         return element
     }()
     
-    let calendarIconImageView: UIImageView = {
+    private let calendarIconImageView: UIImageView = {
         let element = UIImageView()
         element.image = UIImage(systemName: "calendar")
         element.tintColor = UIColor.systemGray
         element.contentMode = .scaleAspectFit
-        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -89,22 +82,19 @@ class BookmarksTableViewCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        //        setupSubviews()
-        //        setupConstraints()
     }
     
     func setupUI(withDataFrom: Photo){
-        
         let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
-                
-                if let dateString = withDataFrom.date, let date = dateFormatter.date(from: dateString) {
-                    dateFormatter.dateFormat = "dd MMMM yyyy"
-                    let formattedDate = dateFormatter.string(from: date)
-                    bookmarkDateLabel.text = formattedDate
-                } else {
-                    bookmarkDateLabel.text = "Invalid date format"
-                }
+        dateFormatter.dateFormat = AppConstants.dateFormatOld
+        
+        if let dateString = withDataFrom.date, let date = dateFormatter.date(from: dateString) {
+            dateFormatter.dateFormat = AppConstants.dateFormatNew
+            let formattedDate = dateFormatter.string(from: date)
+            bookmarkDateLabel.text = formattedDate
+        } else {
+            bookmarkDateLabel.text = systName.bookmarkLabel
+        }
         
         bookmarkTitleLabel.text = withDataFrom.title
         bookmarkImageView.sd_setImage(with: URL(string: withDataFrom.url ?? ""))
@@ -124,7 +114,6 @@ class BookmarksTableViewCell: UITableViewCell {
         labelStackViewTwo.addArrangedSubview(bookmarkDateLabel)
     }
     private func setupConstraints() {
-        
         NSLayoutConstraint.activate([
             
             mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -143,3 +132,9 @@ class BookmarksTableViewCell: UITableViewCell {
         ])
     }
 }
+extension BookmarksTableViewCell {
+    private struct BookmarkConstants {
+        let bookmarkLabel = "Invalid date format"
+    }
+}
+

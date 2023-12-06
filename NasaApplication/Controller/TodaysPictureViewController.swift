@@ -10,11 +10,9 @@ import SDWebImage
 import Lottie
 import CoreData
 
-
 class TodaysPictureViewController: UIViewController {
-    
+    private let constant = Constants()
     var managedObjectContext: NSManagedObjectContext?
-    
     var nasaList = [Photo]()
     
     private var photoOfTheDay: AstronomyPicture?
@@ -22,29 +20,26 @@ class TodaysPictureViewController: UIViewController {
     var animationView = LottieAnimationView()
     private var isMarked = false
     
-    
-    private lazy var mainStackView: UIStackView = {
+    private var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
-        element.spacing = 15
+        element.spacing = 10
         element.distribution = .fill
-        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
-    let dateLabel: UILabel = {
+    private let dateLabel: UILabel = {
         let element = UILabel()
         element.textAlignment = .left
         element.textAlignment = .center
         element.font = .systemFont(ofSize: 18, weight: .bold)
         element.numberOfLines = 0
-        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
-    let dayImageView: UIImageView = {
+    private let dayImageView: UIImageView = {
         let element = UIImageView()
         element.contentMode = .scaleAspectFit
         element.clipsToBounds = true
@@ -54,35 +49,32 @@ class TodaysPictureViewController: UIViewController {
         return element
     }()
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let element = UILabel()
         element.textAlignment = .center
         element.font = .systemFont(ofSize: 22, weight: .bold)
         element.numberOfLines = 0
-        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
-    let textLabel: UITextView = {
+    private let textLabel: UITextView = {
         let element = UITextView()
         element.textAlignment = .justified
         element.font = .systemFont(ofSize: 14, weight: .bold)
         element.isEditable = false
-        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
     private var scrollView: UIScrollView = {
         let element = UIScrollView()
-        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
     private lazy var addBarButtonItem: UIBarButtonItem = {
-        return UIBarButtonItem(image: UIImage(systemName: "bookmark"), style: .plain, target: self, action: #selector(addBarButtonTapped))
+        return UIBarButtonItem(image: UIImage(systemName: AppConstants.bookmarkSysImage), style: .plain, target: self, action: #selector(addBarButtonTapped))
     }()
     
     private lazy var actionBarButtonItem: UIBarButtonItem = {
@@ -94,7 +86,7 @@ class TodaysPictureViewController: UIViewController {
         fetchRequest = Photo.fetchRequest()
         
         guard let title = photoOfTheDay?.title else {
-            print("Don't have photoOfTheDay")
+            print("Don't have a photoOfTheDay")
             return
         }
         fetchRequest.predicate = NSPredicate(
@@ -102,75 +94,55 @@ class TodaysPictureViewController: UIViewController {
         )
         
         if let object = try? managedObjectContext?.fetch(fetchRequest).first {
-            addBarButtonItem.image = UIImage(systemName: "bookmark.fill")
+            addBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkFillSysImage)
         } else {
-            addBarButtonItem.image = UIImage(systemName: "bookmark")
+            addBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkSysImage)
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
-        managedObjectContext = appDelegate.persistentContainer.viewContext
-        
-        print(managedObjectContext)
-        
-        view.backgroundColor = .systemBackground
-        navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
-        
-        
-        view.addSubview(scrollView)
-        view.addSubview(animationView)
-        
-        scrollView.addSubview(mainStackView)
-        
-        mainStackView.addArrangedSubview(dateLabel)
-        mainStackView.addArrangedSubview(dayImageView)
-        mainStackView.addArrangedSubview(titleLabel)
-        mainStackView.addArrangedSubview(textLabel)
-        
+
+        setupViews()
         setupNavigationBar()
         setupConstraints()
         setupAnimation()
-        
         animationView.play()
         fetchAstronomyData()
-        
-        let titleLabel = UILabel()
-            titleLabel.text = "Image Of The Day"
-            titleLabel.textColor = UIColor.label
-            titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-            navigationItem.titleView = titleLabel
+        setupCoreData()
     }
     
     private func fetchAstronomyData() {
         let networkManager = PhotoOfTheDayNetworkManager()
-        networkManager.fetchData { [weak self] (result) in switch result {
-        case .success(let success):
-            DispatchQueue.main.async {
-                self?.photoOfTheDay = success
-                self?.checkCoreData()
-                self?.setupViews()
-                
-                self?.animationView.stop()
-                self?.animationView.removeFromSuperview()
-                self?.view.setNeedsDisplay()
-                //                self?.collectionView.reloadData()
+        networkManager.fetchData { [weak self] (result) in
+            switch result {
+            case .success(let success):
+                DispatchQueue.main.async {
+                    self?.photoOfTheDay = success
+                    self?.checkCoreData()
+                    self?.setupViews()
+                    self?.animationView.stop()
+                    self?.animationView.removeFromSuperview()
+                    self?.view.setNeedsDisplay()
+                }
+            case .failure(let failure):
+                print(failure)
+                DispatchQueue.main.async {
+                    self?.animationView.stop()
+                    self?.animationView.removeFromSuperview()
+                    self?.setupErrorAnimation()
+                }
             }
-        case .failure(let failure):
-            print(failure)
-            DispatchQueue.main.async {
-                self?.animationView.stop()
-                self?.animationView.removeFromSuperview()
-                self?.setupErrorAnimation()
-            }
-        }
-            
         }
     }
+    
+    func setupCoreData() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
+        managedObjectContext = appDelegate.persistentContainer.viewContext
+    }
+    
     func saveBookmarkArrayFull() {
-        let entity = NSEntityDescription.entity(forEntityName: "Photo", in: self.managedObjectContext!)
+        let entity = NSEntityDescription.entity(forEntityName: AppConstants.entityName, in: self.managedObjectContext!)
         let list = NSManagedObject(entity: entity!, insertInto: self.managedObjectContext)
         
         list.setValue(photoOfTheDay?.date, forKey: "date")
@@ -181,7 +153,15 @@ class TodaysPictureViewController: UIViewController {
         saveCoreData()
     }
     
-    func deleteObject() {
+    func saveCoreData(){
+        do {
+            try managedObjectContext?.save()
+        } catch {
+            fatalError("Error in saving item into core data")
+        }
+    }
+    
+    @objc private func addBarButtonTapped(){
         let fetchRequest: NSFetchRequest<Photo>
         fetchRequest = Photo.fetchRequest()
         
@@ -202,19 +182,6 @@ class TodaysPictureViewController: UIViewController {
         checkCoreData()
     }
     
-    func saveCoreData(){
-        do {
-            try managedObjectContext?.save()
-        } catch {
-            fatalError("Error in saving item into core data")
-        }
-    }
-    
-    @objc private func addBarButtonTapped(){
-        
-        deleteObject()
-    }
-    
     @objc private func actionBarButtonTapped() {
         print("You can share an image")
         
@@ -231,7 +198,7 @@ class TodaysPictureViewController: UIViewController {
         
         let objectsToShare: [Any] = [image, text]
         let shareController = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-        
+    
         shareController.completionWithItemsHandler = { _, completed, _, error in
             if completed {
                 print("Sharing succeeded")
@@ -245,26 +212,30 @@ class TodaysPictureViewController: UIViewController {
     
     private func setupNavigationBar() {
         navigationItem.rightBarButtonItems = [actionBarButtonItem, addBarButtonItem]
-        actionBarButtonItem.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
-        addBarButtonItem.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
-        navigationController?.hidesBarsOnSwipe = true
+        actionBarButtonItem.tintColor = AppConstants.navigationBarTintColor
+        addBarButtonItem.tintColor = AppConstants.navigationBarTintColor
         
         actionBarButtonItem.isEnabled = true
         addBarButtonItem.isEnabled = true
+        
+        let titleLabel = UILabel()
+        titleLabel.text = constant.titleLabelText
+        titleLabel.textColor = UIColor.label
+        titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        navigationItem.titleView = titleLabel
     }
     
     private func setupAnimation() {
-        animationView.animation = LottieAnimation.named("loadingBlue")
+        animationView.animation = LottieAnimation.named(AppConstants.loadingAnimation)
         animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
         animationView.animationSpeed = 1
-        view.addSubview(animationView)
         animationView.play()
     }
     
     private func setupErrorAnimation() {
-        animationView = LottieAnimationView(name: "error")
+        animationView = LottieAnimationView(name: AppConstants.errorAnimation)
         animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
@@ -274,16 +245,27 @@ class TodaysPictureViewController: UIViewController {
     }
     
     private func setupViews() {
+        view.backgroundColor = .systemBackground
+        navigationController?.navigationBar.tintColor = AppConstants.navigationBarTintColor
+        
+        view.addSubview(scrollView)
+        view.addSubview(animationView)
+        
+        scrollView.addSubview(mainStackView)
+        
+        mainStackView.addArrangedSubview(dateLabel)
+        mainStackView.addArrangedSubview(dayImageView)
+        mainStackView.addArrangedSubview(titleLabel)
+        mainStackView.addArrangedSubview(textLabel)
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateFormat = AppConstants.dateFormatOld
         if let date = dateFormatter.date(from: photoOfTheDay?.date ?? "") {
-            dateFormatter.dateFormat = "dd MMMM yyyy"
+            dateFormatter.dateFormat = AppConstants.dateFormatNew
             let formattedDate = dateFormatter.string(from: date)
             dateLabel.text =  formattedDate
         }
-        
-        //        dateLabel.text = photoOfTheDay?.date
+
         titleLabel.text = photoOfTheDay?.title
         textLabel.text = photoOfTheDay?.explanation
         
@@ -332,3 +314,8 @@ class TodaysPictureViewController: UIViewController {
     }
 }
 
+extension TodaysPictureViewController {
+    private struct Constants {
+        let titleLabelText = "Image Of The Day"
+    }
+}

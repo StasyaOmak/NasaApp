@@ -10,74 +10,65 @@ import SDWebImage
 import Lottie
 import CoreData
 
-
-
-
 class BookmarkPhotoDetailViewController: UIViewController {
-    
     var bookmarkPhoto: AstronomyPicture?
     private let photoNetworkManager = PhotoNetworkManager()
     var animationView = LottieAnimationView()
     private var isMarked = false
     var managedObjectContext: NSManagedObjectContext?
     
-    private lazy var mainStackView: UIStackView = {
+    private var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
-        element.spacing = 20
+        element.spacing = 10
         element.distribution = .fill
-        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
-    let dateLabel: UILabel = {
+    private let dateLabel: UILabel = {
         let element = UILabel()
         element.textAlignment = .left
         element.textAlignment = .center
         element.font = .systemFont(ofSize: 18, weight: .bold)
         element.numberOfLines = 0
-        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
-    let dayImageView: UIImageView = {
+    private let dayImageView: UIImageView = {
         let element = UIImageView()
         element.contentMode = .scaleAspectFit
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let element = UILabel()
         element.textAlignment = .center
         element.font = .systemFont(ofSize: 22, weight: .bold)
         element.numberOfLines = 0
-        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
-    let textLabel: UITextView = {
+    private let textLabel: UITextView = {
         let element = UITextView()
         element.textAlignment = .justified
         element.font = .systemFont(ofSize: 14, weight: .bold)
         element.isEditable = false
-        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
     private var scrollView: UIScrollView = {
         let element = UIScrollView()
-        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
     private lazy var removeBarButtonItem: UIBarButtonItem = {
-        return UIBarButtonItem(image: UIImage(systemName: "bookmark.fill"), style: .plain, target: self, action: #selector(removeBarButtonItemTapped))
+        return UIBarButtonItem(image: UIImage(systemName: AppConstants.bookmarkFillSysImage), style: .plain, target: self, action: #selector(removeBarButtonItemTapped))
     }()
     
     private lazy var actionBarButtonItem: UIBarButtonItem = {
@@ -96,10 +87,10 @@ class BookmarkPhotoDetailViewController: UIViewController {
             format: "title LIKE %@", title
         )
         
-        if let object = try? managedObjectContext?.fetch(fetchRequest).first {
-            removeBarButtonItem.image = UIImage(systemName: "bookmark.fill")
+        if (try? managedObjectContext?.fetch(fetchRequest).first) != nil {
+            removeBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkFillSysImage)
         } else {
-            removeBarButtonItem.image = UIImage(systemName: "bookmark")
+            removeBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkSysImage)
         }
     }
     
@@ -108,8 +99,6 @@ class BookmarkPhotoDetailViewController: UIViewController {
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
         managedObjectContext = appDelegate.persistentContainer.viewContext
-        
-        print(managedObjectContext)
         
         view.backgroundColor = .systemBackground
         
@@ -125,22 +114,11 @@ class BookmarkPhotoDetailViewController: UIViewController {
         
         setupNavigationBar()
         setupConstraints()
-        setupAnimation()
-        
-        animationView.play()
-        
-        
+
         photoNetworkManager.fetchData { [weak self] picture in
             DispatchQueue.main.async {
-                self?.dayImageView.image.self
-                self?.dateLabel.text.self
-                self?.titleLabel.text.self
-                self?.textLabel.text.self
-                
                 self?.checkCoreData()
                 self?.setupViews()
-                
-                self?.animationView.stop()
                 self?.animationView.removeFromSuperview()
                 self?.view.setNeedsDisplay()
             }
@@ -148,7 +126,7 @@ class BookmarkPhotoDetailViewController: UIViewController {
     }
     
     func saveBookmarkArrayFull() {
-        let entity = NSEntityDescription.entity(forEntityName: "Photo", in: self.managedObjectContext!)
+        let entity = NSEntityDescription.entity(forEntityName: AppConstants.entityName, in: self.managedObjectContext!)
         let list = NSManagedObject(entity: entity!, insertInto: self.managedObjectContext)
         
         list.setValue(bookmarkPhoto?.date, forKey: "date")
@@ -167,6 +145,7 @@ class BookmarkPhotoDetailViewController: UIViewController {
             print("Don't have photoOfTheDay")
             return
         }
+        
         fetchRequest.predicate = NSPredicate(
             format: "title LIKE %@", title
         )
@@ -223,15 +202,14 @@ class BookmarkPhotoDetailViewController: UIViewController {
     
     private func setupNavigationBar() {
         navigationItem.rightBarButtonItems = [actionBarButtonItem, removeBarButtonItem]
-        actionBarButtonItem.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
-        removeBarButtonItem.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
-        navigationController?.hidesBarsOnSwipe = true
+        actionBarButtonItem.tintColor = AppConstants.navigationBarTintColor
+        removeBarButtonItem.tintColor = AppConstants.navigationBarTintColor
         actionBarButtonItem.isEnabled = true
         removeBarButtonItem.isEnabled = true
     }
     
     private func setupAnimation() {
-        animationView.animation = LottieAnimation.named("loadingBlue")
+        animationView.animation = LottieAnimation.named(AppConstants.loadingAnimation)
         animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
@@ -241,11 +219,10 @@ class BookmarkPhotoDetailViewController: UIViewController {
     }
     
     private func setupViews() {
-        
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateFormat = AppConstants.dateFormatOld
         if let date = dateFormatter.date(from: bookmarkPhoto?.date ?? "") {
-            dateFormatter.dateFormat = "dd MMMM yyyy"
+            dateFormatter.dateFormat = AppConstants.dateFormatNew
             let formattedDate = dateFormatter.string(from: date)
             dateLabel.text =  formattedDate
         }
@@ -259,7 +236,6 @@ class BookmarkPhotoDetailViewController: UIViewController {
     }
     
     private func setupConstraints() {
-        
         NSLayoutConstraint.activate([
             
             animationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),

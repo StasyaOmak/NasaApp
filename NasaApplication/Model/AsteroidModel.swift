@@ -9,7 +9,6 @@ import Foundation
 
 struct AsteroidModel {
     
-    
     let name: String
     let isDangeros: Bool
     let closeApproachDate: String
@@ -28,7 +27,6 @@ struct AsteroidModel {
     }
     
     init(object: NearEarthObject) {
-        
         self.name = object.name
         self.isDangeros = object.isPotentiallyHazardousAsteroid
         self.closeApproachDate = object.closeApproachData.first?.closeApproachDateFull ?? ""

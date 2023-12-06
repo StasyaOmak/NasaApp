@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 // MARK: - Asteroid
 struct AsteroidData: Codable {
     let elementCount: Int
@@ -29,16 +28,13 @@ struct NearEarthObject: Codable {
     let closeApproachData: [CloseApproachDatum]
     let isSentryObject: Bool
     
-
     enum CodingKeys: String, CodingKey {
-        
         case name
         case absoluteMagnitudeH = "absolute_magnitude_h"
         case estimatedDiameter = "estimated_diameter"
         case isPotentiallyHazardousAsteroid = "is_potentially_hazardous_asteroid"
         case closeApproachData = "close_approach_data"
         case isSentryObject = "is_sentry_object"
-        
     }
 }
 
@@ -52,7 +48,6 @@ struct CloseApproachDatum: Codable {
         case orbitingBody = "orbiting_body"
     }
 }
-
 
 // MARK: - EstimatedDiameter
 struct EstimatedDiameter: Codable {

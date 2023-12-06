@@ -9,8 +9,8 @@ import UIKit
 import Lottie
 
 class HomeViewController: UIViewController {
-    
-    var animationView = LottieAnimationView()
+    private let color = Color()
+    private var animationView = LottieAnimationView()
     
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
@@ -62,82 +62,57 @@ class HomeViewController: UIViewController {
         setupUI()
         setupConstraints()
         
-        //        navigationController?.navigationItem.rightBarButtonItem?.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
-        navigationController?.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+        navigationController?.navigationBar.tintColor = AppConstants.navigationBarTintColor
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        firstButton.backgroundColor = UIColor(red: 0.36, green: 0.58, blue: 0.99, alpha: 1.00)
-        secondButton.backgroundColor = UIColor(red: 0.36, green: 0.58, blue: 0.99, alpha: 1.00)
-        thirdButton.backgroundColor = UIColor(red: 0.36, green: 0.58, blue: 0.99, alpha: 1.00)
+        firstButton.backgroundColor = color.buttonColor
+        secondButton.backgroundColor = color.buttonColor
+        thirdButton.backgroundColor = color.buttonColor
     }
     
     private func setupAnimation() {
-        animationView.animation = LottieAnimation.named("space")
+        animationView.animation = LottieAnimation.named(Constants.lottieAnimation.rawValue)
         animationView.frame = CGRect(x: 0, y: 150, width: 50, height: 50)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
         animationView.animationSpeed = 1
         view.addSubview(animationView)
         animationView.play()
-        
     }
     
     @objc private func infoPressed(){
         let alert = UIAlertController(
-            title: "Info",
-            message:"""
-        Compatibility:
-        iPhone iOS 15.0 or later.
-
-        Age Rating:
-        4+
-
-        Languages:
-        English
-
-        Category:
-        Reference
-
-        Developer:
-        Anastasiya Omak for Accenture
-
-        Size:
-        5.7 MB
-        """,
+            title: Constants.info.rawValue,
+            message: Constants.infoMessage.rawValue,
             preferredStyle: .actionSheet
         )
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        let cancelAction = UIAlertAction(title: Constants.canselTitle.rawValue, style: .default, handler: nil)
         alert.addAction(cancelAction)
         
         present(alert, animated: true, completion: nil)
-        
     }
     
     private func setupNavigationBar() {
-        
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 45, height: 40))
-        
         let imageView = UIImageView(frame: titleView.bounds)
-        imageView.image = UIImage(named: "nasa")
+        imageView.image = UIImage(named: Constants.navigationImage.rawValue)
         imageView.contentMode = .scaleAspectFit
         titleView.addSubview(imageView)
         
         navigationItem.titleView = titleView
         
-        let darkModeButtonImage = UIImage(systemName: "gearshape")
+        let darkModeButtonImage = UIImage(systemName: Constants.darkModeItem.rawValue)
         let darkModeButton = UIBarButtonItem(image: darkModeButtonImage, style: .plain, target: self, action: #selector(darkModePressed))
         
         navigationItem.rightBarButtonItem = darkModeButton
         
-        
-        let infoImage = UIImage(systemName: "info.circle")
+        let infoImage = UIImage(systemName: AppConstants.infoItemIcon)
         let infoButton = UIBarButtonItem(image: infoImage, style: .plain, target: self, action: #selector(infoPressed))
         
         navigationItem.leftBarButtonItem = infoButton
-        
     }
     
     @objc private func darkModePressed(){
@@ -145,16 +120,14 @@ class HomeViewController: UIViewController {
     }
     
     private func openSettingAction(){
-        
         if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(settingsURL)
         } else {
-            print("Error: Invalid value UIApplication.openSettingsURLString")
+            print(Constants.openSettingActionError.rawValue)
         }
     }
     
     private func setupUI() {
-        
         view.addSubview(mainStackView)
         
         mainStackView.addArrangedSubview(animationView)
@@ -162,21 +135,19 @@ class HomeViewController: UIViewController {
         mainStackView.addArrangedSubview(secondButton)
         mainStackView.addArrangedSubview(thirdButton)
         
-        firstButton.setTitle("Today's Image", for: .normal)
+        firstButton.setTitle(Constants.firstButtonTitle.rawValue, for: .normal)
         firstButton.addTarget(self, action: #selector(todaysPictureButtonTapped), for: .touchUpInside)
         
-        secondButton.setTitle("Random Set", for: .normal)
+        secondButton.setTitle(Constants.secondButtonTitle.rawValue, for: .normal)
         secondButton.addTarget(self, action: #selector(randomSetButtonTapped), for: .touchUpInside)
         
-        thirdButton.setTitle("Search Image", for: .normal)
+        thirdButton.setTitle(Constants.thirdButtonTitle.rawValue, for: .normal)
         thirdButton.addTarget(self, action: #selector(searchPictureButtonTapped), for: .touchUpInside)
         
         firstButton.layer.cornerRadius = 15
         secondButton.layer.cornerRadius = 15
         thirdButton.layer.cornerRadius = 15
-        
     }
-    
     
     @objc private func buttonTapped(_ sender: UIButton) {
         let alpha: CGFloat = (sender.tag == 1) ? 0.5 : 1.0
@@ -200,7 +171,6 @@ class HomeViewController: UIViewController {
 }
 
 extension HomeViewController {
-    
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             
@@ -209,14 +179,51 @@ extension HomeViewController {
             mainStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             mainStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             
-            
             firstButton.heightAnchor.constraint(equalToConstant: 40),
             
             secondButton.heightAnchor.constraint(equalToConstant: 40),
             
             thirdButton.heightAnchor.constraint(equalToConstant: 40),
-            
-            
         ])
     }
 }
+
+extension HomeViewController {
+    private struct Color {
+        let buttonColor = UIColor(red: 0.36, green: 0.58, blue: 0.99, alpha: 1.00)
+    }
+    private struct CornerRadius  {
+        let buttonCornerRadius = 15
+    }
+    private enum Constants: String {
+        case info = "Info"
+        case infoMessage = """
+        Compatibility:
+        iPhone iOS 15.0 or later.
+
+        Age Rating:
+        4+
+
+        Languages:
+        English
+
+        Category:
+        Reference
+
+        Developer:
+        Anastasiya Omak for Accenture
+
+        Size:
+        5.7 MB
+        """
+        case canselTitle = "Cancel"
+        case openSettingActionError = "Error: Invalid value UIApplication.openSettingsURLString"
+        case firstButtonTitle = "Today's Image"
+        case secondButtonTitle = "Random Set"
+        case thirdButtonTitle = "Search Image"
+        case lottieAnimation = "space"
+        case navigationImage = "nasa"
+        case darkModeItem = "gearshape"
+    }
+}
+
