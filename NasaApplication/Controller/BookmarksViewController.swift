@@ -21,10 +21,24 @@ class BookmarksViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubview(bookmarkTableView)
-        
-        bookmarkTableView.delegate = self
-        bookmarkTableView.dataSource = self
+        setupViews()
+        setupNavigationBar()
+        setupConstraints()
+        setupCoreData()
+    }
+    
+    func setupCoreData() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
+        managedObjectContext = appDelegate.persistentContainer.viewContext
+    }
+    
+    private func setupNavigationBar() {
+        navigationController?.navigationBar.tintColor = AppConstants.navigationBarTintColor
+        let titleLabel = UILabel()
+        titleLabel.text = C.titleLabelText
+        titleLabel.textColor = UIColor.label
+        titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        navigationItem.titleView = titleLabel
         
         if let navigationController = self.navigationController {
             let appearance = UINavigationBarAppearance()
@@ -32,27 +46,19 @@ class BookmarksViewController: UIViewController {
             navigationController.navigationBar.standardAppearance = appearance
             navigationController.navigationBar.scrollEdgeAppearance = appearance
             navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "trash.fill"), style: .plain, target: self, action: #selector(deleteAllBookmarks))
-            navigationController.navigationBar.tintColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
-            bookmarkTableView.separatorColor = UIColor(red: 0.00, green: 0.24, blue: 0.57, alpha: 1.00)
+            
+            bookmarkTableView.separatorColor = AppConstants.navigationBarTintColor
             bookmarkTableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
             
-            let titleLabel = UILabel()
-            titleLabel.text = "Bookmark"
-            titleLabel.textColor = UIColor.label
-            titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-            navigationItem.titleView = titleLabel
+            bookmarkTableView.delegate = self
+            bookmarkTableView.dataSource = self
         }
-        
-        setConstraints()
-        
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
-        managedObjectContext = appDelegate.persistentContainer.viewContext
     }
     
     @objc func deleteAllBookmarks() {
         let alert = UIAlertController(
-            title: "Delete All Bookmarks",
-            message: "Are you sure you want to delete all bookmarks?",
+            title: C.titleDeleteMessage,
+            message: C.deleteMessage,
             preferredStyle: .alert
         )
         
@@ -120,7 +126,11 @@ class BookmarksViewController: UIViewController {
         )
     }
     
-    func setConstraints() {
+    private func setupViews() {
+        view.addSubview(bookmarkTableView)
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             bookmarkTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             bookmarkTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -156,5 +166,13 @@ extension BookmarksViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
+    }
+}
+
+extension BookmarksViewController {
+    private struct C {
+        static let titleLabelText = "Bookmark"
+        static let deleteMessage = "Are you sure you want to delete all bookmarks?"
+        static let titleDeleteMessage = "Delete All Bookmarks"
     }
 }

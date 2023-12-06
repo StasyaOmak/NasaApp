@@ -178,7 +178,7 @@ class RandomPhotoDetailViewController: UIViewController {
         
         saveCoreData()
     }
-
+    
     func saveCoreData(){
         do {
             try managedObjectContext?.save()
@@ -212,7 +212,7 @@ class RandomPhotoDetailViewController: UIViewController {
             let formattedDate = dateFormatter.string(from: date)
             dateLabel.text =  formattedDate
         }
-
+        
         titleLabel.text = selectedPhoto?.title
         textLabel.text = selectedPhoto?.explanation
         

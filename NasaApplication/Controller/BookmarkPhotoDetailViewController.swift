@@ -7,13 +7,11 @@
 
 import Foundation
 import SDWebImage
-import Lottie
 import CoreData
 
 class BookmarkPhotoDetailViewController: UIViewController {
     var bookmarkPhoto: AstronomyPicture?
     private let photoNetworkManager = PhotoNetworkManager()
-    var animationView = LottieAnimationView()
     private var isMarked = false
     var managedObjectContext: NSManagedObjectContext?
     
@@ -80,7 +78,7 @@ class BookmarkPhotoDetailViewController: UIViewController {
         fetchRequest = Photo.fetchRequest()
         
         guard let title = bookmarkPhoto?.title else {
-            print("Don't have photoOfTheDay")
+            print("Don't have a photo")
             return
         }
         fetchRequest.predicate = NSPredicate(
@@ -97,32 +95,15 @@ class BookmarkPhotoDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
-        managedObjectContext = appDelegate.persistentContainer.viewContext
-        
-        view.backgroundColor = .systemBackground
-        
-        view.addSubview(scrollView)
-        view.addSubview(animationView)
-        
-        scrollView.addSubview(mainStackView)
-        
-        mainStackView.addArrangedSubview(dateLabel)
-        mainStackView.addArrangedSubview(dayImageView)
-        mainStackView.addArrangedSubview(titleLabel)
-        mainStackView.addArrangedSubview(textLabel)
-        
+        setupViews()
         setupNavigationBar()
         setupConstraints()
-
-        photoNetworkManager.fetchData { [weak self] picture in
-            DispatchQueue.main.async {
-                self?.checkCoreData()
-                self?.setupViews()
-                self?.animationView.removeFromSuperview()
-                self?.view.setNeedsDisplay()
-            }
-        }
+        setupCoreData()
+    }
+    
+    func setupCoreData() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
+        managedObjectContext = appDelegate.persistentContainer.viewContext
     }
     
     func saveBookmarkArrayFull() {
@@ -137,12 +118,20 @@ class BookmarkPhotoDetailViewController: UIViewController {
         saveCoreData()
     }
     
-    func deleteObject() {
+    func saveCoreData(){
+        do {
+            try managedObjectContext?.save()
+        } catch {
+            fatalError("Error in saving item into core data")
+        }
+    }
+    
+    @objc private func removeBarButtonItemTapped() {
         let fetchRequest: NSFetchRequest<Photo>
         fetchRequest = Photo.fetchRequest()
         
         guard let title = bookmarkPhoto?.title else {
-            print("Don't have photoOfTheDay")
+            print("Don't have a photo")
             return
         }
         
@@ -157,19 +146,6 @@ class BookmarkPhotoDetailViewController: UIViewController {
             saveBookmarkArrayFull()
         }
         checkCoreData()
-    }
-    
-    func saveCoreData(){
-        do {
-            try managedObjectContext?.save()
-        } catch {
-            fatalError("Error in saving item into core data")
-        }
-    }
-    
-    @objc private func removeBarButtonItemTapped() {
-        
-        deleteObject()
     }
     
     @objc private func actionBarButtonTapped() {
@@ -208,17 +184,18 @@ class BookmarkPhotoDetailViewController: UIViewController {
         removeBarButtonItem.isEnabled = true
     }
     
-    private func setupAnimation() {
-        animationView.animation = LottieAnimation.named(AppConstants.loadingAnimation)
-        animationView.frame = CGRect(x: (Int(view.bounds.width) - AppConstants.animationFrame) / 2, y: (Int(view.bounds.height) - AppConstants.animationFrame) / 2, width: AppConstants.animationFrame, height: AppConstants.animationFrame)
-        animationView.contentMode = .scaleAspectFit
-        animationView.loopMode = .loop
-        animationView.animationSpeed = AppConstants.loadingAnSpeed
-        view.addSubview(animationView)
-        animationView.play()
-    }
-    
     private func setupViews() {
+        view.backgroundColor = .systemBackground
+        
+        view.addSubview(scrollView)
+        
+        scrollView.addSubview(mainStackView)
+        
+        mainStackView.addArrangedSubview(dateLabel)
+        mainStackView.addArrangedSubview(dayImageView)
+        mainStackView.addArrangedSubview(titleLabel)
+        mainStackView.addArrangedSubview(textLabel)
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = AppConstants.dateFormatOld
         if let date = dateFormatter.date(from: bookmarkPhoto?.date ?? "") {
@@ -232,15 +209,10 @@ class BookmarkPhotoDetailViewController: UIViewController {
         
         guard let url = URL(string: bookmarkPhoto?.url ?? "") else { return }
         dayImageView.sd_setImage(with: url)
-        
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            
-            animationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            animationView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),

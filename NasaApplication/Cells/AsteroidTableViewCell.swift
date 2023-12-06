@@ -28,7 +28,7 @@ class AsteroidTableViewCell: UITableViewCell {
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
-
+    
     private var aproachStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .horizontal
@@ -37,7 +37,7 @@ class AsteroidTableViewCell: UITableViewCell {
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
-   
+    
     private var orbitingStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .horizontal
@@ -159,7 +159,7 @@ class AsteroidTableViewCell: UITableViewCell {
         
         hazardousStackView.addArrangedSubview(hazardousTextLabel)
         hazardousStackView.addArrangedSubview(hazardousLabel)
-
+        
         NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),

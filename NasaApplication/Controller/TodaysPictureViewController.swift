@@ -102,7 +102,7 @@ class TodaysPictureViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupViews()
         setupNavigationBar()
         setupConstraints()
@@ -198,7 +198,7 @@ class TodaysPictureViewController: UIViewController {
         
         let objectsToShare: [Any] = [image, text]
         let shareController = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-    
+        
         shareController.completionWithItemsHandler = { _, completed, _, error in
             if completed {
                 print("Sharing succeeded")
@@ -265,7 +265,7 @@ class TodaysPictureViewController: UIViewController {
             let formattedDate = dateFormatter.string(from: date)
             dateLabel.text =  formattedDate
         }
-
+        
         titleLabel.text = photoOfTheDay?.title
         textLabel.text = photoOfTheDay?.explanation
         

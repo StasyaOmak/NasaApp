@@ -41,7 +41,7 @@ class AsteroidViewController: UIViewController {
         
         view.addSubview(tableView)
     }
-
+    
     private func setupAnimation() {
         animationView.animation = LottieAnimation.named(AppConstants.loadingAnimation)
         animationView.frame = CGRect(x: (Int(view.bounds.width) - AppConstants.animationFrame) / 2, y: (Int(view.bounds.height) - AppConstants.animationFrame) / 2, width: AppConstants.animationFrame, height: AppConstants.animationFrame)

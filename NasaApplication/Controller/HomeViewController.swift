@@ -55,15 +55,15 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
-        
+        setupViews()
         setupNavigationBar()
-        
         setupAnimation()
         setupUI()
         setupConstraints()
-        
-        navigationController?.navigationBar.tintColor = AppConstants.navigationBarTintColor
+    }
+    
+    private func setupViews() {
+        view.backgroundColor = .systemBackground
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -113,6 +113,7 @@ class HomeViewController: UIViewController {
         let infoImage = UIImage(systemName: AppConstants.infoItemIcon)
         let infoButton = UIBarButtonItem(image: infoImage, style: .plain, target: self, action: #selector(infoPressed))
         
+        navigationController?.navigationBar.tintColor = AppConstants.navigationBarTintColor
         navigationItem.leftBarButtonItem = infoButton
     }
     
@@ -200,19 +201,19 @@ extension HomeViewController {
         case infoMessage = """
         Compatibility:
         iPhone iOS 15.0 or later.
-
+        
         Age Rating:
         4+
-
+        
         Languages:
         English
-
+        
         Category:
         Reference
-
+        
         Developer:
         Anastasiya Omak for Accenture
-
+        
         Size:
         5.7 MB
         """

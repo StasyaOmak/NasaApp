@@ -39,14 +39,10 @@ class SearchPictureViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
-        view.addSubview(searchBar)
-        
+        setupViews()
         setupNavigationBar()
         setupCollectionView()
         setConstraints()
-        
-        searchBar.delegate = self
     }
     
     private func setupNavigationBar() {
@@ -56,6 +52,8 @@ class SearchPictureViewController: UIViewController {
         titleLabel.textColor = UIColor.label
         titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         navigationItem.titleView = titleLabel
+        
+        searchBar.delegate = self
     }
     
     private func setupAnimation() {
@@ -152,6 +150,11 @@ class SearchPictureViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+    }
+    
+    private func setupViews() {
+        view.backgroundColor = .systemBackground
+        view.addSubview(searchBar)
     }
     
     private func setConstraints() {
