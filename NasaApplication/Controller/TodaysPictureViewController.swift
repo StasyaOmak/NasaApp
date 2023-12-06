@@ -93,7 +93,7 @@ class TodaysPictureViewController: UIViewController {
             format: "title LIKE %@", title
         )
         
-        if let object = try? managedObjectContext?.fetch(fetchRequest).first {
+        if (try? managedObjectContext?.fetch(fetchRequest).first) != nil {
             addBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkFillSysImage)
         } else {
             addBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkSysImage)
@@ -227,19 +227,19 @@ class TodaysPictureViewController: UIViewController {
     
     private func setupAnimation() {
         animationView.animation = LottieAnimation.named(AppConstants.loadingAnimation)
-        animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
+        animationView.frame = CGRect(x: (Int(view.bounds.width) - AppConstants.animationFrame) / 2, y: (Int(view.bounds.height) - AppConstants.animationFrame) / 2, width: AppConstants.animationFrame, height: AppConstants.animationFrame)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
-        animationView.animationSpeed = 1
+        animationView.animationSpeed = AppConstants.loadingAnSpeed
         animationView.play()
     }
     
     private func setupErrorAnimation() {
         animationView = LottieAnimationView(name: AppConstants.errorAnimation)
-        animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
+        animationView.frame = CGRect(x: (Int(view.bounds.width) - AppConstants.animationFrame) / 2, y: (Int(view.bounds.height) - AppConstants.animationFrame) / 2, width: AppConstants.animationFrame, height: AppConstants.animationFrame)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
-        animationView.animationSpeed = 1.3
+        animationView.animationSpeed = AppConstants.errorAnSpeed
         view.addSubview(animationView)
         animationView.play()
     }
@@ -279,11 +279,11 @@ class TodaysPictureViewController: UIViewController {
     
     @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
         if gesture.state == .began {
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: AppConstants.animationDuration) {
                 self.dayImageView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
             }
         } else if gesture.state == .ended {
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: AppConstants.animationDuration) {
                 self.dayImageView.transform = CGAffineTransform.identity
             }
         }

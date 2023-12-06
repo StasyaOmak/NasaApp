@@ -30,4 +30,11 @@ struct AppConstants {
     static let loadingAnimation = "loadingBlue"
     
     static let entityName = "Photo"
+    
+    static let animationDuration = 0.3
+    
+    static let animationFrame = 200
+    
+    static let loadingAnSpeed = 1.0
+    static let errorAnSpeed = 1.2
 }

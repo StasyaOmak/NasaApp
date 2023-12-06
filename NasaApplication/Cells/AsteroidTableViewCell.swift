@@ -20,24 +20,6 @@ class AsteroidTableViewCell: UITableViewCell {
         return element
     }()
     
-//    private var labelStackView: UIStackView = {
-//        let element = UIStackView()
-//        element.axis = .vertical
-//        element.distribution = .fill
-//        element.spacing = 10
-//        element.translatesAutoresizingMaskIntoConstraints = false
-//        return element
-//    }()
-    
-//    private var labelStackViewTwo: UIStackView = {
-//        let element = UIStackView()
-//        element.axis = .horizontal
-//        element.distribution = .fill
-//        element.spacing = 10
-//        element.translatesAutoresizingMaskIntoConstraints = false
-//        return element
-//    }()
-    
     private var diametStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .horizontal
@@ -76,7 +58,6 @@ class AsteroidTableViewCell: UITableViewCell {
     
     private var nameLabel: UILabel = {
         let element = UILabel()
-//        element.textAlignment = .center
         element.font = .systemFont(ofSize: 16, weight: .bold)
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -178,26 +159,7 @@ class AsteroidTableViewCell: UITableViewCell {
         
         hazardousStackView.addArrangedSubview(hazardousTextLabel)
         hazardousStackView.addArrangedSubview(hazardousLabel)
-//
-//
-//        mainStackView.addArrangedSubview(labelStackViewX)
-//        mainStackView.addArrangedSubview(labelStackViewY)
-//        labelStackViewY.addArrangedSubview(nameLabel)
-//        labelStackViewX.addArrangedSubview(labelStackView)
-//        labelStackViewX.addArrangedSubview(labelStackViewTwo)
-        
-//        labelStackView.addArrangedSubview(diameterTextLabel)
-//        labelStackView.addArrangedSubview(approachTextLabel)
-//        labelStackView.addArrangedSubview(orbitingTextLabel)
-//        labelStackView.addArrangedSubview(hazardousTextLabel)
-//        
-////        mainStackView.addArrangedSubview(labelStackViewTwo)
-//        
-//        labelStackViewTwo.addArrangedSubview(diametrLabel)
-//        labelStackViewTwo.addArrangedSubview(aproachLabel)
-//        labelStackViewTwo.addArrangedSubview(orbitingLabel)
-//        labelStackViewTwo.addArrangedSubview(hazardousLabel)
-        
+
         NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
@@ -207,9 +169,6 @@ class AsteroidTableViewCell: UITableViewCell {
             nameLabel.heightAnchor.constraint(equalToConstant: 20),
             nameLabel.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor),
             nameLabel.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor)
-            
-//            labelStackView.widthAnchor.constraint(equalTo: mainStackView.widthAnchor, multiplier: 0.5),
-//            labelStackViewTwo.widthAnchor.constraint(equalTo: mainStackView.widthAnchor, multiplier: 0.5),
         ])
     }
 }

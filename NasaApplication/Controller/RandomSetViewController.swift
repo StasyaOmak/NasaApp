@@ -49,20 +49,20 @@ class RandomSetViewController: UIViewController {
     
     private func setupAnimation() {
         animationView.animation = LottieAnimation.named(AppConstants.loadingAnimation)
-        animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
+        animationView.frame = CGRect(x: (Int(view.bounds.width) - AppConstants.animationFrame) / 2, y: (Int(view.bounds.height) - AppConstants.animationFrame) / 2, width: AppConstants.animationFrame, height: AppConstants.animationFrame)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
-        animationView.animationSpeed = 1
+        animationView.animationSpeed = AppConstants.loadingAnSpeed
         view.addSubview(animationView)
         animationView.play()
     }
     
     private func setupErrorAnimation() {
         animationView = LottieAnimationView(name: AppConstants.errorAnimation)
-        animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
+        animationView.frame = CGRect(x: (Int(view.bounds.width) - AppConstants.animationFrame) / 2, y: (Int(view.bounds.height) - AppConstants.animationFrame) / 2, width: AppConstants.animationFrame, height: AppConstants.animationFrame)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
-        animationView.animationSpeed = 1.3
+        animationView.animationSpeed = AppConstants.errorAnSpeed
         view.addSubview(animationView)
         animationView.play()
     }
@@ -124,7 +124,7 @@ class RandomSetViewController: UIViewController {
                 window.addSubview(zoomedImageView)
             }
             
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: AppConstants.animationDuration) {
                 zoomedImageView.frame = UIScreen.main.bounds
             }
             
@@ -137,7 +137,7 @@ class RandomSetViewController: UIViewController {
     
     @objc private func handleZoomedImageViewTap(_ gesture: UITapGestureRecognizer) {
         guard let zoomedImageView = gesture.view else { return }
-        UIView.animate(withDuration: 0.3, animations: {
+        UIView.animate(withDuration: AppConstants.animationDuration, animations: {
             zoomedImageView.alpha = 0
         }) { _ in
             zoomedImageView.removeFromSuperview()

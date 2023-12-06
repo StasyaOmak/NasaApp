@@ -11,12 +11,11 @@ import SDWebImage
 import Lottie
 
 class SearchPictureViewController: UIViewController {
-    private let constant = Constants()
     var allAstronomyPictures: [AstronomyPicture] = []
     var filteredAstronomyPictures: [AstronomyPicture] = []
     var animationView: LottieAnimationView?
-    let countItem = 2
-    let sectionInsert = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
+    
+    let sectionInsert = UIEdgeInsets(top: C.inset, left: C.inset, bottom: C.inset, right: C.inset)
     
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
@@ -48,13 +47,12 @@ class SearchPictureViewController: UIViewController {
         setConstraints()
         
         searchBar.delegate = self
-        
     }
     
     private func setupNavigationBar() {
         navigationController?.navigationBar.tintColor = AppConstants.navigationBarTintColor
         let titleLabel = UILabel()
-        titleLabel.text = constant.titleLabelText
+        titleLabel.text = C.titleLabelText
         titleLabel.textColor = UIColor.label
         titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         navigationItem.titleView = titleLabel
@@ -63,10 +61,10 @@ class SearchPictureViewController: UIViewController {
     private func setupAnimation() {
         animationView = LottieAnimationView(name: AppConstants.loadingAnimation)
         guard let animationView = animationView else { return }
-        animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
+        animationView.frame = CGRect(x: (Int(view.bounds.width) - AppConstants.animationFrame) / 2, y: (Int(view.bounds.height) - AppConstants.animationFrame) / 2, width: AppConstants.animationFrame, height: AppConstants.animationFrame)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
-        animationView.animationSpeed = 1
+        animationView.animationSpeed = AppConstants.loadingAnSpeed
         view.addSubview(animationView)
         animationView.play()
     }
@@ -74,46 +72,12 @@ class SearchPictureViewController: UIViewController {
     private func setupErrorAnimation() {
         animationView = LottieAnimationView(name: AppConstants.errorAnimation)
         guard let animationView = animationView else { return }
-        animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
+        animationView.frame = CGRect(x: (Int(view.bounds.width) - AppConstants.animationFrame) / 2, y: (Int(view.bounds.height) - AppConstants.animationFrame) / 2, width: AppConstants.animationFrame, height: AppConstants.animationFrame)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
-        animationView.animationSpeed = 1.3
+        animationView.animationSpeed = AppConstants.errorAnSpeed
         view.addSubview(animationView)
         animationView.play()
-    }
-    
-    
-    private func setupCollectionView() {
-        self.view.addSubview(collectionView)
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-    }
-    
-    private func setConstraints() {
-        NSLayoutConstraint.activate([
-            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-        ])
-    }
-}
-
-extension SearchPictureViewController: UISearchBarDelegate {
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        animationView?.stop()
-        animationView?.removeFromSuperview()
-        filteredAstronomyPictures = []
-        collectionView.reloadData()
-        setupAnimation()
-        fetchAstronomyData(with: searchBar.text ?? "")
-        searchBar.resignFirstResponder()
     }
     
     private func fetchAstronomyData(with searchText: String) {
@@ -163,7 +127,7 @@ extension SearchPictureViewController: UISearchBarDelegate {
                 window.addSubview(zoomedImageView)
             }
             
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: AppConstants.animationDuration) {
                 zoomedImageView.frame = UIScreen.main.bounds
             }
             
@@ -176,15 +140,48 @@ extension SearchPictureViewController: UISearchBarDelegate {
     
     @objc private func handleZoomedImageViewTap(_ gesture: UITapGestureRecognizer) {
         guard let zoomedImageView = gesture.view else { return }
-        UIView.animate(withDuration: 0.3, animations: {
+        UIView.animate(withDuration: AppConstants.animationDuration, animations: {
             zoomedImageView.alpha = 0
         }) { _ in
             zoomedImageView.removeFromSuperview()
         }
     }
+    
+    private func setupCollectionView() {
+        self.view.addSubview(collectionView)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+    }
+    
+    private func setConstraints() {
+        NSLayoutConstraint.activate([
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+        ])
+    }
 }
 
-extension SearchPictureViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension SearchPictureViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        animationView?.stop()
+        animationView?.removeFromSuperview()
+        filteredAstronomyPictures = []
+        collectionView.reloadData()
+        setupAnimation()
+        fetchAstronomyData(with: searchBar.text ?? "")
+        searchBar.resignFirstResponder()
+    }
+}
+
+extension SearchPictureViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filteredAstronomyPictures.count
     }
@@ -224,19 +221,19 @@ extension SearchPictureViewController: UICollectionViewDelegate, UICollectionVie
         
         return cell
     }
-}
-
-extension SearchPictureViewController: UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let space = sectionInsert.left * CGFloat(countItem + 1)
+        let space = sectionInsert.left * CGFloat(C.countItem + 1)
         let availableWidth = view.frame.width - space
-        let widthPerItem = availableWidth / CGFloat(countItem)
+        let widthPerItem = availableWidth / CGFloat(C.countItem)
         return CGSize(width: widthPerItem, height: widthPerItem)
     }
 }
 
 extension SearchPictureViewController {
-    private struct Constants {
-        let titleLabelText = "Search"
+    private struct C {
+        static let titleLabelText = "Search"
+        static let countItem = 2
+        static let inset: CGFloat = 20
     }
 }

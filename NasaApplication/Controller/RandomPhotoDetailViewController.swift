@@ -7,14 +7,11 @@
 
 import UIKit
 import SDWebImage
-import Lottie
 import CoreData
 
 class RandomPhotoDetailViewController: UIViewController {
-    
     var selectedPhoto: AstronomyPicture?
     private let photoNetworkManager = PhotoNetworkManager()
-    var animationView = LottieAnimationView()
     var managedObjectContext: NSManagedObjectContext?
     private var isMarked = false
     
@@ -111,8 +108,6 @@ class RandomPhotoDetailViewController: UIViewController {
         photoNetworkManager.fetchData  { [weak self] picture in
             DispatchQueue.main.async {
                 self?.checkCoreData()
-                self?.animationView.stop()
-                self?.animationView.removeFromSuperview()
                 self?.view.setNeedsDisplay()
             }
         }
@@ -198,23 +193,11 @@ class RandomPhotoDetailViewController: UIViewController {
         addBarButtonItem.isEnabled = true
     }
     
-    private func setupAnimation() {
-        animationView.animation = LottieAnimation.named(AppConstants.loadingAnimation)
-        animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
-        animationView.contentMode = .scaleAspectFit
-        animationView.loopMode = .loop
-        animationView.animationSpeed = 1
-        view.addSubview(animationView)
-        animationView.play()
-    }
-    
     private func setupViews() {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.tintColor = AppConstants.navigationBarTintColor
         
         view.addSubview(scrollView)
-        view.addSubview(animationView)
-        
         scrollView.addSubview(mainStackView)
         
         mainStackView.addArrangedSubview(dateLabel)
@@ -243,11 +226,11 @@ class RandomPhotoDetailViewController: UIViewController {
     
     @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
         if gesture.state == .began {
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: AppConstants.animationDuration) {
                 self.dayImageView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
             }
         } else if gesture.state == .ended {
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: AppConstants.animationDuration) {
                 self.dayImageView.transform = CGAffineTransform.identity
             }
         }
@@ -255,10 +238,6 @@ class RandomPhotoDetailViewController: UIViewController {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            
-            animationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            animationView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),

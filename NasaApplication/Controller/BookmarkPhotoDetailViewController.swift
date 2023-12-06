@@ -210,10 +210,10 @@ class BookmarkPhotoDetailViewController: UIViewController {
     
     private func setupAnimation() {
         animationView.animation = LottieAnimation.named(AppConstants.loadingAnimation)
-        animationView.frame = CGRect(x: (view.bounds.width - 200) / 2, y: (view.bounds.height - 200) / 2, width: 200, height: 200)
+        animationView.frame = CGRect(x: (Int(view.bounds.width) - AppConstants.animationFrame) / 2, y: (Int(view.bounds.height) - AppConstants.animationFrame) / 2, width: AppConstants.animationFrame, height: AppConstants.animationFrame)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
-        animationView.animationSpeed = 1
+        animationView.animationSpeed = AppConstants.loadingAnSpeed
         view.addSubview(animationView)
         animationView.play()
     }
