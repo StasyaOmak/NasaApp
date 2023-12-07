@@ -32,9 +32,6 @@ NasaApp is an iOS application that immerses users in the wonders of space explor
 
 ![nasa2](https://github.com/StasyaOmak/NasaApp/assets/127408467/9d296f9f-67cd-4772-b457-b8fb34c07f03)  ![nasa4](https://github.com/StasyaOmak/NasaApp/assets/127408467/f322a7b0-ddd9-4617-bb7b-2149418ec1da)
 
-![nasa5](https://github.com/StasyaOmak/NasaApp/assets/127408467/da289940-e86e-470b-b2f6-82abb329d480)
-
-
 
 
 ## How to Use
