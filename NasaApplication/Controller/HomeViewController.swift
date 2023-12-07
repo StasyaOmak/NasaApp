@@ -218,9 +218,9 @@ extension HomeViewController {
         5.7 MB
         """
         case openSettingActionError = "Error: Invalid value UIApplication.openSettingsURLString"
-        case firstButtonTitle = "Today's Image"
+        case firstButtonTitle = "Today's Picture"
         case secondButtonTitle = "Random Set"
-        case thirdButtonTitle = "Search Image"
+        case thirdButtonTitle = "Search Picture"
         case lottieAnimation = "space"
         case navigationImage = "nasapng"
         case darkModeItem = "gearshape"
