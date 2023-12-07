@@ -22,6 +22,15 @@ class BookmarksViewController: UIViewController {
         return UIBarButtonItem(image: UIImage(systemName: "trash.fill"), style: .plain, target: self, action: #selector(deleteAllBookmarks))
     }()
     
+    private lazy var lableText: UILabel = {
+        let element = UILabel()
+        element.text = "Your Bookmark is Empty"
+        element.textColor = AppConstants.navigationBarTintColor
+        element.font = .systemFont(ofSize: 16, weight: .bold)
+        element.translatesAutoresizingMaskIntoConstraints = false
+        return element
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,6 +38,12 @@ class BookmarksViewController: UIViewController {
         setupNavigationBar()
         setupConstraints()
         setupCoreData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loadCoreData()
+        bookmarkTableView.reloadData()
     }
     
     func setupCoreData() {
@@ -76,20 +91,14 @@ class BookmarksViewController: UIViewController {
         
         present(alert, animated: true, completion: nil)
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        loadCoreData()
-        bookmarkTableView.reloadData()
-    }
-    
+        
     func loadCoreData() {
         let request: NSFetchRequest<Photo> = Photo.fetchRequest()
         
         do {
             let result = try managedObjectContext?.fetch(request)
             nasaList = result ?? []
-            print(nasaList.count)
+            lableText.isHidden = !nasaList.isEmpty
         } catch {
             fatalError("Error loading items into Core Data")
         }
@@ -132,6 +141,7 @@ class BookmarksViewController: UIViewController {
     
     private func setupViews() {
         view.addSubview(bookmarkTableView)
+        view.addSubview(lableText)
     }
     
     private func setupConstraints() {
@@ -140,6 +150,9 @@ class BookmarksViewController: UIViewController {
             bookmarkTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             bookmarkTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             bookmarkTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            lableText.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            lableText.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
     }
 }

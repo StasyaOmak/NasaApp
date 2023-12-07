@@ -208,7 +208,11 @@ class BookmarkPhotoDetailViewController: UIViewController {
         textLabel.text = bookmarkPhoto?.explanation
         
         guard let url = URL(string: bookmarkPhoto?.url ?? "") else { return }
-        dayImageView.sd_setImage(with: url)
+        dayImageView.sd_setImage(with: url) { [weak self] image, _, _, _ in
+            if image == nil {
+                self?.dayImageView.image = UIImage(named: "nasa")
+            }
+        }
     }
     
     private func setupConstraints() {

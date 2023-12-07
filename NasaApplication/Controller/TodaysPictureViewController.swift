@@ -244,6 +244,11 @@ class TodaysPictureViewController: UIViewController {
         animationView.play()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkCoreData()
+    }
+    
     private func setupViews() {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.tintColor = AppConstants.navigationBarTintColor
@@ -270,7 +275,11 @@ class TodaysPictureViewController: UIViewController {
         textLabel.text = photoOfTheDay?.explanation
         
         guard let url = URL(string: photoOfTheDay?.url ?? "") else { return }
-        dayImageView.sd_setImage(with: url)
+        dayImageView.sd_setImage(with: url) { [weak self] image, _, _, _ in
+            if image == nil {
+                self?.dayImageView.image = UIImage(named: "nasa")
+            }
+        }
         
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
         dayImageView.addGestureRecognizer(longPressGesture)

@@ -222,7 +222,7 @@ extension HomeViewController {
         case secondButtonTitle = "Random Set"
         case thirdButtonTitle = "Search Image"
         case lottieAnimation = "space"
-        case navigationImage = "nasa"
+        case navigationImage = "nasapng"
         case darkModeItem = "gearshape"
     }
 }

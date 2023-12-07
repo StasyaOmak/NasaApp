@@ -177,7 +177,11 @@ extension RandomSetViewController: UICollectionViewDelegate, UICollectionViewDat
         ])
         
         if let imageURL = URL(string: astronomyPictures[indexPath.item].url) {
-            imageView.sd_setImage(with: imageURL, completed: nil)
+            imageView.sd_setImage(with: imageURL) { image, _, _, _ in
+                if image == nil {
+                    imageView.image = UIImage(named: "nasa")
+                }
+            }
         }
         
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
@@ -185,7 +189,11 @@ extension RandomSetViewController: UICollectionViewDelegate, UICollectionViewDat
         imageView.isUserInteractionEnabled = true
         
         if let imageURL = URL(string: astronomyPictures[indexPath.item].url) {
-            imageView.sd_setImage(with: imageURL, completed: nil)
+            imageView.sd_setImage(with: imageURL) { image, _, _, _ in
+                if image == nil {
+                    imageView.image = UIImage(named: "nasa")
+                }
+            }
         }
         
         return cell

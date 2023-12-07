@@ -39,7 +39,7 @@ class BookmarksTableViewCell: UITableViewCell {
     
     private let bookmarkImageView: UIImageView = {
         let element = UIImageView()
-        element.contentMode = .scaleToFill
+        element.contentMode = .scaleAspectFill
         element.layer.masksToBounds = true
         element.layer.cornerRadius = 5
         element.layer.shadowColor = UIColor.black.cgColor
@@ -97,7 +97,11 @@ class BookmarksTableViewCell: UITableViewCell {
         }
         
         bookmarkTitleLabel.text = withDataFrom.title
-        bookmarkImageView.sd_setImage(with: URL(string: withDataFrom.url ?? ""))
+        bookmarkImageView.sd_setImage(with: URL(string: withDataFrom.url ?? "")) { [weak self] image, _, _, _ in
+            if image == nil {
+                self?.bookmarkImageView.image = UIImage(named: "nasa")
+            }
+        }
         
     }
     

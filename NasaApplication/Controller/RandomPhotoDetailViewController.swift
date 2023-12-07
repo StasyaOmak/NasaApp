@@ -11,7 +11,6 @@ import CoreData
 
 class RandomPhotoDetailViewController: UIViewController {
     var selectedPhoto: AstronomyPicture?
-//    private let photoNetworkManager = PhotoNetworkManager()
     var managedObjectContext: NSManagedObjectContext?
     private var isMarked = false
     
@@ -74,6 +73,11 @@ class RandomPhotoDetailViewController: UIViewController {
     private lazy var actionBarButtonItem: UIBarButtonItem = {
         return UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(actionBarButtonTapped))
     }()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkCoreData()
+    }
     
     func checkCoreData() {
         let fetchRequest: NSFetchRequest<Photo>
@@ -210,7 +214,11 @@ class RandomPhotoDetailViewController: UIViewController {
         textLabel.text = selectedPhoto?.explanation
         
         guard let url = URL(string: selectedPhoto?.url ?? "") else { return }
-        dayImageView.sd_setImage(with: url)
+        dayImageView.sd_setImage(with: url) { [weak self] image, _, _, _ in
+            if image == nil {
+                self?.dayImageView.image = UIImage(named: "nasa")
+            }
+        }
         
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
         dayImageView.addGestureRecognizer(longPressGesture)
