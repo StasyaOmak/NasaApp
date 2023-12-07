@@ -18,6 +18,10 @@ class BookmarksViewController: UIViewController {
     var bookmarkAstronomyPictures: [AstronomyPicture] = []
     private var photoOfTheDayTwo: AstronomyPicture?
     
+    private lazy var deleteBarButtonItem: UIBarButtonItem = {
+        return UIBarButtonItem(image: UIImage(systemName: "trash.fill"), style: .plain, target: self, action: #selector(deleteAllBookmarks))
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -45,7 +49,7 @@ class BookmarksViewController: UIViewController {
             appearance.backgroundColor = UIColor.systemBackground
             navigationController.navigationBar.standardAppearance = appearance
             navigationController.navigationBar.scrollEdgeAppearance = appearance
-            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "trash.fill"), style: .plain, target: self, action: #selector(deleteAllBookmarks))
+            navigationItem.rightBarButtonItems = [deleteBarButtonItem]
             
             bookmarkTableView.separatorColor = AppConstants.navigationBarTintColor
             bookmarkTableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)

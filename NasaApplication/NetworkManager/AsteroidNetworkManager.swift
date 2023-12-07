@@ -9,7 +9,7 @@ import Foundation
 
 class AsteroidNetworkManager {
     static let apiKey = "1kDltXwD3QbkCzKTa9zQnjk7ep6J57SGegoDoF6Q"
-    private let url = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2023-11-30&end_date=2023-12-06&api_key=\(apiKey)"
+    private let url = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2023-12-01&end_date=2023-12-07&api_key=\(apiKey)"
     
     func fetchData(completion: @escaping (Result<[AsteroidModel], Error>) -> () ) {
         guard let url = URL(string: url) else { return }

@@ -11,7 +11,7 @@ import CoreData
 
 class RandomPhotoDetailViewController: UIViewController {
     var selectedPhoto: AstronomyPicture?
-    private let photoNetworkManager = PhotoNetworkManager()
+//    private let photoNetworkManager = PhotoNetworkManager()
     var managedObjectContext: NSManagedObjectContext?
     private var isMarked = false
     
@@ -78,7 +78,7 @@ class RandomPhotoDetailViewController: UIViewController {
     func checkCoreData() {
         let fetchRequest: NSFetchRequest<Photo>
         fetchRequest = Photo.fetchRequest()
-        
+        print(fetchRequest)
         guard let title = selectedPhoto?.title else {
             print("Don't have a photo")
             return
@@ -99,18 +99,11 @@ class RandomPhotoDetailViewController: UIViewController {
         super.viewDidLoad()
         
         setupViews()
+        setupCoreData()
+        checkCoreData()
         setupNavigationBar()
         setupConstraints()
-        setupCoreData()
-    }
-    
-    func fetchDataAndUpdateUI() {
-        photoNetworkManager.fetchData  { [weak self] picture in
-            DispatchQueue.main.async {
-                self?.checkCoreData()
-                self?.view.setNeedsDisplay()
-            }
-        }
+        
     }
     
     func setupCoreData() {
