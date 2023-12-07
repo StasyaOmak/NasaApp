@@ -41,12 +41,20 @@ struct NearEarthObject: Codable {
 // MARK: - CloseApproachDatum
 struct CloseApproachDatum: Codable {
     let closeApproachDateFull: String
+    let missDistance: MissDistance
     let orbitingBody: String
+    
 
     enum CodingKeys: String, CodingKey {
         case closeApproachDateFull = "close_approach_date_full"
+        case missDistance = "miss_distance"
         case orbitingBody = "orbiting_body"
     }
+}
+
+// MARK: - MissDistance
+struct MissDistance: Codable {
+    let kilometers: String
 }
 
 // MARK: - EstimatedDiameter

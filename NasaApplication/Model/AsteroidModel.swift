@@ -17,6 +17,7 @@ struct AsteroidModel {
     let diameterMax: Double
     let absoluteMagnitudeH: Double
     let isSentryObject: Bool
+    let missDistance: String
     
     var diametrMinString: String {
         return String(format: "%.0f", diameterMin)
@@ -25,7 +26,7 @@ struct AsteroidModel {
         return String(format: "%.0f", diameterMax)
         
     }
-    
+
     init(object: NearEarthObject) {
         self.name = object.name
         self.isDangeros = object.isPotentiallyHazardousAsteroid
@@ -35,6 +36,7 @@ struct AsteroidModel {
         self.diameterMax = object.estimatedDiameter.meters.estimatedDiameterMax
         self.absoluteMagnitudeH = object.absoluteMagnitudeH
         self.isSentryObject = object.isSentryObject
+        self.missDistance = object.closeApproachData.first?.missDistance.kilometers ?? ""
     }
 }
 

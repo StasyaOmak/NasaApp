@@ -38,7 +38,7 @@ class AsteroidTableViewCell: UITableViewCell {
         return element
     }()
     
-    private var orbitingStackView: UIStackView = {
+    private var hazardousStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .horizontal
         element.distribution = .fill
@@ -47,7 +47,7 @@ class AsteroidTableViewCell: UITableViewCell {
         return element
     }()
     
-    private var hazardousStackView: UIStackView = {
+    private var missDistanceStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .horizontal
         element.distribution = .fill
@@ -75,13 +75,13 @@ class AsteroidTableViewCell: UITableViewCell {
         return element
     }()
     
-    private var orbitingLabel: UILabel = {
+    private var hazardousLabel: UILabel = {
         let element = UILabel()
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
-    private var hazardousLabel: UILabel = {
+    private var missDistanceLabel: UILabel = {
         let element = UILabel()
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -103,17 +103,17 @@ class AsteroidTableViewCell: UITableViewCell {
         return element
     }()
     
-    private var orbitingTextLabel: UILabel = {
+    private var hazardousTextLabel: UILabel = {
         let element = UILabel()
-        element.text = "Orbiting Body:"
+        element.text = "Dangerous:"
         element.font = .systemFont(ofSize: 16, weight: .bold)
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
-    private var hazardousTextLabel: UILabel = {
+    private var missDistanceTextLabel: UILabel = {
         let element = UILabel()
-        element.text = "Dangerous:"
+        element.text = "Miss Distance:"
         element.font = .systemFont(ofSize: 16, weight: .bold)
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -133,9 +133,10 @@ class AsteroidTableViewCell: UITableViewCell {
         nameLabel.text = model.name
         diametrLabel.text = "\(model.diametrMinString) - \(model.diametrMaxString) meters"
         aproachLabel.text = model.closeApproachDate
-        orbitingLabel.text = model.orbitingbody
+//        orbitingLabel.text = model.orbitingbody
         hazardousLabel.text = model.isDangeros ? "Yes" : "No"
         hazardousLabel.textColor = model.isDangeros ? .red : .label
+        missDistanceLabel.text = "\(model.missDistance) km"
     }
     
     private func setupSubviews() {
@@ -145,21 +146,22 @@ class AsteroidTableViewCell: UITableViewCell {
         mainStackView.addArrangedSubview(nameLabel)
         mainStackView.addArrangedSubview(diametStackView)
         mainStackView.addArrangedSubview(aproachStackView)
-        mainStackView.addArrangedSubview(orbitingStackView)
         mainStackView.addArrangedSubview(hazardousStackView)
+        mainStackView.addArrangedSubview(missDistanceStackView)
+        
         
         diametStackView.addArrangedSubview(diameterTextLabel)
         diametStackView.addArrangedSubview(diametrLabel)
         
         aproachStackView.addArrangedSubview(approachTextLabel)
         aproachStackView.addArrangedSubview(aproachLabel)
-        
-        orbitingStackView.addArrangedSubview(orbitingTextLabel)
-        orbitingStackView.addArrangedSubview(orbitingLabel)
-        
+
         hazardousStackView.addArrangedSubview(hazardousTextLabel)
         hazardousStackView.addArrangedSubview(hazardousLabel)
         
+        missDistanceStackView.addArrangedSubview(missDistanceTextLabel)
+        missDistanceStackView.addArrangedSubview(missDistanceLabel)
+
         NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),

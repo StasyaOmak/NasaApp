@@ -152,7 +152,7 @@ class AsteroidViewController: UIViewController {
     private func asteroidInfoAlert (for asteroids: AsteroidModel) {
         let alert = UIAlertController(
             title: asteroids.name,
-            message: "Absolute magnitude: \(asteroids.absoluteMagnitudeH)\n Sentry: \(asteroids.isSentryObject ? "Yes" : "No")",
+            message: "Absolute magnitude: \(asteroids.absoluteMagnitudeH)\n Sentry: \(asteroids.isSentryObject ? "Yes" : "No")\n Orbiting Body: \(asteroids.orbitingbody)",
             preferredStyle: .alert
         )
         
@@ -204,6 +204,7 @@ extension AsteroidViewController {
         - Potential Hazardous Classification
         - Estimated Minimum Diameter
         - Estimated Maximum Diameter
+        - Miss Distance
         """
         static let titleLabel = "Asteroids"
         static let sortImage = "chevron.up.chevron.down"

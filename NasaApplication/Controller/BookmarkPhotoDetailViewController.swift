@@ -101,6 +101,11 @@ class BookmarkPhotoDetailViewController: UIViewController {
         setupCoreData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkCoreData()
+    }
+    
     func setupCoreData() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
         managedObjectContext = appDelegate.persistentContainer.viewContext

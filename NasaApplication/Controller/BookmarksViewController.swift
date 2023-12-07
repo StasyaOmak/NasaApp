@@ -22,7 +22,7 @@ class BookmarksViewController: UIViewController {
         return UIBarButtonItem(image: UIImage(systemName: "trash.fill"), style: .plain, target: self, action: #selector(deleteAllBookmarks))
     }()
     
-    private lazy var lableText: UILabel = {
+    private lazy var labelEmptyText: UILabel = {
         let element = UILabel()
         element.text = "Your Bookmark is Empty"
         element.textColor = AppConstants.navigationBarTintColor
@@ -98,7 +98,7 @@ class BookmarksViewController: UIViewController {
         do {
             let result = try managedObjectContext?.fetch(request)
             nasaList = result ?? []
-            lableText.isHidden = !nasaList.isEmpty
+            labelEmptyText.isHidden = !nasaList.isEmpty
         } catch {
             fatalError("Error loading items into Core Data")
         }
@@ -141,7 +141,7 @@ class BookmarksViewController: UIViewController {
     
     private func setupViews() {
         view.addSubview(bookmarkTableView)
-        view.addSubview(lableText)
+        view.addSubview(labelEmptyText)
     }
     
     private func setupConstraints() {
@@ -151,8 +151,8 @@ class BookmarksViewController: UIViewController {
             bookmarkTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             bookmarkTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
-            lableText.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            lableText.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            labelEmptyText.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            labelEmptyText.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
     }
 }
