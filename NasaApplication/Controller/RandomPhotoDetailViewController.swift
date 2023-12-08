@@ -10,10 +10,14 @@ import SDWebImage
 import CoreData
 
 class RandomPhotoDetailViewController: UIViewController {
+    // MARK: - Public Property
     var selectedPhoto: AstronomyPicture?
     var managedObjectContext: NSManagedObjectContext?
+    
+    // MARK: - Private Property
     private var isMarked = false
     
+    // MARK: - UI
     private lazy var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
@@ -66,39 +70,7 @@ class RandomPhotoDetailViewController: UIViewController {
         return element
     }()
     
-    private lazy var addBarButtonItem: UIBarButtonItem = {
-        return UIBarButtonItem(image: UIImage(systemName: AppConstants.bookmarkSysImage), style: .plain, target: self, action: #selector(addBarButtonTapped))
-    }()
-    
-    private lazy var actionBarButtonItem: UIBarButtonItem = {
-        return UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(actionBarButtonTapped))
-    }()
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        checkCoreData()
-    }
-    
-    func checkCoreData() {
-        let fetchRequest: NSFetchRequest<Photo>
-        fetchRequest = Photo.fetchRequest()
-        print(fetchRequest)
-        guard let title = selectedPhoto?.title else {
-            print("Don't have a photo")
-            return
-        }
-        
-        fetchRequest.predicate = NSPredicate(
-            format: "title LIKE %@", title
-        )
-        
-        if (try? managedObjectContext?.fetch(fetchRequest).first) != nil {
-            addBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkFillSysImage)
-        } else {
-            addBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkSysImage)
-        }
-    }
-    
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -107,13 +79,21 @@ class RandomPhotoDetailViewController: UIViewController {
         checkCoreData()
         setupNavigationBar()
         setupConstraints()
-        
     }
     
-    func setupCoreData() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
-        managedObjectContext = appDelegate.persistentContainer.viewContext
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkCoreData()
     }
+    
+    // MARK: - Private Method
+    private lazy var addBarButtonItem: UIBarButtonItem = {
+        return UIBarButtonItem(image: UIImage(systemName: AppConstants.bookmarkSysImage), style: .plain, target: self, action: #selector(addBarButtonTapped))
+    }()
+    
+    private lazy var actionBarButtonItem: UIBarButtonItem = {
+        return UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(actionBarButtonTapped))
+    }()
     
     @objc private func addBarButtonTapped(){
         let fetchRequest: NSFetchRequest<Photo>
@@ -162,26 +142,6 @@ class RandomPhotoDetailViewController: UIViewController {
         }
         
         present(shareController, animated: true, completion: nil)
-    }
-    
-    func saveBookmarkArrayFull() {
-        let entity = NSEntityDescription.entity(forEntityName: AppConstants.entityName, in: self.managedObjectContext!)
-        let list = NSManagedObject(entity: entity!, insertInto: self.managedObjectContext)
-        
-        list.setValue(selectedPhoto?.date, forKey: "date")
-        list.setValue(selectedPhoto?.explanation, forKey: "explanation")
-        list.setValue(selectedPhoto?.title, forKey: "title")
-        list.setValue(selectedPhoto?.url, forKey: "url")
-        
-        saveCoreData()
-    }
-    
-    func saveCoreData(){
-        do {
-            try managedObjectContext?.save()
-        } catch {
-            fatalError("Error in saving item into core data")
-        }
     }
     
     private func setupNavigationBar() {
@@ -237,6 +197,55 @@ class RandomPhotoDetailViewController: UIViewController {
         }
     }
     
+    // MARK: - CoreData Method
+    private func saveBookmarkArrayFull() {
+        let entity = NSEntityDescription.entity(forEntityName: AppConstants.entityName, in: self.managedObjectContext!)
+        let list = NSManagedObject(entity: entity!, insertInto: self.managedObjectContext)
+        
+        list.setValue(selectedPhoto?.date, forKey: "date")
+        list.setValue(selectedPhoto?.explanation, forKey: "explanation")
+        list.setValue(selectedPhoto?.title, forKey: "title")
+        list.setValue(selectedPhoto?.url, forKey: "url")
+        
+        saveCoreData()
+    }
+    
+    private func saveCoreData(){
+        do {
+            try managedObjectContext?.save()
+        } catch {
+            fatalError("Error in saving item into core data")
+        }
+    }
+    
+    private func checkCoreData() {
+        let fetchRequest: NSFetchRequest<Photo>
+        fetchRequest = Photo.fetchRequest()
+        print(fetchRequest)
+        guard let title = selectedPhoto?.title else {
+            print("Don't have a photo")
+            return
+        }
+        
+        fetchRequest.predicate = NSPredicate(
+            format: "title LIKE %@", title
+        )
+        
+        if (try? managedObjectContext?.fetch(fetchRequest).first) != nil {
+            addBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkFillSysImage)
+        } else {
+            addBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkSysImage)
+        }
+    }
+    
+    private func setupCoreData() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
+        managedObjectContext = appDelegate.persistentContainer.viewContext
+    }
+}
+
+// MARK: - Setup Constraints
+extension RandomPhotoDetailViewController {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),

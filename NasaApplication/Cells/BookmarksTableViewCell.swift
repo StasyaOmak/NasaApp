@@ -8,7 +8,10 @@
 import UIKit
 
 class BookmarksTableViewCell: UITableViewCell {
+    // MARK: - Private Property
     private let systName = BookmarkConstants()
+    
+    // MARK: - UI
     private var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .horizontal
@@ -76,7 +79,7 @@ class BookmarksTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupSubviews()
+        setupViews()
         setupConstraints()
     }
     
@@ -102,11 +105,9 @@ class BookmarksTableViewCell: UITableViewCell {
                 self?.bookmarkImageView.image = UIImage(named: "nasa")
             }
         }
-        
     }
     
-    private func setupSubviews() {
-        
+    private func setupViews() {
         contentView.addSubview(mainStackView)
         mainStackView.addArrangedSubview(bookmarkImageView)
         mainStackView.addArrangedSubview(labelStackView)
@@ -117,6 +118,10 @@ class BookmarksTableViewCell: UITableViewCell {
         labelStackViewTwo.addArrangedSubview(calendarIconImageView)
         labelStackViewTwo.addArrangedSubview(bookmarkDateLabel)
     }
+}
+
+// MARK: - Setup Constraints
+extension BookmarksTableViewCell {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             
@@ -136,6 +141,7 @@ class BookmarksTableViewCell: UITableViewCell {
         ])
     }
 }
+// MARK: - Constants
 extension BookmarksTableViewCell {
     private struct BookmarkConstants {
         let bookmarkLabel = "Invalid date format"

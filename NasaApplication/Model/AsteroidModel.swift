@@ -24,7 +24,10 @@ struct AsteroidModel {
     }
     var diametrMaxString: String {
         return String(format: "%.0f", diameterMax)
-        
+    }
+    
+    var missDistanceString: String {
+        return String(format: "%.0f", Double(missDistance) ?? 0)
     }
 
     init(object: NearEarthObject) {

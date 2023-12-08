@@ -8,8 +8,10 @@
 import UIKit
 
 class MainTabBarController: UITabBarController {
+    // MARK: - Private Property
     private let titleBar = TitleBar()
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -17,6 +19,7 @@ class MainTabBarController: UITabBarController {
         setTabBarAppearance()
     }
     
+    // MARK: - Private Method
     private func generateTabBar() {
         viewControllers = [
             generateVC(viewController: HomeViewController(), title: titleBar.homeTitle, image: UIImage(systemName: AppConstants.houseSysImage), selectedImage: UIImage(systemName: AppConstants.houseFillSysImage)),
@@ -26,9 +29,7 @@ class MainTabBarController: UITabBarController {
     }
     
     private func generateVC(viewController: UIViewController, title: String, image: UIImage?, selectedImage: UIImage?) -> UIViewController {
-        
         let navigationController = UINavigationController(rootViewController: viewController)
-        
         navigationController.tabBarItem.title = title
         navigationController.tabBarItem.image = image
         navigationController.tabBarItem.selectedImage = selectedImage
@@ -44,6 +45,7 @@ class MainTabBarController: UITabBarController {
     }
 }
 
+// MARK: - Constants
 extension MainTabBarController {
     private struct TitleBar {
         let homeTitle = "Home"

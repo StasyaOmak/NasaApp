@@ -10,6 +10,7 @@
 import UIKit
 
 class AsteroidTableViewCell: UITableViewCell {
+    // MARK: - UI
     private var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
@@ -119,28 +120,36 @@ class AsteroidTableViewCell: UITableViewCell {
         return element
     }()
     
+    // MARK: - Private Method
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupSubviews()
+        setupViews()
+        setupConstraints()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setupSubviews()
+        setupViews()
     }
     
     func configure(model: AsteroidModel) {
         nameLabel.text = model.name
         diametrLabel.text = "\(model.diametrMinString) - \(model.diametrMaxString) meters"
         aproachLabel.text = model.closeApproachDate
-//        orbitingLabel.text = model.orbitingbody
         hazardousLabel.text = model.isDangeros ? "Yes" : "No"
         hazardousLabel.textColor = model.isDangeros ? .red : .label
-        missDistanceLabel.text = "\(model.missDistance) km"
+        missDistanceLabel.text = "\(model.missDistanceString) km"
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        if let date = dateFormatter.date(from: model.closeApproachDate ) {
+            dateFormatter.dateFormat = "dd MMM yyyy HH:mm"
+            let formattedDate = dateFormatter.string(from: date)
+            aproachLabel.text =  formattedDate
+        }
     }
     
-    private func setupSubviews() {
-        
+    private func setupViews() {
         contentView.addSubview(mainStackView)
         
         mainStackView.addArrangedSubview(nameLabel)
@@ -161,7 +170,12 @@ class AsteroidTableViewCell: UITableViewCell {
         
         missDistanceStackView.addArrangedSubview(missDistanceTextLabel)
         missDistanceStackView.addArrangedSubview(missDistanceLabel)
+    }
+}
 
+// MARK: - Setup Constraints
+extension AsteroidTableViewCell {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),

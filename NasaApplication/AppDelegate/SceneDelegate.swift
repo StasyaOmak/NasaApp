@@ -55,7 +55,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 print("Notification added")
             }
         }
-        let fourthNavController = UINavigationController(rootViewController: BookmarksViewController())
     }
 }
 

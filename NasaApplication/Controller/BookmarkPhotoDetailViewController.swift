@@ -10,11 +10,14 @@ import SDWebImage
 import CoreData
 
 class BookmarkPhotoDetailViewController: UIViewController {
-    var bookmarkPhoto: AstronomyPicture?
-    private let photoNetworkManager = PhotoNetworkManager()
+    // MARK: - Private Property
     private var isMarked = false
-    var managedObjectContext: NSManagedObjectContext?
+    private var managedObjectContext: NSManagedObjectContext?
     
+    // MARK: - Public Property
+    var bookmarkPhoto: AstronomyPicture?
+    
+    // MARK: - UI
     private var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
@@ -73,25 +76,7 @@ class BookmarkPhotoDetailViewController: UIViewController {
         return UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(actionBarButtonTapped))
     }()
     
-    func checkCoreData() {
-        let fetchRequest: NSFetchRequest<Photo>
-        fetchRequest = Photo.fetchRequest()
-        
-        guard let title = bookmarkPhoto?.title else {
-            print("Don't have a photo")
-            return
-        }
-        fetchRequest.predicate = NSPredicate(
-            format: "title LIKE %@", title
-        )
-        
-        if (try? managedObjectContext?.fetch(fetchRequest).first) != nil {
-            removeBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkFillSysImage)
-        } else {
-            removeBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkSysImage)
-        }
-    }
-    
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -106,31 +91,7 @@ class BookmarkPhotoDetailViewController: UIViewController {
         checkCoreData()
     }
     
-    func setupCoreData() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
-        managedObjectContext = appDelegate.persistentContainer.viewContext
-    }
-    
-    func saveBookmarkArrayFull() {
-        let entity = NSEntityDescription.entity(forEntityName: AppConstants.entityName, in: self.managedObjectContext!)
-        let list = NSManagedObject(entity: entity!, insertInto: self.managedObjectContext)
-        
-        list.setValue(bookmarkPhoto?.date, forKey: "date")
-        list.setValue(bookmarkPhoto?.explanation, forKey: "explanation")
-        list.setValue(bookmarkPhoto?.title, forKey: "title")
-        list.setValue(bookmarkPhoto?.url, forKey: "url")
-        
-        saveCoreData()
-    }
-    
-    func saveCoreData(){
-        do {
-            try managedObjectContext?.save()
-        } catch {
-            fatalError("Error in saving item into core data")
-        }
-    }
-    
+    // MARK: - Private Method
     @objc private func removeBarButtonItemTapped() {
         let fetchRequest: NSFetchRequest<Photo>
         fetchRequest = Photo.fetchRequest()
@@ -148,7 +109,7 @@ class BookmarkPhotoDetailViewController: UIViewController {
             managedObjectContext?.delete(object)
             saveCoreData()
         } else {
-            saveBookmarkArrayFull()
+            saveBookmark()
         }
         checkCoreData()
     }
@@ -189,6 +150,7 @@ class BookmarkPhotoDetailViewController: UIViewController {
         removeBarButtonItem.isEnabled = true
     }
     
+    // MARK: - Setup Views
     private func setupViews() {
         view.backgroundColor = .systemBackground
         
@@ -220,6 +182,54 @@ class BookmarkPhotoDetailViewController: UIViewController {
         }
     }
     
+    // MARK: - Core Data
+    private func checkCoreData() {
+        let fetchRequest: NSFetchRequest<Photo>
+        fetchRequest = Photo.fetchRequest()
+        
+        guard let title = bookmarkPhoto?.title else {
+            print("Don't have a photo")
+            return
+        }
+        fetchRequest.predicate = NSPredicate(
+            format: "title LIKE %@", title
+        )
+        
+        if (try? managedObjectContext?.fetch(fetchRequest).first) != nil {
+            removeBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkFillSysImage)
+        } else {
+            removeBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkSysImage)
+        }
+    }
+    
+    private func setupCoreData() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
+        managedObjectContext = appDelegate.persistentContainer.viewContext
+    }
+    
+    private func saveBookmark() {
+        let entity = NSEntityDescription.entity(forEntityName: AppConstants.entityName, in: self.managedObjectContext!)
+        let list = NSManagedObject(entity: entity!, insertInto: self.managedObjectContext)
+        
+        list.setValue(bookmarkPhoto?.date, forKey: "date")
+        list.setValue(bookmarkPhoto?.explanation, forKey: "explanation")
+        list.setValue(bookmarkPhoto?.title, forKey: "title")
+        list.setValue(bookmarkPhoto?.url, forKey: "url")
+        
+        saveCoreData()
+    }
+    
+    private func saveCoreData(){
+        do {
+            try managedObjectContext?.save()
+        } catch {
+            fatalError("Error in saving item into core data")
+        }
+    }
+}
+
+// MARK: - Setup Constraints
+extension BookmarkPhotoDetailViewController {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),

@@ -9,11 +9,13 @@ import UIKit
 import Lottie
 
 class HomeViewController: UIViewController {
+    // MARK: - Private Property
     private let color = Color()
     private let cornerRadius = CornerRadius()
     private var animationView = LottieAnimationView()
     
-    private lazy var mainStackView: UIStackView = {
+    // MARK: - UI
+    private var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
         element.spacing = 10
@@ -52,18 +54,15 @@ class HomeViewController: UIViewController {
         return element
     }()
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupViews()
         setupNavigationBar()
         setupAnimation()
-        setupUI()
+        setupViews()
         setupConstraints()
-    }
-    
-    private func setupViews() {
-        view.backgroundColor = .systemBackground
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,6 +72,7 @@ class HomeViewController: UIViewController {
         thirdButton.backgroundColor = color.buttonColor
     }
     
+    // MARK: - Private Method
     private func setupAnimation() {
         animationView.animation = LottieAnimation.named(Constants.lottieAnimation.rawValue)
         animationView.frame = CGRect(x: 0, y: 150, width: 50, height: 50)
@@ -129,7 +129,7 @@ class HomeViewController: UIViewController {
         }
     }
     
-    private func setupUI() {
+    private func setupViews() {
         view.addSubview(mainStackView)
         
         mainStackView.addArrangedSubview(animationView)
@@ -149,6 +149,8 @@ class HomeViewController: UIViewController {
         firstButton.layer.cornerRadius = CGFloat(cornerRadius.buttonCornerRadius)
         secondButton.layer.cornerRadius = CGFloat(cornerRadius.buttonCornerRadius)
         thirdButton.layer.cornerRadius = CGFloat(cornerRadius.buttonCornerRadius)
+        
+        view.backgroundColor = .systemBackground
     }
     
     @objc private func buttonTapped(_ sender: UIButton) {
@@ -172,6 +174,7 @@ class HomeViewController: UIViewController {
     }
 }
 
+// MARK: - Setup Constraints
 extension HomeViewController {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -190,6 +193,7 @@ extension HomeViewController {
     }
 }
 
+// MARK: - Constants
 extension HomeViewController {
     private struct Color {
         let buttonColor = UIColor(red: 0.36, green: 0.58, blue: 0.99, alpha: 1.00)

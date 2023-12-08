@@ -11,15 +11,16 @@ import Lottie
 import CoreData
 
 class TodaysPictureViewController: UIViewController {
+    // MARK: - Private Property
     private let constant = Constants()
-    var managedObjectContext: NSManagedObjectContext?
-    var nasaList = [Photo]()
-    
     private var photoOfTheDay: AstronomyPicture?
-    private let photoNetworkManager = PhotoOfTheDayNetworkManager()
-    var animationView = LottieAnimationView()
     private var isMarked = false
     
+    // MARK: - Public Property
+    var animationView = LottieAnimationView()
+    var managedObjectContext: NSManagedObjectContext?
+    
+    // MARK: - UI
     private var mainStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .vertical
@@ -81,25 +82,7 @@ class TodaysPictureViewController: UIViewController {
         return UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(actionBarButtonTapped))
     }()
     
-    func checkCoreData() {
-        let fetchRequest: NSFetchRequest<Photo>
-        fetchRequest = Photo.fetchRequest()
-        
-        guard let title = photoOfTheDay?.title else {
-            print("Don't have a photoOfTheDay")
-            return
-        }
-        fetchRequest.predicate = NSPredicate(
-            format: "title LIKE %@", title
-        )
-        
-        if (try? managedObjectContext?.fetch(fetchRequest).first) != nil {
-            addBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkFillSysImage)
-        } else {
-            addBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkSysImage)
-        }
-    }
-    
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -112,6 +95,12 @@ class TodaysPictureViewController: UIViewController {
         setupCoreData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkCoreData()
+    }
+    
+    // MARK: - Private Method
     private func fetchAstronomyData() {
         let networkManager = PhotoOfTheDayNetworkManager()
         networkManager.fetchData { [weak self] (result) in
@@ -133,31 +122,6 @@ class TodaysPictureViewController: UIViewController {
                     self?.setupErrorAnimation()
                 }
             }
-        }
-    }
-    
-    func setupCoreData() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
-        managedObjectContext = appDelegate.persistentContainer.viewContext
-    }
-    
-    func saveBookmarkArrayFull() {
-        let entity = NSEntityDescription.entity(forEntityName: AppConstants.entityName, in: self.managedObjectContext!)
-        let list = NSManagedObject(entity: entity!, insertInto: self.managedObjectContext)
-        
-        list.setValue(photoOfTheDay?.date, forKey: "date")
-        list.setValue(photoOfTheDay?.explanation, forKey: "explanation")
-        list.setValue(photoOfTheDay?.title, forKey: "title")
-        list.setValue(photoOfTheDay?.url, forKey: "url")
-        
-        saveCoreData()
-    }
-    
-    func saveCoreData(){
-        do {
-            try managedObjectContext?.save()
-        } catch {
-            fatalError("Error in saving item into core data")
         }
     }
     
@@ -244,11 +208,6 @@ class TodaysPictureViewController: UIViewController {
         animationView.play()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        checkCoreData()
-    }
-    
     private func setupViews() {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.tintColor = AppConstants.navigationBarTintColor
@@ -298,8 +257,55 @@ class TodaysPictureViewController: UIViewController {
         }
     }
     
-    private func setupConstraints() {
+    // MARK: - Core Data
+    private func setupCoreData() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
+        managedObjectContext = appDelegate.persistentContainer.viewContext
+    }
+    
+    private func checkCoreData() {
+        let fetchRequest: NSFetchRequest<Photo>
+        fetchRequest = Photo.fetchRequest()
         
+        guard let title = photoOfTheDay?.title else {
+            print("Don't have a photoOfTheDay")
+            return
+        }
+        fetchRequest.predicate = NSPredicate(
+            format: "title LIKE %@", title
+        )
+        
+        if (try? managedObjectContext?.fetch(fetchRequest).first) != nil {
+            addBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkFillSysImage)
+        } else {
+            addBarButtonItem.image = UIImage(systemName: AppConstants.bookmarkSysImage)
+        }
+    }
+    
+    private func saveBookmarkArrayFull() {
+        let entity = NSEntityDescription.entity(forEntityName: AppConstants.entityName, in: self.managedObjectContext!)
+        let list = NSManagedObject(entity: entity!, insertInto: self.managedObjectContext)
+        
+        list.setValue(photoOfTheDay?.date, forKey: "date")
+        list.setValue(photoOfTheDay?.explanation, forKey: "explanation")
+        list.setValue(photoOfTheDay?.title, forKey: "title")
+        list.setValue(photoOfTheDay?.url, forKey: "url")
+        
+        saveCoreData()
+    }
+    
+    private func saveCoreData(){
+        do {
+            try managedObjectContext?.save()
+        } catch {
+            fatalError("Error in saving item into core data")
+        }
+    }
+}
+
+// MARK: - Setup Constraints
+extension TodaysPictureViewController {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -323,6 +329,7 @@ class TodaysPictureViewController: UIViewController {
     }
 }
 
+// MARK: - Constants
 extension TodaysPictureViewController {
     private struct Constants {
         let titleLabelText = "Image Of The Day"

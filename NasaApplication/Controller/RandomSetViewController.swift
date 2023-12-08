@@ -12,11 +12,12 @@ import SDWebImage
 import Lottie
 
 class RandomSetViewController: UIViewController {
+    // MARK: - Public Property
     var astronomyPictures: [AstronomyPicture] = []
     var animationView = LottieAnimationView()
-    
     let sectionInsert = UIEdgeInsets(top: C.inset, left: C.inset, bottom: C.inset, right: C.inset)
     
+    // MARK: - UI
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -28,6 +29,7 @@ class RandomSetViewController: UIViewController {
         return collectionView
     }()
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,9 +37,10 @@ class RandomSetViewController: UIViewController {
         setupNavigationBar()
         setupAnimation()
         fetchAstronomyData()
-        setConstraints()
+        setupConstraints()
     }
     
+    // MARK: - Private Method
     private func setupNavigationBar() {
         navigationController?.navigationBar.tintColor = AppConstants.navigationBarTintColor
         let titleLabel = UILabel()
@@ -75,16 +78,7 @@ class RandomSetViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
     }
-    
-    private func setConstraints() {
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-        ])
-    }
-    
+
     private func fetchAstronomyData() {
         let networkManager = PhotoNetworkManager()
         networkManager.fetchData(count: 100 ) { [weak self] (result) in
@@ -145,8 +139,8 @@ class RandomSetViewController: UIViewController {
     }
 }
 
+// MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension RandomSetViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return astronomyPictures.count
     }
@@ -200,8 +194,8 @@ extension RandomSetViewController: UICollectionViewDelegate, UICollectionViewDat
     }
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
 extension RandomSetViewController: UICollectionViewDelegateFlowLayout {
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let space = sectionInsert.left * CGFloat(C.countItem + 1)
         let availableWidth = view.frame.width - space
@@ -218,6 +212,19 @@ extension RandomSetViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+// MARK: - Setup Constraints
+extension RandomSetViewController {
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+        ])
+    }
+}
+
+// MARK: - Constants
 extension RandomSetViewController {
     private struct C {
         static let titleLabelText = "Random"

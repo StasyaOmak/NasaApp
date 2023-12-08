@@ -11,15 +11,17 @@ import SDWebImage
 import Lottie
 
 class SearchPictureViewController: UIViewController {
-    var allAstronomyPictures: [AstronomyPicture] = []
+    // MARK: - Public Property
     var filteredAstronomyPictures: [AstronomyPicture] = []
     var animationView: LottieAnimationView?
     
-    let sectionInsert = UIEdgeInsets(top: C.inset, left: C.inset, bottom: C.inset, right: C.inset)
+    // MARK: - Private Property
+    private let sectionInsert = UIEdgeInsets(top: C.inset, left: C.inset, bottom: C.inset, right: C.inset)
     
+    // MARK: - UI
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.placeholder = "Search pictures by word"
+        searchBar.placeholder = C.placeholderText
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         return searchBar
     }()
@@ -36,15 +38,17 @@ class SearchPictureViewController: UIViewController {
         return collectionView
     }()
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupViews()
         setupNavigationBar()
         setupCollectionView()
-        setConstraints()
+        setupConstraints()
     }
     
+    // MARK: - Private Method
     private func setupNavigationBar() {
         navigationController?.navigationBar.tintColor = AppConstants.navigationBarTintColor
         let titleLabel = UILabel()
@@ -83,7 +87,7 @@ class SearchPictureViewController: UIViewController {
         networkManager.fetchData(count: 100) { [weak self] (result) in
             switch result {
             case .success(let success):
-                self?.allAstronomyPictures = success
+                self?.filteredAstronomyPictures = success
                 if let _ = success.first {
                     self?.filteredAstronomyPictures = success.filter { $0.explanation.lowercased().contains(searchText.lowercased()) }
                 } else {
@@ -156,8 +160,11 @@ class SearchPictureViewController: UIViewController {
         view.backgroundColor = .systemBackground
         view.addSubview(searchBar)
     }
-    
-    private func setConstraints() {
+}
+
+// MARK: - Setup Constraints
+extension SearchPictureViewController {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -171,8 +178,8 @@ class SearchPictureViewController: UIViewController {
     }
 }
 
+// MARK: - UISearchBarDelegate
 extension SearchPictureViewController: UISearchBarDelegate {
-    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         animationView?.stop()
         animationView?.removeFromSuperview()
@@ -184,6 +191,7 @@ extension SearchPictureViewController: UISearchBarDelegate {
     }
 }
 
+// MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension SearchPictureViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filteredAstronomyPictures.count
@@ -237,10 +245,12 @@ extension SearchPictureViewController: UICollectionViewDelegate, UICollectionVie
     }
 }
 
+// MARK: - Constants
 extension SearchPictureViewController {
     private struct C {
         static let titleLabelText = "Search"
         static let countItem = 2
         static let inset: CGFloat = 20
+        static let placeholderText = "Search pictures by word"
     }
 }

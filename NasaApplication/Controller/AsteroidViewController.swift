@@ -10,11 +10,15 @@ import UIKit
 import Lottie
 
 class AsteroidViewController: UIViewController {
+    // MARK: - Private Property
     private var asteroids: [AsteroidModel] = []
     private let asteroidNetworkManager = AsteroidNetworkManager()
     private var isSortingDangerousFirst = true
+    
+    // MARK: - Public Property
     var animationView = LottieAnimationView()
     
+    // MARK: - UI
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -22,6 +26,7 @@ class AsteroidViewController: UIViewController {
         return tableView
     }()
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,10 +34,11 @@ class AsteroidViewController: UIViewController {
         setupNavigationBar()
         setupAnimation()
         fetchAstronomyData()
-        setConstraints()
+        setupConstraints()
         longPressRecognizer()
     }
     
+    // MARK: - Private Method
     private func setupViews() {
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.delegate = self
@@ -104,7 +110,6 @@ class AsteroidViewController: UIViewController {
         let infoButton = UIBarButtonItem(image: infoImage, style: .plain, target: self, action: #selector(infoPressed))
         
         navigationItem.leftBarButtonItem = infoButton
-        
     }
     
     @objc private func infoPressed(){
@@ -120,7 +125,7 @@ class AsteroidViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    func sortAsteroids() {
+    private func sortAsteroids() {
         if isSortingDangerousFirst {
             asteroids.sort { $0.isDangeros && !$1.isDangeros }
         } else {
@@ -129,7 +134,7 @@ class AsteroidViewController: UIViewController {
         isSortingDangerousFirst.toggle()
     }
     
-    @objc func sortButtonTapped() {
+    @objc private func sortButtonTapped() {
         sortAsteroids()
         tableView.reloadData()
     }
@@ -161,8 +166,11 @@ class AsteroidViewController: UIViewController {
         
         present(alert, animated: true, completion: nil)
     }
-    
-    func setConstraints() {
+}
+
+// MARK: - Setup Constraints
+extension AsteroidViewController {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -175,6 +183,7 @@ class AsteroidViewController: UIViewController {
     }
 }
 
+// MARK: - UITableViewDataSource, UITableViewDelegate
 extension AsteroidViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return asteroids.count
@@ -193,6 +202,7 @@ extension AsteroidViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
+// MARK: - Constants
 extension AsteroidViewController {
     private struct C {
         static let infoText = """
